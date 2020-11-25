@@ -41,6 +41,6 @@ public class BaseServlet extends HttpServlet {
         req.setAttribute("title", title);
         req.setAttribute("content", content);
 
-        req.getRequestDispatcher("/WEB-INF/base.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/base.jsp").forward(req, resp);
     }
 }
