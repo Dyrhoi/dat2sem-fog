@@ -15,4 +15,21 @@ public class OrderServlet extends BaseServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         super.render("Byg selv Carport - Fog", "order", req, resp);
     }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        //TODO: Dyrhoi - Include variables from frontend
+        String firstname;
+        String lastname;
+        String email;
+        String phone;
+
+        boolean carportHasShed;
+        //TODO: Roof type ?
+
+        int carportWidth;
+        int carportLength;
+
+
+    }
 }
