@@ -6,11 +6,11 @@ import java.io.*;
 import java.sql.*;
 
 public class Database {
-    private String url = "jdbc:mysql://localhost:3306/olskercupcakes?serverTimezone=CET";
-    private String user = "olskercupcakes";
+    private String url = "jdbc:mysql://localhost:3306/fog?serverTimezone=CET";
+    private String user = "fog";
     private boolean logging = true;
 
-    private final int version = 0;
+    private final int version = 1;
 
     public Database() {
         try {

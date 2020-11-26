@@ -22,6 +22,12 @@ create table carports(
     roof_type varchar(100)
 );
 
+create table material_types(
+    id int PRIMARY KEY AUTO_INCREMENT,
+    name varchar(250),
+    description varchar(500)
+);
+
 create table orders(
     id int PRIMARY KEY AUTO_INCREMENT,
     customers_id int,
@@ -45,12 +51,6 @@ create table materials(
     description varchar(500),
     material_types_id int,
     FOREIGN KEY (material_types_id) REFERENCES material_types(id)
-);
-
-create table material_types(
-    id int PRIMARY KEY AUTO_INCREMENT,
-    name varchar(250),
-    description varchar(500)
 );
 
 create table bill_of_materials(
