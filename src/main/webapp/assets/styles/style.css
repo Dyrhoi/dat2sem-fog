@@ -3,21 +3,20 @@
 }
 
 #shedCheckbox:checked ~ #toolshedDimensions {
-    display: block;
+    display: flex;
 }
 
-/*Radioo with images*/
+/*Radio with images*/
 
 .row .col .image-radio {
     border:2px solid #dedede;
-    max-width:275px;
     width:100%;
     transition: background .2s ease-in-out;
 }
 
 input[type="radio"]:checked + .image-radio {
     background-color:#DEDEDE;
-    border:2px solid black;
+    border:2px solid #0C2069;
 }
 
 .row .col .image-radio:hover {
@@ -42,11 +41,11 @@ input[type="radio"]:checked + .image-radio .image-radio--image:after {
     line-height:32px;
     color:white;
     position:absolute;
-    bottom:0;
-    right:0;
+    bottom:-2px;
+    right:-2px;
     height:32px;
     width:32px;
-    background-color:black;
+    background-color:#0C2069;
     font-family: 'Material Icons Round';
     text-align:center;
 
