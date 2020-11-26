@@ -22,10 +22,28 @@
 
     <div id="rooftype">
         <h1>Overdække</h1>
-        <label for="flat">Carport med fladt tag</label>
-        <input type="radio" id="flat" name="roof" checked="checked">
-        <label for="angle">Carport med rejsning</label>
-        <input type="radio" id="angle" name="roof">
+        <div class="form-group row">
+            <div class="col">
+                <input type="radio" hidden checked required id="car-type-flat" name="roof-type" value="flat">
+                <div class="image-radio" data-radio="flat">
+                    <div class="image-radio--image" style="background-image: none"></div>
+                </div>
+                <label for="car-type-flat">
+                    Go flat
+                    <span class="d-block">Dette er et flat tag</span>
+                </label>
+            </div>
+            <div class="col">
+                <input type="radio" hidden required id="car-type-angled" name="roof-type" value="angled">
+                <div class="image-radio" data-radio="angled">
+                    <div class="image-radio--image" style="background-image: none"></div>
+                </div>
+                <label for="car-type-angled">
+                    Go angled
+                    <span class="d-block">Dette er et angled tag</span>
+                </label>
+            </div>
+        </div>
     </div>
     <div id="toolshed">
         <div>
