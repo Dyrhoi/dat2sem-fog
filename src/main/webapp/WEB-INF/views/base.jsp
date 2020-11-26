@@ -25,7 +25,7 @@
 
     <!--content-->
     <main>
-        <jsp:include page="/WEB-INF/pages/${requestScope.content}.jsp" />
+        <jsp:include page="/WEB-INF/views/pages/${requestScope.content}.jsp" />
     </main>
 </div>
 
