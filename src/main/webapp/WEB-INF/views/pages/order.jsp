@@ -7,10 +7,10 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<form method="post" action="${pageContext.request.contextPath}" id="order_form" class="bg-light">
-    <h1>Dimensioner</h1>
-    <div class="form-horizontal col-md-12 col-xs-12">
-        <div id="carportDimensions" class="from-group row">
+<form method="post" action="${pageContext.request.contextPath}" id="order_form" class="">
+   <div class="">
+       <h1>Dimensioner</h1>
+       <div id="carportDimensions" class="from-group row">
             <div class="col">
                 <div class="d-flex">
                     <label class="col-form-label" for="width">Carport bredde</label>
