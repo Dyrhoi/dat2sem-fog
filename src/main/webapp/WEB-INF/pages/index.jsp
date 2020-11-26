@@ -9,14 +9,16 @@
 
 <form method="post" action="${pageContext.request.contextPath}" id="order_form" class="bg-light">
     <h1>Dimensioner</h1>
-    <div id="carportDimensions">
-        <div class="form-group row">
+    <div id="carportDimensions" class="from-group row pl-2">
+        <div class="col">
             <label class="col-form-label" for="width">Carport bredde</label>
-            <label class="col-form-label" for="length">Carport længde</label>
+            <br>
+            <input class="col-11" type="range" id="width" value="480" step="30" min="240" max="750">
         </div>
-        <div class="form-group row">
-            <input class="col-md-4" type="range" id="width" value="480" step="30" min="240" max="750" style="width: 400px">
-            <input class="col-md-4" type="range" id="length" value="480" step="30" min="240" max="780" style="width: 400px">
+        <div class="col">
+            <label class="col-form-label" for="length">Carport længde</label>
+            <br>
+            <input class="col-11" type="range" id="length" value="480" step="30" min="240" max="780">
         </div>
     </div>
 
@@ -52,30 +54,46 @@
             <div id="toolshedDimensions">
                 <div class="form-group-row">
                     <label class="col-form-label" for="shedWidth">Redskabsrum bredde</label>
-                    <label class="col-form-label" for="shedLength">Redskabsrum længde</label>
+                    <br>
+                    <input type="range" id="shedWidth" value="210" step="30" min="210" max="780">
                 </div>
                 <div class="form-group row">
-                    <input type="range" id="shedWidth" value="210" step="30" min="210" max="780">
+                    <label class="col-form-label" for="shedLength">Redskabsrum længde</label>
+                    <br>
                     <input type="range" id="shedLength" value="150" step="30" min="150" max="690">
                 </div>
             </div>
         </div>
     </div>
-    <div id="userInfo" class="input-group">
-        <label for="name">Navn</label>
-        <input type="text" id="name">
-        <label for="address">Adresse</label>
-        <input type="text" id="address">
-        <label for="city">By</label>
-        <input type="text" id="city">
-        <label for="postalcode">Postnummer</label>
-        <input type="text" id="postalcode">
-        <label for="phonenumber">Telefon</label>
-        <input type="text" id="phonenumber">
-        <label for="email">E-mail adresse</label>
-        <input type="text" id="email">
-        <label for="comment">Evt. bemærkninger</label>
-        <textarea id="comment"></textarea>
+    <div id="userInfo" class="form-horizontal col-md-12 col-xs-12">
+        <div>
+            <label class="" for="name">Navn</label>
+            <input class="form-control" type="text" id="name">
+        </div>
+        <div>
+            <label for="address">Adresse</label>
+            <input class="form-control" type="text" id="address">
+        </div>
+        <div>
+            <label for="city">By</label>
+            <input class="form-control" type="text" id="city">
+        </div>
+        <div>
+            <label for="postalcode">Postnummer</label>
+            <input class="form-control" type="text" id="postalcode">
+        </div>
+        <div>
+            <label for="phonenumber">Telefon</label>
+            <input class="form-control" type="text" id="phonenumber">
+        </div>
+        <div>
+            <label for="email">E-mail adresse</label>
+            <input class="form-control" type="text" id="email">
+        </div>
+        <div>
+            <label for="comment">Evt. bemærkninger</label>
+            <textarea class="form-control" id="comment"></textarea>
+        </div>
     </div>
-        <input type="submit" value="Indhent tilbud"/>
+        <input type="submit" value="Send forespørgsel"/>
 </form>
