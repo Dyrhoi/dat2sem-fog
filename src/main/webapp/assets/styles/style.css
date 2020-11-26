@@ -1,0 +1,7 @@
+#toolshedDimensions {
+    display: none;
+}
+
+#shedCheckbox:checked ~ #toolshedDimensions {
+    display: block;
+}
