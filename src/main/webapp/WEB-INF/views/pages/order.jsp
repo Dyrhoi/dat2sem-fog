@@ -17,8 +17,8 @@
         <div class="row landing-items">
             <div class="col-md text-center">
                 <div class="">
-                    <div class="rounded-circle bg-light mb-2">
-                        <span class="material-icons-round text-dark">
+                    <div class="rounded-circle mb-2">
+                        <span class="material-icons-round">
                             crop_free
                         </span>
                     </div>
@@ -28,8 +28,8 @@
             </div>
             <div class="col-md text-center">
                 <div class="">
-                    <div class="rounded-circle bg-light mb-2">
-                        <span class="material-icons-round text-dark">
+                    <div class="rounded-circle mb-2">
+                        <span class="material-icons-round">
                             local_offer
                         </span>
                     </div>
@@ -39,8 +39,8 @@
             </div>
             <div class="col-md text-center">
                 <div class="">
-                    <div class="rounded-circle bg-light mb-2">
-                        <span class="material-icons-round text-dark">
+                    <div class="rounded-circle mb-2">
+                        <span class="material-icons-round">
                             sentiment_satisfied_alt
                         </span>
                     </div>
@@ -57,7 +57,7 @@
                 <h2>Dimensioner</h2>
                 <div id="carportDimensions" class="from-group row">
                     <div class="col-sm">
-                        <div class="d-flex align-items-center">
+                        <div class="d-flex align-items-center mb-2">
                             <label class="" for="width">Carport bredde</label>
                             <span class="ml-auto range-label" data-range="carport-width"><span>480</span>cm</span>
                         </div>
@@ -65,7 +65,7 @@
                                max="750">
                     </div>
                     <div class="col-sm">
-                        <div class="d-flex align-items-center">
+                        <div class="d-flex align-items-center mb-2">
                             <label class="" for="length">Carport længde</label>
                             <span class="ml-auto range-label" data-range="carport-length"><span>480</span>cm</span>
                         </div>
@@ -80,22 +80,22 @@
                 <div class="form-group row">
                     <div class="col-sm">
                         <label for="car-type-flat">
-                            Go flat
-                            <span class="d-block font-weight-normal">Dette er et flat tag</span>
+                            Fladt tag
+                            <span class="d-block font-weight-normal">Et simpelt men effektivt tag.</span>
                         </label>
                         <input type="radio" hidden checked required id="car-type-flat" name="roof-type" value="flat">
                         <div class="image-radio" data-radio="flat">
-                            <div class="image-radio--image" style="background-image: none"></div>
+                            <div class="image-radio--image" style="background-image: url('https://image.architonic.com/pro2-3/20059413/carport-cp37-1-pro-b-arcit18.jpg')"></div>
                         </div>
                     </div>
                     <div class="col-sm">
                         <label for="car-type-angled">
-                            Go angled
-                            <span class="d-block font-weight-normal">Dette er et angled tag</span>
+                            Tag med rejsning
+                            <span class="d-block font-weight-normal">Et sejere men dyrere tag.</span>
                         </label>
                         <input type="radio" hidden required id="car-type-angled" name="roof-type" value="angled">
                         <div class="image-radio" data-radio="angled">
-                            <div class="image-radio--image" style="background-image: none"></div>
+                            <div class="image-radio--image" style="background-image: url('https://www.theshedcompany.com.au/assets/product/Gable-roof-with-infill-carport__ScaleMaxWidthWzgwMF0.jpg')"></div>
                         </div>
                     </div>
                 </div>
@@ -103,11 +103,11 @@
 
             <section>
                 <h2>Redskabsskur</h2>
-                <label for="shed_checkbox">Med redskabsskur?</label>
+                <label for="shed_checkbox">Tilbygning af redskabsskur</label>
                 <input type="checkbox" id="shed_checkbox">
                 <div id="shed_dimensions" class="row">
                     <div class="col-sm form-group">
-                        <div class="d-flex">
+                        <div class="d-flex align-items-center mb-2">
                             <label class="col-form-label" for="shed-width">Redskabsrum bredde</label>
                             <span class="ml-auto col-form-label range-label" data-range="shed-width"><span>210</span>cm</span>
                         </div>
@@ -115,7 +115,7 @@
                                min="210" max="780">
                     </div>
                     <div class="form-group col-sm">
-                        <div class="d-flex">
+                        <div class="d-flex align-items-center mb-2">
                             <label class="col-form-label" for="shed-length">Redskabsrum længde</label>
                             <span class="ml-auto col-form-label range-label" data-range="shed-length"><span>150</span>cm</span>
                         </div>
@@ -165,7 +165,7 @@
                     <textarea class="form-control" id="comment"></textarea>
                 </div>
             </section>
-            <section class="d-flex justify-content-end">
+            <section class="d-flex justify-content-end align-items-center">
                 <button type="button" class="btn btn-primary">Indsend forespørgsel</button>
             </section>
         </form>

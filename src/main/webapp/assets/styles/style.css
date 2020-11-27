@@ -6,6 +6,10 @@
     display: flex;
 }
 
+/*
+Labels
+ */
+
 label {
     font-size:1rem;
     font-weight: 500;
@@ -15,29 +19,63 @@ label {
     margin-bottom:0;
 }
 
+/*
+Landing page.
+*/
+
 .landing-items .rounded-circle {
     margin:0 auto;
     height:70px;
     width:70px;
     line-height: 70px;
+    transition: all .2s ease-in-out;
+    background-color: #f8f9fa;
+    overflow: hidden;
+    position: relative;
 }
 
 .landing-items .rounded-circle span {
     line-height: 70px;
+    color:#343a40;
     font-size: 35px;
+    transition: color .2s ease;
+    position: relative;
+    z-index:2;
+}
+
+.landing-items > div .rounded-circle:after {
+    content: "";
+    z-index:0;
+    position: absolute;
+    top:0;
+    left:0;
+    height:100%;
+    width: 100%;
+    opacity: 0;
+    transition: opacity .4s ease;
+    background: linear-gradient(80deg, rgb(0, 14, 74), rgb(13, 74, 115));
+}
+
+
+.landing-items > div:hover .rounded-circle:after {
+    opacity: .9;
+}
+
+.landing-items > div:hover .rounded-circle span {
+    color:white;
 }
 
 /*Radio with images*/
 
 .image-radio {
-    border:2px solid #dedede;
+    border:4px solid transparent;
     width:100%;
     transition: background .2s ease-in-out;
 }
 
 input[type="radio"]:checked + .image-radio {
     background-color:#DEDEDE;
-    border:2px solid #0C2069;
+    border:4px solid #003d76;
 }
 
 .image-radio:hover {
@@ -47,11 +85,14 @@ input[type="radio"]:checked + .image-radio {
 .image-radio--image {
     width:100%;
     height:200px;
+    /*
     background-size: 110%;
     background-position-x: 40%;
     background-position-y: -15px;
     background-repeat: no-repeat;
     transition: background .2s ease-in-out;
+     */
+    background-size: cover;
     cursor:pointer;
     position: relative;
 }
@@ -59,28 +100,36 @@ input[type="radio"]:checked + .image-radio {
 
 input[type="radio"]:checked + .image-radio .image-radio--image:after {
     content: "done";
-    line-height:32px;
+    line-height:42px;
     color:white;
     position:absolute;
-    bottom:-2px;
-    right:-2px;
-    height:32px;
-    width:32px;
-    background-color:#0C2069;
+    bottom:-3px;
+    right:-3px;
+    height:42px;
+    width:42px;
+    font-size:24px;
+    background-color:#003d76;
     font-family: 'Material Icons Round';
     text-align:center;
 
 }
 
 input[type="radio"]:checked + .image-radio .image-radio--image {
+    /*
     background-size:120%;
     background-position-x: 40%;
     background-position-y: -30px;
+
+     */
 }
 
 .image-radio--image:hover {
     background-color:#DCDCDC;
 }
+
+/*
+Default paddings
+ */
 
 section {
     padding: 2rem 0;
@@ -88,4 +137,52 @@ section {
 
 form section {
     padding: 1rem 0;
+}
+
+/*
+Rangeslider
+ */
+
+.rangeslider, .rangeslider__fill {
+    box-shadow:none;
+}
+
+.rangeslider__fill {
+    background-color: #003d76;
+}
+
+.rangeslider--horizontal .rangeslider__handle {
+    top:50%;
+    transform:translateY(-50%);
+}
+.rangeslider__handle {
+    width:25px;
+    height:25px;
+}
+
+.rangeslider--horizontal {
+    height: 15px;
+}
+
+/*
+
+Default values changed
+cus scuffed css variables... :(
+
+*/
+
+.btn-primary {
+    background-color: #003d76;
+    border-color: #003d76;
+}
+
+.btn-primary:hover {
+    background-color: #17599b;
+    border-color: #17599b;
+}
+
+@media (min-width: 1200px) {
+    .container {
+        max-width: 960px !important;
+    }
 }

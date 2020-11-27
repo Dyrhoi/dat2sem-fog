@@ -19,7 +19,7 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/styles/style.css?fc=<%= Math.random() %>">
 </head>
 
-<body>
+<body class=>
     <!--Header-->
 
     <!--Nav Bar-->
