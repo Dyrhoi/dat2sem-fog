@@ -1,14 +1,23 @@
-#toolshedDimensions {
+#shed_dimensions {
     display: none;
 }
 
-#shedCheckbox:checked ~ #toolshedDimensions {
+#shed_checkbox:checked ~ #shed_dimensions {
     display: flex;
+}
+
+label {
+    font-size:1rem;
+    font-weight: 500;
+}
+
+.d-flex label {
+    margin-bottom:0;
 }
 
 /*Radio with images*/
 
-.row .col .image-radio {
+.image-radio {
     border:2px solid #dedede;
     width:100%;
     transition: background .2s ease-in-out;
@@ -19,11 +28,11 @@ input[type="radio"]:checked + .image-radio {
     border:2px solid #0C2069;
 }
 
-.row .col .image-radio:hover {
+.image-radio:hover {
     background-color:#DCDCDC;
 }
 
-.row .col .image-radio--image {
+.image-radio--image {
     width:100%;
     height:200px;
     background-size: 110%;
@@ -57,6 +66,6 @@ input[type="radio"]:checked + .image-radio .image-radio--image {
     background-position-y: -30px;
 }
 
-.row .col .image-radio--image:hover {
+.image-radio--image:hover {
     background-color:#DCDCDC;
 }
