@@ -89,13 +89,31 @@
                         </div>
                     </div>
                     <div class="col-sm">
-                        <label for="car-type-angled">
-                            Tag med rejsning
-                            <span class="d-block font-weight-normal">Et sejere men dyrere tag.</span>
-                        </label>
-                        <input type="radio" hidden required id="car-type-angled" name="roof-type" value="angled">
-                        <div class="image-radio" data-radio="angled">
-                            <div class="image-radio--image" style="background-image: url('https://www.theshedcompany.com.au/assets/product/Gable-roof-with-infill-carport__ScaleMaxWidthWzgwMF0.jpg')"></div>
+                        <div class="form-group">
+                            <label for="car-type-angled">
+                                Tag med rejsning
+                                <span class="d-block font-weight-normal">Et sejere men dyrere tag.</span>
+                            </label>
+                            <input type="radio" hidden required id="car-type-angled" name="roof-type" value="angled">
+                            <div class="image-radio" data-radio="angled">
+                                <div class="image-radio--image" style="background-image: url('https://www.theshedcompany.com.au/assets/product/Gable-roof-with-infill-carport__ScaleMaxWidthWzgwMF0.jpg')"></div>
+                            </div>
+                        </div>
+                        <div class="options disabled">
+                            <div class="form-group">
+                                <div class="d-flex align-items-center mb-2">
+                                    <label class="" for="angle">Tag hældning</label>
+                                    <span class="ml-auto range-label" data-range="roof-angle"><span>2000</span> grader</span>
+                                </div>
+                                <input class="custom-range" name="roof-angle" type="range" id="angle" value="25" step="5" min="15"
+                                       max="45">
+                            </div>
+                            <div class="form-group">
+                                <label for="roof_material">Tagmateriale</label>
+                                <select disabled class="form-control" id="roof_material">
+                                    <option>Yeeeet.</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
