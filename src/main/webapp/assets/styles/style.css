@@ -15,6 +15,18 @@ label {
     margin-bottom:0;
 }
 
+.landing-items .rounded-circle {
+    margin:0 auto;
+    height:70px;
+    width:70px;
+    line-height: 70px;
+}
+
+.landing-items .rounded-circle span {
+    line-height: 70px;
+    font-size: 35px;
+}
+
 /*Radio with images*/
 
 .image-radio {
@@ -68,4 +80,12 @@ input[type="radio"]:checked + .image-radio .image-radio--image {
 
 .image-radio--image:hover {
     background-color:#DCDCDC;
+}
+
+section {
+    padding: 2rem 0;
+}
+
+form section {
+    padding: 1rem 0;
 }
