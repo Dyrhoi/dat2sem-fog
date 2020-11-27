@@ -7,7 +7,7 @@
 }
 
 /*
-Labels
+Form stuff
  */
 
 label {
@@ -17,6 +17,22 @@ label {
 
 .d-flex label {
     margin-bottom:0;
+}
+
+.options {
+    position: relative;
+}
+
+.options.disabled:after {
+    content: "";
+    position: absolute;
+    top:0;
+    left:0;
+    height:100%;
+    width:100%;
+    background-color: white;
+    mix-blend-mode: saturation;
+    cursor:not-allowed;
 }
 
 /*
