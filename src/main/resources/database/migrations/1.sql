@@ -1,3 +1,4 @@
+SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS customers;
 DROP TABLE IF EXISTS carports;
 DROP TABLE IF EXISTS orders;
@@ -5,6 +6,7 @@ DROP TABLE IF EXISTS sheds;
 DROP TABLE IF EXISTS materials;
 DROP TABLE IF EXISTS material_types;
 DROP TABLE IF EXISTS bill_of_materials;
+SET FOREIGN_KEY_CHECKS = 1;
 
 create table customers(
     id int PRIMARY KEY AUTO_INCREMENT,
@@ -48,7 +50,6 @@ create table materials(
     id int PRIMARY KEY AUTO_INCREMENT,
     name varchar(250),
     stock int,
-    description varchar(500),
     material_types_id int,
     FOREIGN KEY (material_types_id) REFERENCES material_types(id)
 );
