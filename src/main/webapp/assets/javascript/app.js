@@ -26,6 +26,10 @@ $('.custom-range').rangeslider({
    polyfill : false
 });
 
+$("#shed_checkbox").change(function () {
+   $("#shed_dimensions .custom-range").rangeslider("update", true);
+})
+
 function updateRangeLabels(element) {
    let targetName = $(element).attr("name");
    let target = $(".range-label[data-range='" + targetName + "']");
