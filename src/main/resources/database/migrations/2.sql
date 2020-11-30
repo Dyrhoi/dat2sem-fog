@@ -1,7 +1,7 @@
-INSERT INTO material_types(name, description) VALUES ('Træ', 'Skelet og beklædning'),
+INSERT INTO material_types(name, description) VALUES ('Træ', 'Træ og tagplader'),
                                                      ('Tag', 'Tagsten & Tagpap'),
-                                                     ('Beslag', 'Beslag til montering af div.'),
-                                                     ('Skruer', 'Skruer til montering');
+                                                     ('Beslag', 'Beslag og Skruer'),
+                                                     ('Skruer', 'Beslag og Skruer');
 
                                                             /*Træ materialer fra carport med hældning*/
 INSERT INTO materials(name, stock, material_types_id) values ('25x150 mm. trykimprægneret bræt', 1000, 1),
@@ -80,3 +80,5 @@ INSERT INTO materials(name, stock, material_types_id) values ('25x150 mm. trykim
                                                              ('Firkantskiver 40x40x11 mm.', 1000, 4),
                                                              ('4,5 x 70 mm. Skruer, 400 stk', 1000, 4),
                                                              ('4,5 x 50 mm. Skruer, 300 stk', 1000, 4);
+
+UPDATE properties SET value = 2 WHERE name = 'version';
