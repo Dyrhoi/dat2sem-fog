@@ -13,6 +13,7 @@ import java.io.IOException;
 public class OrderServlet extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setAttribute("roofTypes", api.getRoofTypes());
         super.render("Byg selv Carport - Fog", "order", req, resp);
     }
 
