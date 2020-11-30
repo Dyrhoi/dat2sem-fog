@@ -1,6 +1,8 @@
 package web.servlets;
 
 import api.API;
+import domain.material.dao.MaterialDAO;
+import infrastructure.Database;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -27,7 +29,8 @@ public class BaseServlet extends HttpServlet {
 
     }
     private static API attachAPI() {
-        return new API();
+        Database db = new Database();
+        return new API(new MaterialDAO(db));
     }
 
     /*
