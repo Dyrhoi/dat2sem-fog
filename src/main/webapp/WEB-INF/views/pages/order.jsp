@@ -93,7 +93,7 @@
                             <div class="form-group">
                                 <label for="roof_flat_material">Tagmateriale</label>
                                 <select class="form-control" id="roof_flat_material">
-                                    <option>Yeeeet.</option>
+                                    <option>Tag Materiale #1</option>
                                 </select>
                             </div>
                         </div>
@@ -113,7 +113,7 @@
                             <div class="form-group">
                                 <label for="roof_angled_material">Tagmateriale</label>
                                 <select class="form-control" id="roof_angled_material">
-                                    <option>Yeeeet.</option>
+                                    <option>Tag Materiale #1</option>
                                 </select>
                             </div>
                             <div class="form-group mb-0">
