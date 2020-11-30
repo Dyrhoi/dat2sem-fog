@@ -5,7 +5,6 @@ $(".custom-range").each(function () {
 
 $(".image-radio--radio").each(function () {
    updateRadioDisable(this);
-   console.log($(this).prop("checked"));
    if($(this).prop("checked")) return false;
 });
 
