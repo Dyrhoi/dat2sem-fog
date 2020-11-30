@@ -86,7 +86,7 @@
                             </label>
                             <input type="radio" class="image-radio--radio" hidden checked required id="car-type-flat" name="roof-type" value="flat">
                             <div class="image-radio" data-radio="flat">
-                                <div class="image-radio--image" style="background-image: url('https://image.architonic.com/pro2-3/20059413/carport-cp37-1-pro-b-arcit18.jpg')"></div>
+                                <div class="image-radio--image" style="background-image: url('https://preview.free3d.com/img/2019/05/2154879260106425428/ih7duys9-900.jpg')"></div>
                             </div>
                         </div>
                         <div class="options">
@@ -106,7 +106,7 @@
                             </label>
                             <input type="radio" class="image-radio--radio" hidden required id="car-type-angled" name="roof-type" value="angled">
                             <div class="image-radio" data-radio="angled">
-                                <div class="image-radio--image" style="background-image: url('https://www.theshedcompany.com.au/assets/product/Gable-roof-with-infill-carport__ScaleMaxWidthWzgwMF0.jpg')"></div>
+                                <div class="image-radio--image" style="background-image: url('https://preview.free3d.com/img/2020/06/2337161513644590386/d9yfqpbm-900.jpg')"></div>
                             </div>
                         </div>
                         <div class="options">
