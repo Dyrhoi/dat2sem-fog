@@ -52,10 +52,10 @@
     </section>
 
     <section>
-        <form method="post" action="${pageContext.request.contextPath}" id="order_form" class="">
+        <form method="post" action="${pageContext.request.contextPath}/" id="order_form" class="">
             <section>
                 <h2>Dimensioner</h2>
-                <div id="carportDimensions" class="from-group row">
+                <div id="carportDimensions" class="form-group row">
                     <div class="col-sm">
                         <div class="d-flex align-items-center mb-2">
                             <label class="" for="width">Carport bredde</label>
@@ -132,7 +132,7 @@
             <section>
                 <h2>Redskabsskur</h2>
                 <label for="shed_checkbox">Tilbygning af redskabsskur</label>
-                <input type="checkbox" id="shed_checkbox">
+                <input type="checkbox" id="shed_checkbox" name="shed-checkbox">
                 <div id="shed_dimensions" class="row">
                     <div class="col-sm form-group">
                         <div class="d-flex align-items-center mb-2">
@@ -167,25 +167,25 @@
                 <div class="form-row">
                     <div class="col-md-5 form-group">
                         <label for="address">Adresse</label>
-                        <input class="form-control" type="text" id="address">
+                        <input class="form-control" type="text" id="address" name="address">
                     </div>
                     <div class="col-md-5 form-group">
                         <label for="city">By</label>
-                        <input class="form-control" type="text" id="city">
+                        <input class="form-control" type="text" id="city" name="city">
                     </div>
                     <div class="col-md-2 form-group">
                         <label for="postalcode">Postnummer</label>
-                        <input class="form-control" type="text" id="postalcode">
+                        <input class="form-control" type="text" id="postalcode" name="postal-code">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="col-md form-group">
                         <label for="email">E-mail adresse</label>
-                        <input class="form-control" type="text" id="email">
+                        <input class="form-control" type="text" id="email" name="email">
                     </div>
                     <div class="col-md form-group">
                         <label for="phonenumber">Telefon</label>
-                        <input class="form-control" type="text" id="phonenumber">
+                        <input class="form-control" type="text" id="phonenumber" name="phone-number">
                     </div>
                 </div>
                 <div class="form-group">
@@ -194,7 +194,7 @@
                 </div>
             </section>
             <section class="d-flex justify-content-end align-items-center">
-                <button type="button" class="btn btn-primary">Indsend forespørgsel</button>
+                <button type="submit" class="btn btn-primary">Indsend forespørgsel</button>
             </section>
         </form>
     </section>
