@@ -4,7 +4,7 @@ import java.security.SecureRandom;
 import java.util.Base64;
 
 public class Util {
-    private String generateSecureToken() {
+    public static String generateSecureToken() {
         Base64.Encoder encoder = Base64.getUrlEncoder().withoutPadding();
         SecureRandom random = new SecureRandom();
 
