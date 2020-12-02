@@ -23,7 +23,7 @@
     <!--Header-->
 
     <!--Nav Bar-->
-    <nav class="navbar navbar-light border-bottom mb-3">
+    <nav class="navbar navbar-light border-bottom mb-3 bg-white">
         <div class="container">
             <a class="navbar-brand" href="${pageContext.request.contextPath}/">Fog</a>
         </div>
