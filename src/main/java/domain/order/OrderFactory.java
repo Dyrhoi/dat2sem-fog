@@ -3,6 +3,8 @@ package domain.order;
 import domain.carport.Carport;
 import domain.customer.Customer;
 import domain.shed.Shed;
+import org.apache.commons.validator.Validator;
+import org.apache.commons.validator.routines.EmailValidator;
 import validation.ValidationErrorException;
 
 import java.util.UUID;
@@ -35,14 +37,18 @@ public abstract class OrderFactory {
     }
 
     public void validate() throws ValidationErrorException {
-        ValidationErrorException validationErrorException = new ValidationErrorException();
+        ValidationErrorException valEx = new ValidationErrorException();
 
-        /*
-        * What can go wrong?
-        * */
+        //What can go wrong?
+        //Customer:
+        if(customer == null)
+            valEx.addProblem("customer", "We did not receive all expected inputs.");
+        EmailValidator emailValidator = EmailValidator.getInstance();
+        if(!emailValidator.isValid(customer.getEmail()))
+            valEx.addProblem("email", "");
 
 
-        validationErrorException.validate();
+        valEx.validate();
     }
 
     public Order validateAndCommit() throws ValidationErrorException {

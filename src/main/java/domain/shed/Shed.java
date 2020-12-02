@@ -7,6 +7,8 @@ public class Shed {
     private final int width;
     private final int length;
 
+    //TODO: - Static max length and widths, for validation.
+
     public Shed(int id, int width, int length) {
         this.id = id;
         this.width = width;
