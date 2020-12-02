@@ -12,7 +12,8 @@
         <section>
             <div class=>
                 <h1>Byg selv carport med Fog</h1>
-                <p class="lead">Kan du ikke finde den helt rigtige carport? Med byg selv, kan du selv justere dine mål, så sender vi dig et tilbud.</p>
+                <p class="lead">Kan du ikke finde den helt rigtige carport? Med byg selv, kan du selv justere dine mål,
+                    så sender vi dig et tilbud.</p>
             </div>
         </section>
         <section>
@@ -46,30 +47,6 @@
                                 sentiment_satisfied_alt
                             </span>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </section>
-
-    <section>
-        <form method="post" action="${pageContext.request.contextPath}/" id="order_form" class="">
-            <section>
-                <h2>Dimensioner</h2>
-                <div id="carportDimensions" class="form-group row">
-                    <div class="col-sm">
-                        <div class="d-flex align-items-center mb-2">
-                            <label class="" for="width">Carport bredde</label>
-                            <span class="ml-auto range-label" data-range="carport-width"><span>480</span>cm</span>
-                        </div>
-                        <input class="custom-range" name="carport-width" type="range" id="width" value="480" step="30" min="240"
-                               max="750">
-                    </div>
-                    <div class="col-sm">
-                        <div class="d-flex align-items-center mb-2">
-                            <label class="" for="length">Carport længde</label>
-                            <span class="ml-auto range-label" data-range="carport-length"><span>480</span>cm</span>
-                        </div>
                         <h4>Tilfredshedsgaranti</h4>
                         <p class="mb-0">Med professionelle montører er du sikker på 100% tilfredshedsgaranti.</p>
                     </div>
@@ -87,7 +64,8 @@
                                 <label class="" for="width">Carport bredde</label>
                                 <span class="ml-auto range-label" data-range="carport-width"><span>480</span>cm</span>
                             </div>
-                            <input class="custom-range" name="carport-width" type="range" id="width" value="480" step="30" min="240"
+                            <input class="custom-range" name="carport-width" type="range" id="width" value="480"
+                                   step="30" min="240"
                                    max="750">
                         </div>
                         <div class="col-sm">
@@ -95,7 +73,8 @@
                                 <label class="" for="length">Carport længde</label>
                                 <span class="ml-auto range-label" data-range="carport-length"><span>480</span>cm</span>
                             </div>
-                            <input class="custom-range" name="carport-length" type="range" id="length" value="480" step="30" min="240"
+                            <input class="custom-range" name="carport-length" type="range" id="length"
+                                   value="480" step="30" min="240"
                                    max="780">
                         </div>
                     </div>
@@ -110,9 +89,11 @@
                                     Fladt tag
                                     <span class="d-block font-weight-normal">Et simpelt men effektivt tag.</span>
                                 </label>
-                                <input type="radio" class="image-radio--radio" hidden checked required id="car-type-flat" name="roof-type" value="flat">
+                                <input type="radio" class="image-radio--radio" hidden checked required
+                                       id="car-type-flat" name="roof-type" value="flat">
                                 <div class="image-radio" data-radio="flat">
-                                    <div class="image-radio--image" style="background-image: url('https://preview.free3d.com/img/2019/05/2154879260106425428/ih7duys9-900.jpg')"></div>
+                                    <div class="image-radio--image"
+                                         style="background-image: url('https://preview.free3d.com/img/2019/05/2154879260106425428/ih7duys9-900.jpg')"></div>
                                 </div>
                             </div>
                             <div class="options">
@@ -134,16 +115,19 @@
                                     Tag med rejsning
                                     <span class="d-block font-weight-normal">Et sejere men dyrere tag.</span>
                                 </label>
-                                <input type="radio" class="image-radio--radio" hidden required id="car-type-angled" name="roof-type" value="angled">
+                                <input type="radio" class="image-radio--radio" hidden required
+                                       id="car-type-angled" name="roof-type" value="angled">
                                 <div class="image-radio" data-radio="angled">
-                                    <div class="image-radio--image" style="background-image: url('https://preview.free3d.com/img/2020/06/2337161513644590386/d9yfqpbm-900.jpg')"></div>
+                                    <div class="image-radio--image"
+                                         style="background-image: url('https://preview.free3d.com/img/2020/06/2337161513644590386/d9yfqpbm-900.jpg')"></div>
                                 </div>
                             </div>
                             <div class="options">
                                 <div class="form-group">
                                     <label for="roof_angled_material">Tagmateriale</label>
                                     <select class="form-control" id="roof_angled_material">
-                                        <c:forEach items="${requestScope.roofTypes}" var="item" varStatus="loop">
+                                        <c:forEach items="${requestScope.roofTypes}" var="item"
+                                                   varStatus="loop">
                                             <option value="${loop.index}"><c:out value="${item}"/></option>
                                         </c:forEach>
                                     </select>
@@ -151,85 +135,91 @@
                                 <div class="form-group mb-0">
                                     <div class="d-flex align-items-center mb-2">
                                         <label class="" for="angle">Tag hældning</label>
-                                        <span class="ml-auto range-label" data-range="roof-angle"><span>2000</span> grader</span>
+                                        <span class="ml-auto range-label"
+                                              data-range="roof-angle"><span>2000</span> grader</span>
                                     </div>
-                                    <input class="custom-range" name="roof-angle" type="range" id="angle" value="25" step="5" min="15"
+                                    <input class="custom-range" name="roof-angle" type="range" id="angle"
+                                           value="25" step="5" min="15"
                                            max="45">
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            <section>
-                <h2>Redskabsskur</h2>
-                <p>NB! Der skal beregnes 15 cm tagudhæng på hver side af redskabsrummet</p>
-                <input type="checkbox" class="css-checkbox" id="shed_checkbox">
-                <label for="shed_checkbox" class="css-label">Tilbygning af redskabsskur</label>
-                <div id="shed_dimensions" class="row">
-                    <div class="col-sm form-group">
-                        <div class="d-flex align-items-center mb-2">
-                            <label class="col-form-label" for="shed-width">Redskabsrum bredde</label>
-                            <span class="ml-auto col-form-label range-label" data-range="shed-width"><span>210</span>cm</span>
+                <section>
+                    <h2>Redskabsskur</h2>
+                    <p>NB! Der skal beregnes 15 cm tagudhæng på hver side af redskabsrummet</p>
+                    <input type="checkbox" class="css-checkbox" id="shed_checkbox">
+                    <label for="shed_checkbox" class="css-label">Tilbygning af redskabsskur</label>
+                    <div id="shed_dimensions" class="row">
+                        <div class="col-sm form-group">
+                            <div class="d-flex align-items-center mb-2">
+                                <label class="col-form-label" for="shed-width">Redskabsrum bredde</label>
+                                <span class="ml-auto col-form-label range-label"
+                                      data-range="shed-width"><span>210</span>cm</span>
+                            </div>
+                            <input class="custom-range" name="shed-width" type="range" id="shed-width"
+                                   value="210" step="30"
+                                   min="210" max="780">
                         </div>
-                        <input class="custom-range" name="shed-width" type="range" id="shed-width" value="210" step="30"
-                               min="210" max="780">
-                    </div>
-                    <div class="form-group col-sm">
-                        <div class="d-flex align-items-center mb-2">
-                            <label class="col-form-label" for="shed-length">Redskabsrum længde</label>
-                            <span class="ml-auto col-form-label range-label" data-range="shed-length"><span>150</span>cm</span>
+                        <div class="form-group col-sm">
+                            <div class="d-flex align-items-center mb-2">
+                                <label class="col-form-label" for="shed-length">Redskabsrum længde</label>
+                                <span class="ml-auto col-form-label range-label"
+                                      data-range="shed-length"><span>150</span>cm</span>
+                            </div>
+                            <input class="custom-range" name="shed-length" type="range" id="shed-length"
+                                   value="150" step="30"
+                                   min="150" max="690">
                         </div>
-                        <input class="custom-range" name="shed-length" type="range" id="shed-length" value="150" step="30"
-                               min="150" max="690">
                     </div>
-                </div>
-            </section>
-            <section>
-                <h2>Kunde</h2>
-                <div class="form-row">
-                    <div class="col-md form-group">
-                        <label class="" for="first_name">Fornavn</label>
-                        <input class="form-control" type="text" id="first_name" name="first-name">
+                </section>
+                <section>
+                    <h2>Kunde</h2>
+                    <div class="form-row">
+                        <div class="col-md form-group">
+                            <label class="" for="first_name">Fornavn</label>
+                            <input class="form-control" type="text" id="first_name" name="first-name">
+                        </div>
+                        <div class="col-md form-group">
+                            <label for="last_name">Efternavn</label>
+                            <input class="form-control" type="text" id="last_name" name="last-name">
+                        </div>
                     </div>
-                    <div class="col-md form-group">
-                        <label for="last_name">Efternavn</label>
-                        <input class="form-control" type="text" id="last_name" name="last-name">
+                    <div class="form-row">
+                        <div class="col-md-5 form-group">
+                            <label for="address">Adresse</label>
+                            <input class="form-control" type="text" id="address" name="address">
+                        </div>
+                        <div class="col-md-5 form-group">
+                            <label for="city">By</label>
+                            <input class="form-control" type="text" id="city" name="city">
+                        </div>
+                        <div class="col-md-2 form-group">
+                            <label for="postalcode">Postnummer</label>
+                            <input class="form-control" type="text" id="postalcode" name="postal-code">
+                        </div>
                     </div>
-                </div>
-                <div class="form-row">
-                    <div class="col-md-5 form-group">
-                        <label for="address">Adresse</label>
-                        <input class="form-control" type="text" id="address" name="address">
+                    <div class="form-row">
+                        <div class="col-md form-group">
+                            <label for="email">E-mail adresse</label>
+                            <input class="form-control" type="text" id="email" name="email">
+                        </div>
+                        <div class="col-md form-group">
+                            <label for="phonenumber">Telefon</label>
+                            <input class="form-control" type="text" id="phonenumber" name="phone-number">
+                        </div>
                     </div>
-                    <div class="col-md-5 form-group">
-                        <label for="city">By</label>
-                        <input class="form-control" type="text" id="city" name="city">
+                    <div class="form-group">
+                        <label for="comment">Evt. bemærkninger</label>
+                        <textarea class="form-control" id="comment"></textarea>
                     </div>
-                    <div class="col-md-2 form-group">
-                        <label for="postalcode">Postnummer</label>
-                        <input class="form-control" type="text" id="postalcode" name="postal-code">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="col-md form-group">
-                        <label for="email">E-mail adresse</label>
-                        <input class="form-control" type="text" id="email" name="email">
-                    </div>
-                    <div class="col-md form-group">
-                        <label for="phonenumber">Telefon</label>
-                        <input class="form-control" type="text" id="phonenumber" name="phone-number">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="comment">Evt. bemærkninger</label>
-                    <textarea class="form-control" id="comment"></textarea>
-                </div>
-            </section>
-            <section class="d-flex justify-content-end align-items-center">
-                <button type="submit" class="btn btn-primary">Indsend forespørgsel</button>
-            </section>
-        </form>
-    </section>
+                </section>
+                <section class="d-flex justify-content-end align-items-center">
+                    <button type="submit" class="btn btn-primary">Indsend forespørgsel</button>
+                </section>
+            </form>
+        </section>
+    </div>
 </div>
