@@ -6,10 +6,10 @@ public class Carport {
 
     private final int width;
     private final int length;
-    private final String roof;
+    private final roofTypes roof;
     private int roofAngle;
 
-    public Carport(int id, int width, int length, String roof) {
+    public Carport(int id, int width, int length, roofTypes roof) {
         this.id = id;
         this.width = width;
         this.length = length;
@@ -24,7 +24,7 @@ public class Carport {
 
     public int getLength() { return length; }
 
-    public String getRoof() { return roof; }
+    public roofTypes getRoof() { return roof; }
 
     @Override
     public String toString() {
@@ -35,5 +35,10 @@ public class Carport {
                 ", roof='" + roof + '\'' +
                 ", roofAngle=" + roofAngle +
                 '}';
+    }
+
+    public static enum roofTypes {
+        FLAT,
+        ANGLED
     }
 }

@@ -70,7 +70,7 @@ public class OrderServlet extends BaseServlet {
             //carportHasShed = req.getParameter("shed-checkbox").equals("on");
             carportHasShed = req.getParameter("shed-checkbox") != null;
 
-            Carport carport = new Carport(id, carportWidth, carportLength, roofType);
+            Carport carport = new Carport(id, carportWidth, carportLength, Carport.roofTypes.valueOf(roofType));
 
             if (roofType.equals("angled")){
                 roofAngle = Integer.parseInt(req.getParameter("roof-angle"));
