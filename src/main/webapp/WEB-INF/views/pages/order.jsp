@@ -152,7 +152,7 @@
                 <section>
                     <h2>Redskabsskur</h2>
                     <p>NB! Der skal beregnes 15 cm tagudhæng på hver side af redskabsrummet</p>
-                    <input type="checkbox" class="css-checkbox" id="shed_checkbox">
+                    <input type="checkbox" name="shed-checkbox"  class="css-checkbox" id="shed_checkbox">
                     <label for="shed_checkbox" class="css-label">Tilbygning af redskabsskur</label>
                     <div id="shed_dimensions" class="row">
                         <div class="col-sm form-group">

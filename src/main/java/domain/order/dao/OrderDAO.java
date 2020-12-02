@@ -47,10 +47,15 @@ public class OrderDAO implements OrderRepository {
                         stmt.setString(5, getCustomer().getAddress().getCity());
                         stmt.setString(6, getCustomer().getAddress().getAddress());
 
-                        stmt.executeQuery();
+                        stmt.executeUpdate();
                         rs = stmt.getGeneratedKeys();
-                        rs.next();
-                        customerId = stmt.getGeneratedKeys().getInt(1);
+
+                        if(rs.next()) {
+                            customerId = rs.getInt(1);
+                        }
+                        else {
+                            throw new SQLException("Couldn't insert customer.");
+                        }
 
 
                         //Carport
@@ -60,10 +65,14 @@ public class OrderDAO implements OrderRepository {
                         stmt.setInt(2, getCarport().getLength());
                         stmt.setString(3, getCarport().getRoof().toString());
 
-                        stmt.executeQuery();
+                        stmt.executeUpdate();
                         rs = stmt.getGeneratedKeys();
-                        rs.next();
-                        carportId = stmt.getGeneratedKeys().getInt(1);
+                        if(rs.next()) {
+                            carportId = rs.getInt(1);
+                        }
+                        else {
+                            throw new SQLException("Couldn't insert carport.");
+                        }
 
                         //Shed
                         int shedId = -1;
@@ -73,10 +82,14 @@ public class OrderDAO implements OrderRepository {
                             stmt.setInt(2, getShed().getLength());
                             stmt.setInt(3, carportId);
 
-                            stmt.executeQuery();
+                            stmt.executeUpdate();
                             rs = stmt.getGeneratedKeys();
-                            rs.next();
-                            shedId = stmt.getGeneratedKeys().getInt(1);
+                            if(rs.next()) {
+                                shedId = rs.getInt(1);
+                            }
+                            else {
+                                throw new SQLException("Couldn't insert Shed");
+                            }
                         }
 
                         //Order
@@ -86,7 +99,7 @@ public class OrderDAO implements OrderRepository {
                         stmt.setInt(3, carportId);
                         stmt.setString(4, getToken());
 
-                        stmt.executeQuery();
+                        stmt.executeUpdate();
 
                         conn.commit();
 
@@ -99,7 +112,7 @@ public class OrderDAO implements OrderRepository {
                         conn.setAutoCommit(true);
                     }
                 } catch (SQLException throwables) {
-                    //Error connecting to database...?
+                    throwables.printStackTrace();
                     throw new RuntimeException(throwables);
                 }
                 throw new RuntimeException("Unknown error.");
