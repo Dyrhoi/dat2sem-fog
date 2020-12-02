@@ -1,5 +1,7 @@
 package domain.order;
 
+import api.Util;
+import com.mysql.cj.util.StringUtils;
 import domain.carport.Carport;
 import domain.customer.Customer;
 import domain.shed.Shed;
@@ -41,14 +43,59 @@ public abstract class OrderFactory {
 
         //What can go wrong?
         //Customer:
-        if(customer == null)
-            valEx.addProblem("customer", "We did not receive all expected inputs.");
-        EmailValidator emailValidator = EmailValidator.getInstance();
-        if(!emailValidator.isValid(customer.getEmail()))
-            valEx.addProblem("email", "");
+        validateCustomer(valEx);
+
 
 
         valEx.validate();
+    }
+
+    private void validateCustomer(ValidationErrorException valEx) {
+        if(customer == null)
+            valEx.addProblem("customer", "We did not receive all expected inputs.");
+        EmailValidator emailValidator = EmailValidator.getInstance();
+
+        if(!emailValidator.isValid(customer.getEmail()))
+            valEx.addProblem("email", "E-mail is not valid.");
+
+        if(StringUtils.isNullOrEmpty(customer.getFirstname()) || StringUtils.isNullOrEmpty(customer.getLastname()))
+            valEx.addProblem("name", "First and last name should be set.");
+
+        String phoneNumberStrip = Util.phoneNumberStrip(customer.getPhone());
+        try {
+            Integer.parseInt(phoneNumberStrip);
+        } catch (NumberFormatException e) {
+            valEx.addProblem("phone", "Not a valid phone number.");
+        }
+
+        if(StringUtils.isNullOrEmpty(customer.getAddress().getAddress()) ||
+                StringUtils.isNullOrEmpty(customer.getAddress().getCity()) ||
+                StringUtils.isNullOrEmpty(customer.getAddress().getPostalCode()))
+            valEx.addProblem("address", "Invalid address, empty fields not allowed.");
+    }
+
+    private void validateCarport(ValidationErrorException valEx) {
+        if(customer == null)
+            valEx.addProblem("customer", "We did not receive all expected inputs.");
+        EmailValidator emailValidator = EmailValidator.getInstance();
+
+        if(!emailValidator.isValid(customer.getEmail()))
+            valEx.addProblem("email", "E-mail is not valid.");
+
+        if(StringUtils.isNullOrEmpty(customer.getFirstname()) || StringUtils.isNullOrEmpty(customer.getLastname()))
+            valEx.addProblem("name", "First and last name should be set.");
+
+        String phoneNumberStrip = Util.phoneNumberStrip(customer.getPhone());
+        try {
+            Integer.parseInt(phoneNumberStrip);
+        } catch (NumberFormatException e) {
+            valEx.addProblem("phone", "Not a valid phone number.");
+        }
+
+        if(StringUtils.isNullOrEmpty(customer.getAddress().getAddress()) ||
+                StringUtils.isNullOrEmpty(customer.getAddress().getCity()) ||
+                StringUtils.isNullOrEmpty(customer.getAddress().getPostalCode()))
+            valEx.addProblem("address", "Invalid address, empty fields not allowed.");
     }
 
     public Order validateAndCommit() throws ValidationErrorException {

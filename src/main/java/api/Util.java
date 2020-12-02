@@ -12,4 +12,10 @@ public class Util {
         random.nextBytes(bytes);
         return encoder.encodeToString(bytes);
     }
+
+    public static String phoneNumberStrip(String phonenumber) {
+        phonenumber = phonenumber.strip();
+        if(phonenumber.length() > 8) phonenumber = phonenumber.substring(3);
+        return phonenumber.replaceAll("[\\s-]+", "");
+    }
 }
