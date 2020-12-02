@@ -57,7 +57,7 @@
         </section>
 
         <section>
-            <form method="post" action="${pageContext.request.contextPath}" id="order_form" class="">
+            <form method="post" action="${pageContext.request.contextPath}/" id="order_form" class="">
                 <section>
                     <h2>Dimensioner</h2>
                     <div id="carportDimensions" class="form-group row">
