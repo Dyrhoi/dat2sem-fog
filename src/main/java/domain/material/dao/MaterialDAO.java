@@ -32,6 +32,6 @@ public class MaterialDAO implements MaterialRepository {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        throw new RuntimeException("SHIT HAPPENS");
+        throw new RuntimeException("Roof material could not be loaded");
     }
 }
