@@ -58,7 +58,7 @@
             <form method="post" action="${pageContext.request.contextPath}" id="order_form" class="">
                 <section>
                     <h2>Dimensioner</h2>
-                    <div id="carportDimensions" class="from-group row">
+                    <div id="carportDimensions" class="form-group row">
                         <div class="col-sm">
                             <div class="d-flex align-items-center mb-2">
                                 <label class="" for="width">Carport bredde</label>
