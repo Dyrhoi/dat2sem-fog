@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: Jack
@@ -9,7 +10,7 @@
 <div class="container">
     <section>
         <div class=>
-            <h1>Sælger siden</h1>
+            <h1>Sælger side</h1>
             <p class="lead">Her kan I slå carport ordre op, og finde specifikationer</p>
         </div>
     </section>
@@ -24,4 +25,15 @@
         <th scope="col" class="text-nowrap">Dato</th>
     </tr>
     </thead>
+    <tbody>
+    <c:forEach var="user" items="${requestScope.orders}">
+        <tr class="d-lg-table-row">
+            <th scope="row" class="text-nowrap user-id"><c:out value"${order.id}" /></th>
+            <td class="text-nowrap"><c:out value"${order.name}" /></td>
+            <td class="text-nowrap"><c:out value"${order.email}" /></td>
+            <td class="text-nowrap"><c:out value"${order.phone}" /></td>
+            <td class="text-nowrap"><c:out value"${order.date}" /></td>
+        </tr>
+    </c:forEach>
+    </tbody>
 </table>
