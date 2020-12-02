@@ -38,6 +38,26 @@ public abstract class OrderFactory {
         this.uuid = uuid;
     }
 
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public Carport getCarport() {
+        return carport;
+    }
+
+    public Shed getShed() {
+        return shed;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
     public void validate() throws ValidationErrorException {
         ValidationErrorException valEx = new ValidationErrorException();
 

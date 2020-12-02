@@ -1,5 +1,6 @@
 package infrastructure;
 
+import org.apache.ibatis.jdbc.RuntimeSqlException;
 import org.apache.ibatis.jdbc.ScriptRunner;
 
 import java.io.*;
@@ -10,7 +11,7 @@ public class Database {
     private String user = "fog";
     private boolean logging = true;
 
-    private final int version = 3;
+    private final int version = 4;
 
     public Database() {
         try {
@@ -97,7 +98,7 @@ public class Database {
         try(Connection conn = this.getConnection()) {
             conn.setAutoCommit(false);
             ScriptRunner runner = new ScriptRunner(conn);
-            if(!logging)
+            if (!logging)
                 runner.setLogWriter(null);
             runner.setStopOnError(true);
             runner.runScript(new BufferedReader(new InputStreamReader(stream)));
