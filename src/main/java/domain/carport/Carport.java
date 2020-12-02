@@ -9,7 +9,13 @@ public class Carport {
     private final roofTypes roof;
     private int roofAngle;
 
-    //TODO: - Static max length and widths, for validation.
+    public static final int minWidth = 240;
+    public static final int maxWidth = 750;
+    public static final int minLength = 240;
+    public static final int maxLength = 780;
+    public static final int minAngle = 15;
+    public static final int maxAngle = 45;
+
 
     public Carport(int id, int width, int length, roofTypes roof) {
         this.id = id;
