@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS  roof_materials;
+
 CREATE TABLE roof_materials(
     id int PRIMARY KEY AUTO_INCREMENT,
     name varchar(250)

@@ -41,6 +41,10 @@ public class Customer {
         return phone;
     }
 
+    public Address getAddress() {
+        return address;
+    }
+
     public String getFullName() {
         return firstname + " " + lastname;
     }
@@ -88,6 +92,18 @@ public class Customer {
                     ", city='" + city + '\'' +
                     ", postalCode='" + postalCode + '\'' +
                     '}';
+        }
+
+        public String getAddress() {
+            return address;
+        }
+
+        public String getCity() {
+            return city;
+        }
+
+        public String getPostalCode() {
+            return postalCode;
         }
     }
 }
