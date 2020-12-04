@@ -1,7 +1,10 @@
 package web.servlets;
 
 import api.API;
+import domain.material.MaterialRepository;
 import domain.material.dao.MaterialDAO;
+import domain.order.OrderRepository;
+import domain.order.dao.OrderDAO;
 import infrastructure.Database;
 
 import javax.servlet.ServletException;
@@ -30,7 +33,11 @@ public class BaseServlet extends HttpServlet {
     }
     private static API attachAPI() {
         Database db = new Database();
-        return new API(new MaterialDAO(db));
+
+        MaterialRepository materialRepository = new MaterialDAO(db);
+        OrderRepository orderRepository = new OrderDAO(db);
+
+        return new API(materialRepository, orderRepository);
     }
 
     /*

@@ -7,6 +7,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="domain.shed.Shed" %>
+<%@ page import="domain.carport.Carport" %>
 <div>
     <div class="container">
         <section>
@@ -55,7 +57,7 @@
         </section>
 
         <section>
-            <form method="post" action="${pageContext.request.contextPath}" id="order_form" class="">
+            <form method="post" action="${pageContext.request.contextPath}/" id="order_form" class="">
                 <section>
                     <h2>Dimensioner</h2>
                     <div id="carportDimensions" class="form-group row">
@@ -65,8 +67,8 @@
                                 <span class="ml-auto range-label" data-range="carport-width"><span>480</span>cm</span>
                             </div>
                             <input class="custom-range" name="carport-width" type="range" id="width" value="480"
-                                   step="30" min="240"
-                                   max="750">
+                                   step="30" min="${Carport.minWidth}"
+                                   max="${Carport.maxWidth}">
                         </div>
                         <div class="col-sm">
                             <div class="d-flex align-items-center mb-2">
@@ -74,8 +76,8 @@
                                 <span class="ml-auto range-label" data-range="carport-length"><span>480</span>cm</span>
                             </div>
                             <input class="custom-range" name="carport-length" type="range" id="length"
-                                   value="480" step="30" min="240"
-                                   max="780">
+                                   value="480" step="30" min="${Carport.minLength}"
+                                   max="${Carport.maxLength}">
                         </div>
                     </div>
                 </section>
@@ -139,8 +141,8 @@
                                               data-range="roof-angle"><span>2000</span> grader</span>
                                     </div>
                                     <input class="custom-range" name="roof-angle" type="range" id="angle"
-                                           value="25" step="5" min="15"
-                                           max="45">
+                                           value="25" step="5" min="${Carport.minAngle}"
+                                           max="${Carport.maxAngle}">
                                 </div>
                             </div>
                         </div>
@@ -150,7 +152,7 @@
                 <section>
                     <h2>Redskabsskur</h2>
                     <p>NB! Der skal beregnes 15 cm tagudhæng på hver side af redskabsrummet</p>
-                    <input type="checkbox" class="css-checkbox" id="shed_checkbox">
+                    <input type="checkbox" name="shed-checkbox"  class="css-checkbox" id="shed_checkbox">
                     <label for="shed_checkbox" class="css-label">Tilbygning af redskabsskur</label>
                     <div id="shed_dimensions" class="row">
                         <div class="col-sm form-group">
@@ -161,7 +163,7 @@
                             </div>
                             <input class="custom-range" name="shed-width" type="range" id="shed-width"
                                    value="210" step="30"
-                                   min="210" max="780">
+                                   min="${Shed.minWidth}" max="${Shed.maxWidth}">
                         </div>
                         <div class="form-group col-sm">
                             <div class="d-flex align-items-center mb-2">
@@ -171,7 +173,7 @@
                             </div>
                             <input class="custom-range" name="shed-length" type="range" id="shed-length"
                                    value="150" step="30"
-                                   min="150" max="690">
+                                   min="${Shed.minLength}" max="${Shed.maxLength}">
                         </div>
                     </div>
                 </section>
