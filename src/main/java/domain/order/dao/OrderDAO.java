@@ -54,10 +54,12 @@ public class OrderDAO implements OrderRepository {
                 stmt = conn.prepareStatement("SELECT * FROM carports WHERE id = ?");
                 stmt.setInt(1, carportId);
 
+                rs = stmt.executeQuery();
+
                 if (rs.next()) {
                     int carportWidth = rs.getInt("width");
                     int carportLength = rs.getInt("length");
-                    Carport.roofTypes roofType = Carport.roofTypes.valueOf(rs.getString("roof_types"));
+                    Carport.roofTypes roofType = Carport.roofTypes.valueOf(rs.getString("roof_type"));
                     carport = new Carport(carportId, carportWidth, carportLength, roofType);
                 } else {
                     throw new SQLException();
@@ -66,6 +68,8 @@ public class OrderDAO implements OrderRepository {
                 //Get Shed
                 stmt = conn.prepareStatement("SELECT * FROM sheds WHERE carports_id = ?");
                 stmt.setInt(1, carportId);
+
+                rs = stmt.executeQuery();
 
                 if (rs.next()) {
                     int shedId = rs.getInt("id");
@@ -79,6 +83,8 @@ public class OrderDAO implements OrderRepository {
                 //Get Customer
                 stmt = conn.prepareStatement("SELECT * FROM customers WHERE id = ?");
                 stmt.setInt(1, customerId);
+
+                rs = stmt.executeQuery();
 
                 if (rs.next()){
                     String name = rs.getString("name");
