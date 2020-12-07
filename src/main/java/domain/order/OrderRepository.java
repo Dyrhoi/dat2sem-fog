@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface OrderRepository {
-    List<Order> getOrders();
+    List<Order> getOrders() throws SQLException;
     Order getOrder(UUID uuid) throws SQLException, CarportNotFoundException, ShedNotFoundException, CustomerNotFoundException;
 
     OrderFactory createOrder();

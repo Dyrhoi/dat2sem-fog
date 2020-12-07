@@ -1,7 +1,7 @@
 package domain.salesman;
 
-import domain.validation.ValidationErrorException;
 import org.apache.commons.validator.routines.EmailValidator;
+import validation.ValidationErrorException;
 
 public abstract class SalesmanFactory {
     private String email;

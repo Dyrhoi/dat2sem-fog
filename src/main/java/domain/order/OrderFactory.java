@@ -121,7 +121,7 @@ public abstract class OrderFactory {
             valEx.addProblem("address", "Invalid address, empty fields not allowed.");
     }
 
-    public Order validateAndCommit() throws ValidationErrorException {
+    public Order validateAndCommit() throws ValidationErrorException, CarportNotFoundException, ShedNotFoundException, CustomerNotFoundException {
         validate();
         return commit();
     }

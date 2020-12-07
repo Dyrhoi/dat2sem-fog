@@ -1,4 +1,4 @@
-package web.servlets.pages;
+package web.servlets.pages.salesman;
 
 import web.servlets.BaseServlet;
 
