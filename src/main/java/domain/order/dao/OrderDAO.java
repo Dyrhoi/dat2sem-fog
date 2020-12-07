@@ -75,14 +75,8 @@ public class OrderDAO implements OrderRepository {
                 rs = stmt.executeQuery();
 
                 if (rs.next()) {
-                    String name = rs.getString("name");
-                    String[] fullName = name.split("\\s");
-                    StringBuilder firstNameString = new StringBuilder();
-                    for (int i = 0; i < fullName.length; i++) {
-                        firstNameString.append(fullName[i]).append(" ");
-                    }
-                    String firstName = firstNameString.toString();
-                    String lastName = fullName[fullName.length - 1];
+                    String firstname = rs.getString("firstname");
+                    String lastname = rs.getString("lastname");
                     String email = rs.getString("email");
                     String phone = rs.getString("phone_number");
                     String address = rs.getString("address");
@@ -90,7 +84,7 @@ public class OrderDAO implements OrderRepository {
                     String city = rs.getString("city");
 
                     Customer.Address customerAddress = new Customer.Address(address, city, postalCode);
-                    customer = new Customer(customerId, firstName, lastName, email, phone, customerAddress);
+                    customer = new Customer(customerId, firstname, lastname, email, phone, customerAddress);
                 }
 
                 Order order = new Order(uuid, carport, shed, customer);
@@ -166,14 +160,8 @@ public class OrderDAO implements OrderRepository {
             rs = stmt.executeQuery();
 
             if (rs.next()) {
-                String name = rs.getString("name");
-                String[] fullName = name.split("\\s");
-                StringBuilder firstNameString = new StringBuilder();
-                for (int i = 0; i < fullName.length; i++) {
-                    firstNameString.append(fullName[i]).append(" ");
-                }
-                String firstName = firstNameString.toString();
-                String lastName = fullName[fullName.length - 1];
+                String firstname = rs.getString("firstname");
+                String lastname = rs.getString("lastname");
                 String email = rs.getString("email");
                 String phone = rs.getString("phone_number");
                 String address = rs.getString("address");
@@ -181,7 +169,7 @@ public class OrderDAO implements OrderRepository {
                 String city = rs.getString("city");
 
                 Customer.Address customerAddress = new Customer.Address(address, city, postalCode);
-                customer = new Customer(customerId, firstName, lastName, email, phone, customerAddress);
+                customer = new Customer(customerId, firstname, lastname, email, phone, customerAddress);
             }
             return new Order(uuid, carport, shed, customer);
         }
@@ -205,13 +193,14 @@ public class OrderDAO implements OrderRepository {
                         ResultSet rs;
                         //Customer:
                         int customerId = -1;
-                        stmt = conn.prepareStatement("INSERT INTO customers (name, email, phone_number, postal_code, city, address) VALUES (?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-                        stmt.setString(1, getCustomer().getFullName());
-                        stmt.setString(2, getCustomer().getEmail());
-                        stmt.setString(3, getCustomer().getPhone());
-                        stmt.setString(4, getCustomer().getAddress().getPostalCode());
-                        stmt.setString(5, getCustomer().getAddress().getCity());
-                        stmt.setString(6, getCustomer().getAddress().getAddress());
+                        stmt = conn.prepareStatement("INSERT INTO customers (firstname, lastname, email, phone_number, postal_code, city, address) VALUES (?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+                        stmt.setString(1, getCustomer().getFirstname());
+                        stmt.setString(2, getCustomer().getLastname());
+                        stmt.setString(3, getCustomer().getEmail());
+                        stmt.setString(4, getCustomer().getPhone());
+                        stmt.setString(5, getCustomer().getAddress().getPostalCode());
+                        stmt.setString(6, getCustomer().getAddress().getCity());
+                        stmt.setString(7, getCustomer().getAddress().getAddress());
 
                         stmt.executeUpdate();
                         rs = stmt.getGeneratedKeys();
