@@ -32,7 +32,7 @@ public class SalesmanOrdersServlet extends BaseServlet {
                 //super.render("Se ordre - #" + slug, "salesman/order", req, resp);
                 resp.getWriter().println("<h1>#" + slug + "</h1>");
                 resp.getWriter().println(order.toString());
-            } catch (OrderNotFoundException e) {
+            } catch (IllegalArgumentException | OrderNotFoundException e) { //Illegal Argument from UUID.fromString (Maybe just pass a string to DAO?)
                 e.printStackTrace();
             }
         }
