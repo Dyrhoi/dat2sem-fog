@@ -1,3 +1,4 @@
+<%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <%--
   Created by IntelliJ IDEA.
   User: Windowshoi
@@ -12,6 +13,9 @@
 
 <head>
     <title>${requestScope.get("title")}</title>
+
+    <meta charset="utf-8">
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
           integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rangeslider.js/2.0.5/rangeslider.min.css" integrity="sha512-DNvC8BVOWih/2JxU9KKi5FvkH8q/pIamVvXr44a3AWmUKM3v54N3tlcM7vMk3R7lagSJbVGqREkqk6pn+4xjtA==" crossorigin="anonymous" />
@@ -19,7 +23,7 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/styles/style.css?fc=<%= Math.random() %>">
 </head>
 
-<body class=>
+<body>
     <!--Header-->
 
     <!--Nav Bar-->
