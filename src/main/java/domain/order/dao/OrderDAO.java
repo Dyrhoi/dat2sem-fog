@@ -1,11 +1,14 @@
 package domain.order.dao;
 
 import domain.carport.Carport;
+import domain.carport.CarportNotFoundException;
 import domain.customer.Customer;
+import domain.customer.CustomerNotFoundException;
 import domain.order.Order;
 import domain.order.OrderFactory;
 import domain.order.OrderRepository;
 import domain.shed.Shed;
+import domain.shed.ShedNotFoundException;
 import infrastructure.Database;
 
 import java.sql.*;
@@ -47,7 +50,7 @@ public class OrderDAO implements OrderRepository {
 
     //TODO: THIS IS HARDCODED NEED FIX
     @Override
-    public Order getOrder(UUID uuid) throws SQLException {
+    public Order getOrder(UUID uuid) throws SQLException, CarportNotFoundException, ShedNotFoundException, CustomerNotFoundException {
         Carport carport = null;
         Shed shed = null;
         Customer customer = null;
@@ -81,7 +84,7 @@ public class OrderDAO implements OrderRepository {
                     Carport.roofTypes roofType = Carport.roofTypes.valueOf(rs.getString("roof_types"));
                     carport = new Carport(carportId, carportWidth, carportLength, roofType);
                 } else {
-                    throw new SQLException();
+                    throw new CarportNotFoundException();
                 }
 
                 //Get Shed
@@ -94,7 +97,7 @@ public class OrderDAO implements OrderRepository {
                     int shedLength = rs.getInt("length");
                     shed = new Shed(shedId, shedWidth, shedLength);
                 } else {
-                    throw new SQLException();
+                    throw new ShedNotFoundException();
                 }
 
                 //Get Customer
@@ -118,6 +121,8 @@ public class OrderDAO implements OrderRepository {
 
                     Customer.Address customerAddress = new Customer.Address(address, city, postalCode);
                     customer = new Customer(customerId, firstName, lastName, email, phone, customerAddress);
+                } else {
+                    throw new CustomerNotFoundException();
                 }
 
             } catch (RuntimeException e) {
@@ -131,7 +136,7 @@ public class OrderDAO implements OrderRepository {
     public OrderFactory createOrder() {
         return new OrderFactory() {
             @Override
-            protected Order commit() {
+            protected Order commit() throws CarportNotFoundException, ShedNotFoundException, CustomerNotFoundException {
                 try (Connection conn = database.getConnection()) {
                     //Being transaction:
                     conn.setAutoCommit(false);
