@@ -1,12 +1,10 @@
 package api;
 
-import domain.carport.CarportNotFoundException;
-import domain.customer.CustomerNotFoundException;
 import domain.material.MaterialRepository;
 import domain.order.Order;
 import domain.order.OrderFactory;
 import domain.order.OrderRepository;
-import domain.shed.ShedNotFoundException;
+import domain.order.exceptions.OrderNotFoundException;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -29,11 +27,11 @@ public class API {
         return orderRepository.createOrder();
     }
 
-    public List<Order> getOrders () throws SQLException {
+    public List<Order> getOrders () {
         return orderRepository.getOrders();
     }
 
-    public Order getOrder(UUID uuid) throws SQLException, CarportNotFoundException, ShedNotFoundException, CustomerNotFoundException {
+    public Order getOrder(UUID uuid) throws OrderNotFoundException {
         return orderRepository.getOrder(uuid);
     }
 }

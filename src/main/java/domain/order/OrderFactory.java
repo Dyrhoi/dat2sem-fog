@@ -3,12 +3,8 @@ package domain.order;
 import api.Util;
 import com.mysql.cj.util.StringUtils;
 import domain.carport.Carport;
-import domain.carport.CarportNotFoundException;
 import domain.customer.Customer;
-import domain.customer.CustomerNotFoundException;
 import domain.shed.Shed;
-import domain.shed.ShedNotFoundException;
-import org.apache.commons.validator.Validator;
 import org.apache.commons.validator.routines.EmailValidator;
 import validation.ValidationErrorException;
 
@@ -121,10 +117,10 @@ public abstract class OrderFactory {
             valEx.addProblem("address", "Invalid address, empty fields not allowed.");
     }
 
-    public Order validateAndCommit() throws ValidationErrorException, CarportNotFoundException, ShedNotFoundException, CustomerNotFoundException {
+    public Order validateAndCommit() throws ValidationErrorException {
         validate();
         return commit();
     }
 
-    protected abstract Order commit() throws CarportNotFoundException, ShedNotFoundException, CustomerNotFoundException;
+    protected abstract Order commit() ;
 }
