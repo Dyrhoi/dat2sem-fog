@@ -18,9 +18,11 @@ public class SalesmanOrdersServlet extends BaseServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String[] paths = req.getPathInfo().split("/");
-        String slug = paths[paths.length - 1];
-        if (slug != null && !slug.equals("orders")) {
+        /*
+        * UUID IS SET IN URL
+        * */
+        if (req.getPathInfo() != null && req.getPathInfo().length() > 1) {
+            String slug = req.getPathInfo().substring(1);
             try {
                 UUID uuid = UUID.fromString(slug);
                 Order order = api.getOrder(uuid);
@@ -34,6 +36,9 @@ public class SalesmanOrdersServlet extends BaseServlet {
                 e.printStackTrace();
             }
         }
+        /*
+        * SHOW ALL ORDERS IF NO UUID IN URL
+        * */
         else {
             List<Order> orders = api.getOrders();
             req.setAttribute("orders", orders);
