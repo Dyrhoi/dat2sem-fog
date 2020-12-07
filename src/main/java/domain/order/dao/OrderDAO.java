@@ -76,8 +76,6 @@ public class OrderDAO implements OrderRepository {
                     int shedWidth = rs.getInt("width");
                     int shedLength = rs.getInt("length");
                     shed = new Shed(shedId, shedWidth, shedLength);
-                } else {
-                    throw new SQLException();
                 }
 
                 //Get Customer
