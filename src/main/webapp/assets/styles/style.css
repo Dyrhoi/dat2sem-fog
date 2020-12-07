@@ -196,6 +196,8 @@ cus scuffed css variables... :(
     }
 }
 
+[data-href] { cursor: pointer; }
+
 input[type=checkbox].css-checkbox + label.css-label {
     padding-left:35px;
     height:30px;

@@ -30,8 +30,9 @@ public class SalesmanOrdersServlet extends BaseServlet {
                 req.setAttribute("order", order);
 
                 //super.render("Se ordre - #" + slug, "salesman/order", req, resp);
-                resp.getWriter().println("<h1>#" + slug + "</h1>");
-                resp.getWriter().println(order.toString());
+                /*resp.getWriter().println("<h1>#" + slug + "</h1>");
+                resp.getWriter().println(order.toString());*/
+                super.render("order - " + uuid, "salesmanOrders", req, resp);
             } catch (IllegalArgumentException | OrderNotFoundException e) { //Illegal Argument from UUID.fromString (Maybe just pass a string to DAO?)
                 e.printStackTrace();
             }

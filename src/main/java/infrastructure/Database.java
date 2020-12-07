@@ -11,7 +11,7 @@ public class Database {
     private String user = "fog";
     private boolean logging = true;
 
-    private final int version = 4;
+    private final int version = 5;
 
     public Database() {
         try {

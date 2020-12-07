@@ -12,7 +12,7 @@
 <div>
     <div class="container">
         <section>
-            <div class=>
+            <div>
                 <h1>Byg selv carport med Fog</h1>
                 <p class="lead">Kan du ikke finde den helt rigtige carport? Med byg selv, kan du selv justere dine mål,
                     så sender vi dig et tilbud.</p>
