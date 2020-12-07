@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @WebServlet({"/salesman/orders", "/salesman/orders/*"})
-public class OrdersServlet extends BaseServlet {
+public class SalesmanOrdersServlet extends BaseServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
