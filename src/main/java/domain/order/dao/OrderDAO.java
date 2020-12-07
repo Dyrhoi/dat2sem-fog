@@ -191,6 +191,7 @@ public class OrderDAO implements OrderRepository {
                         e.printStackTrace();
                         System.out.println("Rolling back DB...");
                         conn.rollback();
+                    } finally {
                         conn.setAutoCommit(true);
                     }
                 } catch (SQLException throwables) {
