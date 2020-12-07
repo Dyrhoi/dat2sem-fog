@@ -6,11 +6,11 @@ public class Customer {
 
     private final int id;
 
-    private String firstname;
-    private String lastname;
-    private String email;
-    private String phone;
-    private Address address;
+    private final String firstname;
+    private final String lastname;
+    private final String email;
+    private final String phone;
+    private final Address address;
 
     public Customer(int id, String firstname, String lastname, String email, String phone, Address address) {
         this.id = id;
@@ -75,9 +75,9 @@ public class Customer {
     }
 
     public static class Address{
-        private String address;
-        private String city;
-        private String postalCode;
+        private final String address;
+        private final String city;
+        private final String postalCode;
 
         public Address(String address, String city, String postalCode){
             this.address = address;
