@@ -9,20 +9,41 @@ import domain.shed.Shed;
 import infrastructure.Database;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class OrderDAO implements OrderRepository {
-    private Database database;
+    private final Database database;
 
     public OrderDAO(Database database) {
         this.database = database;
     }
 
     @Override
-    public List<Order> getOrders() {
-        return null;
+    public List<Order> getOrders() throws SQLException {
+        List<Order> orders = new ArrayList<>();
+        try (Connection conn = database.getConnection()) {
+            try {
+                PreparedStatement stmt;
+                ResultSet rs;
+
+                //Get ID's
+                int customerId;
+                int carportId;
+                stmt = conn.prepareStatement("SELECT * FROM orders");
+
+                rs = stmt.executeQuery();
+                while(rs.next()) {
+
+                }
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+                return orders;
     }
+
 
     //TODO: THIS IS HARDCODED NEED FIX
     @Override
