@@ -1,10 +1,13 @@
 package api;
 
 import domain.material.MaterialRepository;
+import domain.order.Order;
 import domain.order.OrderFactory;
 import domain.order.OrderRepository;
 
+import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 
 public class API {
     private final MaterialRepository materialRepository;
@@ -21,5 +24,13 @@ public class API {
 
     public OrderFactory createOrder() {
         return orderRepository.createOrder();
+    }
+
+    public List<Order> getOrders () {
+        return orderRepository.getOrders();
+    }
+
+    public Order getOrder(UUID uuid) throws SQLException {
+        return orderRepository.getOrder(uuid);
     }
 }

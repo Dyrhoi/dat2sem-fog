@@ -48,4 +48,14 @@ public class Order {
     public int hashCode() {
         return Objects.hash(uuid);
     }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "uuid=" + uuid +
+                ", carport=" + carport +
+                ", shed=" + shed +
+                ", customer=" + customer +
+                '}';
+    }
 }
