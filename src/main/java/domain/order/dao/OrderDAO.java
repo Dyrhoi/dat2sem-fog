@@ -1,8 +1,11 @@
 package domain.order.dao;
 
+import domain.carport.Carport;
+import domain.customer.Customer;
 import domain.order.Order;
 import domain.order.OrderFactory;
 import domain.order.OrderRepository;
+import domain.shed.Shed;
 import infrastructure.Database;
 
 import java.sql.*;
@@ -11,7 +14,8 @@ import java.util.UUID;
 
 public class OrderDAO implements OrderRepository {
     private Database database;
-    public OrderDAO (Database database) {
+
+    public OrderDAO(Database database) {
         this.database = database;
     }
 
@@ -20,9 +24,86 @@ public class OrderDAO implements OrderRepository {
         return null;
     }
 
+    //TODO: THIS IS HARDCODED NEED FIX
     @Override
-    public Order getOrder(UUID uuid) {
-        return null;
+    public Order getOrder(UUID uuid) throws SQLException {
+        Carport carport = null;
+        Shed shed = null;
+        Customer customer = null;
+        try (Connection conn = database.getConnection()) {
+            try {
+                PreparedStatement stmt;
+                ResultSet rs;
+
+                //Get ID's
+                int customerId;
+                int carportId;
+                stmt = conn.prepareStatement("SELECT * FROM orders WHERE uuid = ?");
+                stmt.setString(1, uuid.toString());
+
+                rs = stmt.executeQuery();
+
+                if (rs.next()) {
+                    customerId = rs.getInt("customers_id");
+                    carportId = rs.getInt("carports_id");
+                } else {
+                    throw new SQLException("DER SKETE EN FEJL");
+                }
+
+                //Get Carport
+                stmt = conn.prepareStatement("SELECT * FROM carports WHERE id = ?");
+                stmt.setInt(1, carportId);
+
+                if (rs.next()) {
+                    int carportWidth = rs.getInt("width");
+                    int carportLength = rs.getInt("length");
+                    Carport.roofTypes roofType = Carport.roofTypes.valueOf(rs.getString("roof_types"));
+                    carport = new Carport(carportId, carportWidth, carportLength, roofType);
+                } else {
+                    throw new SQLException();
+                }
+
+                //Get Shed
+                stmt = conn.prepareStatement("SELECT * FROM sheds WHERE carports_id = ?");
+                stmt.setInt(1, carportId);
+
+                if (rs.next()) {
+                    int shedId = rs.getInt("id");
+                    int shedWidth = rs.getInt("width");
+                    int shedLength = rs.getInt("length");
+                    shed = new Shed(shedId, shedWidth, shedLength);
+                } else {
+                    throw new SQLException();
+                }
+
+                //Get Customer
+                stmt = conn.prepareStatement("SELECT * FROM customers WHERE id = ?");
+                stmt.setInt(1, customerId);
+
+                if (rs.next()){
+                    String name = rs.getString("name");
+                    String[] fullName = name.split("\\s");
+                    StringBuilder firstNameString = new StringBuilder();
+                    for (int i = 0 ; i < fullName.length ; i++){
+                        firstNameString.append(fullName[i]).append(" ");
+                    }
+                    String firstName = firstNameString.toString();
+                    String lastName = fullName[fullName.length - 1];
+                    String email = rs.getString("email");
+                    String phone = rs.getString("phone_number");
+                    String address = rs.getString("address");
+                    String postalCode = String.valueOf(rs.getInt("postal_code"));
+                    String city = rs.getString("city");
+
+                    Customer.Address customerAddress = new Customer.Address(address, city, postalCode);
+                    customer = new Customer(customerId, firstName, lastName, email, phone, customerAddress);
+                }
+
+            } catch (RuntimeException e) {
+                e.printStackTrace();
+            }
+        }
+        return new Order(uuid, carport, shed, customer);
     }
 
     @Override
@@ -30,7 +111,7 @@ public class OrderDAO implements OrderRepository {
         return new OrderFactory() {
             @Override
             protected Order commit() {
-                try(Connection conn = database.getConnection()) {
+                try (Connection conn = database.getConnection()) {
                     //Being transaction:
                     conn.setAutoCommit(false);
                     try {
@@ -50,10 +131,9 @@ public class OrderDAO implements OrderRepository {
                         stmt.executeUpdate();
                         rs = stmt.getGeneratedKeys();
 
-                        if(rs.next()) {
+                        if (rs.next()) {
                             customerId = rs.getInt(1);
-                        }
-                        else {
+                        } else {
                             throw new SQLException("Couldn't insert customer.");
                         }
 
@@ -67,16 +147,15 @@ public class OrderDAO implements OrderRepository {
 
                         stmt.executeUpdate();
                         rs = stmt.getGeneratedKeys();
-                        if(rs.next()) {
+                        if (rs.next()) {
                             carportId = rs.getInt(1);
-                        }
-                        else {
+                        } else {
                             throw new SQLException("Couldn't insert carport.");
                         }
 
                         //Shed
                         int shedId = -1;
-                        if(getShed() != null) {
+                        if (getShed() != null) {
                             stmt = conn.prepareStatement("INSERT INTO sheds (width, length, carports_id) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
                             stmt.setInt(1, getShed().getWidth());
                             stmt.setInt(2, getShed().getLength());
@@ -84,10 +163,9 @@ public class OrderDAO implements OrderRepository {
 
                             stmt.executeUpdate();
                             rs = stmt.getGeneratedKeys();
-                            if(rs.next()) {
+                            if (rs.next()) {
                                 shedId = rs.getInt(1);
-                            }
-                            else {
+                            } else {
                                 throw new SQLException("Couldn't insert Shed");
                             }
                         }
