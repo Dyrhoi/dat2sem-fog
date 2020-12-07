@@ -25,15 +25,18 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="user" items="${requestScope.orders}">
-            <tr class="d-lg-table-row">
-                <th scope="row" class="text-nowrap user-id"><c:out value="${order.id}" /></th>
-                <td class="text-nowrap"><c:out value="${order.name}" /></td>
-                <td class="text-nowrap"><c:out value="${order.email}" /></td>
-                <td class="text-nowrap"><c:out value="${order.phone}" /></td>
-                <td class="text-nowrap"><c:out value="${order.date}" /></td>
-            </tr>
-        </c:forEach>
+        <c:if test="${requestScope.orders != null}">
+            <h1>HALLOOOOO!</h1>
+            <c:forEach var="order" items="${requestScope.orders}" varStatus="loop">
+                <tr class="d-lg-table-row">
+                    <th scope="row" class="text-nowrap user-id"><c:out value="${order.uuid}" /></th>
+                    <td class="text-nowrap"><c:out value="${order.customer.fullName}" /></td>
+                    <td class="text-nowrap"><c:out value="${order.customer.email}" /></td>
+                    <td class="text-nowrap"><c:out value="${order.customer.phone}" /></td>
+                    <td class="text-nowrap"><c:out value="24/12-2020" /></td>
+                </tr>
+            </c:forEach>
+        </c:if>
         </tbody>
     </table>
 </div>

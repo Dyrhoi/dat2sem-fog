@@ -26,6 +26,10 @@ public class OrderDAO implements OrderRepository {
     @Override
     public List<Order> getOrders() throws SQLException {
         List<Order> orders = new ArrayList<>();
+        Carport carport;
+        Shed shed = null;
+        Customer customer;
+        UUID uuid;
         try (Connection conn = database.getConnection()) {
             try {
                 PreparedStatement stmt;
@@ -34,23 +38,81 @@ public class OrderDAO implements OrderRepository {
                 //Get ID's
                 int customerId;
                 int carportId;
-                stmt = conn.prepareStatement("SELECT * FROM orders");
+                PreparedStatement orderStmt = conn.prepareStatement("SELECT * FROM orders");
+                ResultSet orderRs = orderStmt.executeQuery();
 
-                rs = stmt.executeQuery();
-                while(rs.next()) {
+                while (orderRs.next()) {
+                    uuid = UUID.fromString(orderRs.getString("uuid"));
+                    carportId = orderRs.getInt("carports_id");
+                    customerId = orderRs.getInt("customers_id");
 
+                    stmt = conn.prepareStatement("SELECT * FROM carports WHERE id = ?");
+                    stmt.setInt(1, carportId);
+
+                    rs = stmt.executeQuery();
+
+                    if (rs.next()) {
+                        int carportWidth = rs.getInt("width");
+                        int carportLength = rs.getInt("length");
+                        Carport.roofTypes roofType = Carport.roofTypes.valueOf(rs.getString("roof_type"));
+                        carport = new Carport(carportId, carportWidth, carportLength, roofType);
+                    } else {
+                        throw new CarportNotFoundException();
+                    }
+
+                    stmt = conn.prepareStatement("SELECT * FROM sheds WHERE carports_id = ?");
+                    stmt.setInt(1, carportId);
+
+                    rs = stmt.executeQuery();
+
+                    if (rs.next()) {
+                        int shedId = rs.getInt("id");
+                        int shedWidth = rs.getInt("width");
+                        int shedLength = rs.getInt("length");
+                        shed = new Shed(shedId, shedWidth, shedLength);
+                    }
+
+                    stmt = conn.prepareStatement("SELECT * FROM customers WHERE id = ?");
+                    stmt.setInt(1, customerId);
+
+                    rs = stmt.executeQuery();
+
+                    if (rs.next()){
+                        String name = rs.getString("name");
+                        String[] fullName = name.split("\\s");
+                        StringBuilder firstNameString = new StringBuilder();
+                        for (int i = 0 ; i < fullName.length ; i++){
+                            firstNameString.append(fullName[i]).append(" ");
+                        }
+                        String firstName = firstNameString.toString();
+                        String lastName = fullName[fullName.length - 1];
+                        String email = rs.getString("email");
+                        String phone = rs.getString("phone_number");
+                        String address = rs.getString("address");
+                        String postalCode = String.valueOf(rs.getInt("postal_code"));
+                        String city = rs.getString("city");
+
+                        Customer.Address customerAddress = new Customer.Address(address, city, postalCode);
+                        customer = new Customer(customerId, firstName, lastName, email, phone, customerAddress);
+                    } else {
+                        throw new CustomerNotFoundException();
+                    }
+
+                    Order order = new Order(uuid, carport, shed, customer);
+                    orders.add(order);
                 }
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
+
+            } catch (RuntimeException | CustomerNotFoundException | CarportNotFoundException e) {
+                e.printStackTrace();
             }
         }
-                return orders;
+        return orders;
     }
 
 
     //TODO: THIS IS HARDCODED NEED FIX
     @Override
-    public Order getOrder(UUID uuid) throws SQLException, CarportNotFoundException, ShedNotFoundException, CustomerNotFoundException {
+    public Order getOrder(UUID uuid) throws SQLException, CarportNotFoundException, CustomerNotFoundException {
         Carport carport = null;
         Shed shed = null;
         Customer customer = null;
@@ -78,10 +140,12 @@ public class OrderDAO implements OrderRepository {
                 stmt = conn.prepareStatement("SELECT * FROM carports WHERE id = ?");
                 stmt.setInt(1, carportId);
 
+                rs = stmt.executeQuery();
+
                 if (rs.next()) {
                     int carportWidth = rs.getInt("width");
                     int carportLength = rs.getInt("length");
-                    Carport.roofTypes roofType = Carport.roofTypes.valueOf(rs.getString("roof_types"));
+                    Carport.roofTypes roofType = Carport.roofTypes.valueOf(rs.getString("roof_type"));
                     carport = new Carport(carportId, carportWidth, carportLength, roofType);
                 } else {
                     throw new CarportNotFoundException();
@@ -91,18 +155,20 @@ public class OrderDAO implements OrderRepository {
                 stmt = conn.prepareStatement("SELECT * FROM sheds WHERE carports_id = ?");
                 stmt.setInt(1, carportId);
 
+                rs = stmt.executeQuery();
+
                 if (rs.next()) {
                     int shedId = rs.getInt("id");
                     int shedWidth = rs.getInt("width");
                     int shedLength = rs.getInt("length");
                     shed = new Shed(shedId, shedWidth, shedLength);
-                } else {
-                    throw new ShedNotFoundException();
                 }
 
                 //Get Customer
                 stmt = conn.prepareStatement("SELECT * FROM customers WHERE id = ?");
                 stmt.setInt(1, customerId);
+
+                rs = stmt.executeQuery();
 
                 if (rs.next()){
                     String name = rs.getString("name");
