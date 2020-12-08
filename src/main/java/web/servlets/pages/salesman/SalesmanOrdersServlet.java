@@ -28,6 +28,8 @@ public class SalesmanOrdersServlet extends BaseServlet {
                 Order order = api.getOrder(uuid);
 
                 req.setAttribute("order", order);
+                req.setAttribute("prePrice", Math.round(Math.random() * (40000-20000) + 20000));
+                req.setAttribute("roof_material", api.getRoofMaterial(order.getCarport().getRoof_material() + 1));
 
                 //super.render("Se ordre - #" + slug, "salesman/order", req, resp);
                 /*resp.getWriter().println("<h1>#" + slug + "</h1>");

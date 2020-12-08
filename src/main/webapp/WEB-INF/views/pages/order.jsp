@@ -57,19 +57,10 @@
         </section>
 
         <section>
-            <form method="post" action="${pageContext.request.contextPath}/" id="order_form" class="">
+            <form method="post" action="${pageContext.request.contextPath}/" id="order_form">
                 <section>
                     <h2>Dimensioner</h2>
                     <div id="carportDimensions" class="form-group row">
-                        <div class="col-sm">
-                            <div class="d-flex align-items-center mb-2">
-                                <label class="" for="width">Carport bredde</label>
-                                <span class="ml-auto range-label" data-range="carport-width"><span>480</span>cm</span>
-                            </div>
-                            <input class="custom-range" name="carport-width" type="range" id="width" value="480"
-                                   step="30" min="${Carport.minWidth}"
-                                   max="${Carport.maxWidth}">
-                        </div>
                         <div class="col-sm">
                             <div class="d-flex align-items-center mb-2">
                                 <label class="" for="length">Carport længde</label>
@@ -78,6 +69,14 @@
                             <input class="custom-range" name="carport-length" type="range" id="length"
                                    value="480" step="30" min="${Carport.minLength}"
                                    max="${Carport.maxLength}">
+                        </div>
+                        <div class="col-sm">
+                            <div class="d-flex align-items-center mb-2">
+                                <label class="" for="width">Carport bredde</label>
+                                <span class="ml-auto range-label" data-range="carport-width"><span>480</span>cm</span>
+                            </div>
+                            <input class="custom-range" name="carport-width" type="range" id="width" value="480"
+                                   step="30" min="${Carport.minWidth}" max="${Carport.maxWidth}">
                         </div>
                     </div>
                 </section>
@@ -101,7 +100,7 @@
                             <div class="options">
                                 <div class="form-group">
                                     <label for="roof_flat_material">Tagmateriale</label>
-                                    <select class="form-control" id="roof_flat_material">
+                                    <select class="form-control" id="roof_flat_material" name="roof_flat_material">
                                         <!--
                                         TODO:Hvid
                                         Make this dynamically fetch roof materials depending on type
@@ -127,8 +126,8 @@
                             <div class="options">
                                 <div class="form-group">
                                     <label for="roof_angled_material">Tagmateriale</label>
-                                    <select class="form-control" id="roof_angled_material">
-                                        <c:forEach items="${requestScope.roofTypes}" var="item"
+                                    <select class="form-control" id="roof_angled_material" name="roof_angled_material">
+                                        <c:forEach var="item" items="${requestScope.roofMaterials}"
                                                    varStatus="loop">
                                             <option value="${loop.index}"><c:out value="${item}"/></option>
                                         </c:forEach>
@@ -138,7 +137,7 @@
                                     <div class="d-flex align-items-center mb-2">
                                         <label class="" for="angle">Tag hældning</label>
                                         <span class="ml-auto range-label"
-                                              data-range="roof-angle"><span>2000</span> grader</span>
+                                              data-range="roof-angle"><span></span> grader</span>
                                     </div>
                                     <input class="custom-range" name="roof-angle" type="range" id="angle"
                                            value="25" step="5" min="${Carport.minAngle}"
@@ -155,16 +154,6 @@
                     <input type="checkbox" name="shed-checkbox"  class="css-checkbox" id="shed_checkbox">
                     <label for="shed_checkbox" class="css-label">Tilbygning af redskabsskur</label>
                     <div id="shed_dimensions" class="row">
-                        <div class="col-sm form-group">
-                            <div class="d-flex align-items-center mb-2">
-                                <label class="col-form-label" for="shed-width">Redskabsrum bredde</label>
-                                <span class="ml-auto col-form-label range-label"
-                                      data-range="shed-width"><span>210</span>cm</span>
-                            </div>
-                            <input class="custom-range" name="shed-width" type="range" id="shed-width"
-                                   value="210" step="30"
-                                   min="${Shed.minWidth}" max="${Shed.maxWidth}">
-                        </div>
                         <div class="form-group col-sm">
                             <div class="d-flex align-items-center mb-2">
                                 <label class="col-form-label" for="shed-length">Redskabsrum længde</label>
@@ -174,6 +163,16 @@
                             <input class="custom-range" name="shed-length" type="range" id="shed-length"
                                    value="150" step="30"
                                    min="${Shed.minLength}" max="${Shed.maxLength}">
+                        </div>
+                        <div class="col-sm form-group">
+                            <div class="d-flex align-items-center mb-2">
+                                <label class="col-form-label" for="shed-width">Redskabsrum bredde</label>
+                                <span class="ml-auto col-form-label range-label"
+                                      data-range="shed-width"><span>210</span>cm</span>
+                            </div>
+                            <input class="custom-range" name="shed-width" type="range" id="shed-width"
+                                   value="210" step="30"
+                                   min="${Shed.minWidth}" max="${Shed.maxWidth}">
                         </div>
                     </div>
                 </section>
@@ -215,7 +214,7 @@
                     </div>
                     <div class="form-group">
                         <label for="comment">Evt. bemærkninger</label>
-                        <textarea class="form-control" id="comment"></textarea>
+                        <textarea class="form-control" id="comment" name="comment"></textarea>
                     </div>
                 </section>
                 <section class="d-flex justify-content-end align-items-center">

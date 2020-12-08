@@ -11,6 +11,7 @@ public class Customer {
     private final String email;
     private final String phone;
     private final Address address;
+    private String comment;
 
     public Customer(int id, String firstname, String lastname, String email, String phone, Address address) {
         this.id = id;
@@ -21,9 +22,15 @@ public class Customer {
         this.address = address;
     }
 
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
     public int getId() {
         return id;
     }
+
+    public String getComment() { return comment; }
 
     public String getFirstname() {
         return firstname;
