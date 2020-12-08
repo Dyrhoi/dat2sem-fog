@@ -53,8 +53,10 @@ public class OrderDAO implements OrderRepository {
                 if (rs.next()) {
                     int carportWidth = rs.getInt("width");
                     int carportLength = rs.getInt("length");
+                    int roofAngle = rs.getInt("angle");
                     Carport.roofTypes roofType = Carport.roofTypes.valueOf(rs.getString("roof_type"));
-                    carport = new Carport(carportId, carportWidth, carportLength, roofType);
+                    int roof_material = rs.getInt("roof_material");
+                    carport = new Carport(carportId, carportWidth, carportLength, roofType, roofAngle, roof_material);
                 }
 
                 stmt = conn.prepareStatement("SELECT * FROM sheds WHERE carports_id = ?");
@@ -136,8 +138,10 @@ public class OrderDAO implements OrderRepository {
             if (rs.next()) {
                 int carportWidth = rs.getInt("width");
                 int carportLength = rs.getInt("length");
+                int roofAngle = rs.getInt("angle");
                 Carport.roofTypes roofType = Carport.roofTypes.valueOf(rs.getString("roof_type"));
-                carport = new Carport(carportId, carportWidth, carportLength, roofType);
+                int roof_material = rs.getInt("roof_material");
+                carport = new Carport(carportId, carportWidth, carportLength, roofType, roofAngle, roof_material);
             }
 
             //Get Shed
@@ -193,14 +197,15 @@ public class OrderDAO implements OrderRepository {
                         ResultSet rs;
                         //Customer:
                         int customerId = -1;
-                        stmt = conn.prepareStatement("INSERT INTO customers (firstname, lastname, email, phone_number, postal_code, city, address) VALUES (?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+                        stmt = conn.prepareStatement("INSERT INTO customers (firstname, lastname, email, phone_number, notes, address, postal_code, city) VALUES (?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
                         stmt.setString(1, getCustomer().getFirstname());
                         stmt.setString(2, getCustomer().getLastname());
                         stmt.setString(3, getCustomer().getEmail());
                         stmt.setString(4, getCustomer().getPhone());
-                        stmt.setString(5, getCustomer().getAddress().getPostalCode());
-                        stmt.setString(6, getCustomer().getAddress().getCity());
-                        stmt.setString(7, getCustomer().getAddress().getAddress());
+                        stmt.setString(5, getCustomer().getComment());
+                        stmt.setString(6, getCustomer().getAddress().getAddress());
+                        stmt.setString(7, getCustomer().getAddress().getPostalCode());
+                        stmt.setString(8, getCustomer().getAddress().getCity());
 
                         stmt.executeUpdate();
                         rs = stmt.getGeneratedKeys();
@@ -214,10 +219,12 @@ public class OrderDAO implements OrderRepository {
 
                         //Carport
                         int carportId = -1;
-                        stmt = conn.prepareStatement("INSERT INTO carports (width, length, roof_type) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+                        stmt = conn.prepareStatement("INSERT INTO carports (width, length, roof_type, roof_material, angle) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
                         stmt.setInt(1, getCarport().getWidth());
                         stmt.setInt(2, getCarport().getLength());
                         stmt.setString(3, getCarport().getRoof().toString());
+                        stmt.setInt(4, getCarport().getRoof_material());
+                        stmt.setInt(5, getCarport().getRoofAngle());
 
                         stmt.executeUpdate();
                         rs = stmt.getGeneratedKeys();
