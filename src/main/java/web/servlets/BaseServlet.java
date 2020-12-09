@@ -5,6 +5,8 @@ import domain.material.MaterialRepository;
 import domain.material.dao.MaterialDAO;
 import domain.order.OrderRepository;
 import domain.order.dao.OrderDAO;
+import domain.user.customer.CustomerRepository;
+import domain.user.customer.dao.CustomerDAO;
 import infrastructure.Database;
 
 import javax.servlet.ServletException;
@@ -35,7 +37,8 @@ public class BaseServlet extends HttpServlet {
         Database db = new Database();
 
         MaterialRepository materialRepository = new MaterialDAO(db);
-        OrderRepository orderRepository = new OrderDAO(db);
+        CustomerRepository customerRepository = new CustomerDAO(db);
+        OrderRepository orderRepository = new OrderDAO(db, customerRepository);
 
         return new API(materialRepository, orderRepository);
     }
