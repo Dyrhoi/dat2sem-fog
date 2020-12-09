@@ -12,12 +12,11 @@
         <section>
             <h1>Kundesamtale</h1>
             <p>For ordre: <a href="">#2a5j2-fk99-2221-vfk2a</a></p>
-            <p class="mb-0">Ordre status <span class="badge badge-secondary">Accepteret</span></p>
+            <p class="mb-0">Ordre status <span class="badge badge-warning">Tilbud afsendt</span></p>
         </section>
         <section>
             <article class="event">
-                <div class="event-message accept">Ordren blev oprettet - 6. Dec, 2020</div>
-                <div class="event-message accept">Ordren blev accepteret - 9. Dec, 2020</div>
+                <div class="event-message accept"><a href="">Ordren</a> blev oprettet af klienten. - 6. Dec, 2020</div>
             </article>
             <article class="message border rounded">
                 <section class="d-flex justify-content-between align-items-center">
@@ -32,6 +31,9 @@
                         Adgium, tus, et epos. Cur vita messis? Ubi est dexter nutrix? Capios mori! Seculas accelerare in lutetia! Impositios sunt exemplars de placidus buxum.
                     </p>
                 </section>
+            </article>
+            <article class="event">
+                <div class="event-message accept"><a href="">Ordren</a> blev godkendt af salgsassistenten. - 9. Dec, 2020</div>
             </article>
             <article class="message border rounded staff">
                 <section class="d-flex justify-content-between align-items-center">
@@ -50,7 +52,24 @@
                 </section>
             </article>
             <article class="event">
-                <div class="event-message accept">Tilbud tilsendt d. 9 Dec, 2020</div>
+                <div class="event-message accept"><a href="">Tilbud</a> tilsendt af salgsassistenten. - 9 Dec, 2020</div>
+            </article>
+            <article class="message border rounded alert-warning border-warning">
+                <section>
+                    <div class="row d-flex align-items-center">
+                        <div class="pl-3 d-flex align-items-center">
+                            <span class="material-icons-outlined">
+                                error
+                            </span>
+                        </div>
+                        <div class="col">
+                            <h2>Du har et ubesvaret tilbud.</h2>
+                            <p>
+                                Besvar tilbudet fra salgsassistenten for at færdiggøre ordren.
+                            </p>
+                        </div>
+                    </div>
+                </section>
             </article>
             <article class="reply border rounded">
                 <div id="editor"></div>

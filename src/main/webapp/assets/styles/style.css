@@ -161,6 +161,10 @@ article.message section, article.reply section {
     border-bottom: 1px solid lightgray;
 }
 
+article.message.alert-warning section, article.reply.alert-warning  section {
+    border-bottom: 1px solid #ffc107;
+}
+
 .ql-toolbar.ql-snow {
     background-color:rgba(0,0,0,.025);
     border:0;
@@ -169,13 +173,16 @@ article.message section, article.reply section {
 
 
 .ql-container.ql-snow {
-    margin:1rem;
+    margin:1rem 1rem 0 1rem;
     border-radius: .25rem;
     border:1px solid #dee2e6 !important;
+    background-color: #fffbfb;
+    font-size:14px;
 }
 
 .ql-editor {
     min-height:100px;
+    resize: vertical;
 }
 
 
@@ -199,6 +206,10 @@ article.message h2 {
     font-size:16px;
     font-weight: 500;
     margin-bottom: 0;
+}
+
+article.message span.material-icons-outlined {
+    font-size:32px;
 }
 
 article.event {

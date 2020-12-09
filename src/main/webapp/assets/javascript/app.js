@@ -15,7 +15,7 @@ let toolbarOptions = [
 ]
 let quill = new Quill('#editor', {
    theme: 'snow',
-   placeholder: 'Starten på din besked...',
+   placeholder: 'Skriv en besked.',
    modules: {
       toolbar: toolbarOptions
    }
