@@ -7,6 +7,9 @@ import domain.order.OrderFactory;
 import domain.order.exceptions.OrderNotFoundException;
 import domain.order.OrderRepository;
 import domain.carport.Shed;
+import domain.user.customer.CustomerRepository;
+import domain.user.customer.dao.CustomerDAO;
+import domain.user.customer.exceptions.CustomerNotFoundException;
 import infrastructure.Database;
 
 import java.sql.*;
@@ -16,9 +19,11 @@ import java.util.UUID;
 
 public class OrderDAO implements OrderRepository {
     private final Database database;
+    private final CustomerRepository customerRepository;
 
-    public OrderDAO(Database database) {
+    public OrderDAO(Database database, CustomerRepository customerDAO) {
         this.database = database;
+        this.customerRepository = customerDAO;
     }
 
     //TODO: This should be Inner Join - Dyrhoi
@@ -201,37 +206,45 @@ public class OrderDAO implements OrderRepository {
                         PreparedStatement stmt;
                         ResultSet rs;
                         //Customer:
+
+                        //Let's see if customer already exists;
                         int userId = -1;
-                        stmt = conn.prepareStatement("INSERT INTO users (first_name, last_name, email, phone_number, address, postal_code, city) VALUES (?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-                        stmt.setString(1, getCustomer().getFirstname());
-                        stmt.setString(2, getCustomer().getLastname());
-                        stmt.setString(3, getCustomer().getEmail());
-                        stmt.setString(4, getCustomer().getPhone());
-                        stmt.setString(5, getCustomer().getAddress().getAddress());
-                        stmt.setString(6, getCustomer().getAddress().getPostalCode());
-                        stmt.setString(7, getCustomer().getAddress().getCity());
-
-                        stmt.executeUpdate();
-                        rs = stmt.getGeneratedKeys();
-
-                        if (rs.next()) {
-                            userId = rs.getInt(1);
-                        } else {
-                            throw new SQLException("Couldn't insert users.");
-                        }
-
-                        //Customer Specific Info:
                         int customerId = -1;
-                        stmt = conn.prepareStatement("INSERT INTO customers (user_id) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
-                        stmt.setInt(1, userId);
+                        try {
+                            //Customer exists, set id to current customer.
+                            Customer customer = customerRepository.getCustomer(getCustomer().getEmail());
+                            customerId = customer.getId();
+                        } catch (CustomerNotFoundException e) {
+                            stmt = conn.prepareStatement("INSERT INTO users (first_name, last_name, email, phone_number, address, postal_code, city) VALUES (?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+                            stmt.setString(1, getCustomer().getFirstname());
+                            stmt.setString(2, getCustomer().getLastname());
+                            stmt.setString(3, getCustomer().getEmail());
+                            stmt.setString(4, getCustomer().getPhone());
+                            stmt.setString(5, getCustomer().getAddress().getAddress());
+                            stmt.setString(6, getCustomer().getAddress().getPostalCode());
+                            stmt.setString(7, getCustomer().getAddress().getCity());
 
-                        stmt.executeUpdate();
-                        rs = stmt.getGeneratedKeys();
+                            stmt.executeUpdate();
+                            rs = stmt.getGeneratedKeys();
 
-                        if (rs.next()) {
-                            customerId = rs.getInt(1);
-                        } else {
-                            throw new SQLException("Couldn't insert customers.");
+                            if (rs.next()) {
+                                userId = rs.getInt(1);
+                            } else {
+                                throw new SQLException("Couldn't insert users.");
+                            }
+
+                            //Customer Specific Info:
+                            stmt = conn.prepareStatement("INSERT INTO customers (user_id) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
+                            stmt.setInt(1, userId);
+
+                            stmt.executeUpdate();
+                            rs = stmt.getGeneratedKeys();
+
+                            if (rs.next()) {
+                                customerId = rs.getInt(1);
+                            } else {
+                                throw new SQLException("Couldn't insert customers.");
+                            }
                         }
 
 
