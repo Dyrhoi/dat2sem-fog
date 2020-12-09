@@ -148,9 +148,88 @@ form section {
     padding: 1rem 0;
 }
 
-/*
-Rangeslider
- */
+article.message, article.reply {
+    margin-top:1rem;
+}
+
+article.message:first-of-type {
+    margin-top:0;
+}
+
+article.message section, article.reply section {
+    padding: 1rem 1rem;
+    border-bottom: 1px solid lightgray;
+}
+
+.ql-toolbar.ql-snow {
+    background-color:rgba(0,0,0,.025);
+    border:0;
+    border-bottom: 1px solid #dee2e6;
+}
+
+
+.ql-container.ql-snow {
+    margin:1rem;
+    border-radius: .25rem;
+    border:1px solid #dee2e6 !important;
+}
+
+.ql-editor {
+    min-height:100px;
+}
+
+
+
+article.message section:last-of-type, article.reply section:last-of-type {
+    border-bottom: none;
+}
+
+article.message.staff section:first-of-type {
+    background-color:#f1f8ff;
+}
+article.message.staff {
+    border-color: #a6d1ff !important;
+}
+
+article.message section p:last-of-type {
+    margin-bottom:0;
+}
+
+article.message h2 {
+    font-size:16px;
+    font-weight: 500;
+    margin-bottom: 0;
+}
+
+article.event {
+    padding-left:1em;
+    border-left:2px solid #dee2e6;
+    margin-top:1rem;
+}
+
+article.event:first-of-type {
+    margin-top:0;
+}
+
+article.event .event-message {
+    position:relative;
+}
+
+article.event .event-message:before {
+    content:"";
+    top:50%;
+    position: absolute;
+    margin-left:-1em;
+    background-color:#dee2e6;
+    transform: translate(calc(-50% - 1px), -50%);
+    border-radius: 50%;
+    height:10px;
+    width: 10px;
+}
+
+    /*
+    Rangeslider
+     */
 
 .rangeslider, .rangeslider__fill {
     box-shadow:none;

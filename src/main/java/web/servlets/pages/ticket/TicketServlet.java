@@ -14,8 +14,7 @@ public class TicketServlet extends BaseServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (req.getPathInfo() != null && req.getPathInfo().length() > 1) {
             String slug = req.getPathInfo().substring(1);
-
-
+            super.render("Sag #UUID - Fog", "ticket/_slug", req, resp);
         }
     }
 }
