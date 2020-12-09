@@ -5,7 +5,6 @@ import com.mysql.cj.util.StringUtils;
 import domain.carport.Carport;
 import domain.customer.Customer;
 import domain.shed.Shed;
-import org.apache.commons.validator.Validator;
 import org.apache.commons.validator.routines.EmailValidator;
 import validation.ValidationErrorException;
 
@@ -60,7 +59,7 @@ public abstract class OrderFactory {
 
     public void validate() throws ValidationErrorException {
         ValidationErrorException valEx = new ValidationErrorException();
-
+        //TODO send fejlbesked til brugeren ved fejl.
         //What can go wrong?
         //Customer:
         validateCustomer(valEx);
@@ -123,5 +122,6 @@ public abstract class OrderFactory {
         return commit();
     }
 
-    protected abstract Order commit();
+    protected abstract Order commit() ;
+            //TODO Dyrhoi
 }
