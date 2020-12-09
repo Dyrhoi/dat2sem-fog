@@ -12,6 +12,8 @@ public class Order {
     private final Carport carport;
     private final Shed shed;
     private final Customer customer;
+    private String date;
+    private String token;
 
     public Order(UUID uuid, Carport carport, Shed shed, Customer customer) {
         this.uuid = uuid;
@@ -34,6 +36,22 @@ public class Order {
 
     public Shed getShed() {
         return shed;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     @Override

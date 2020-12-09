@@ -4,53 +4,47 @@ import domain.carport.Carport;
 import domain.customer.Customer;
 import domain.order.Order;
 import domain.order.OrderFactory;
+import domain.order.exceptions.OrderNotFoundException;
 import domain.order.OrderRepository;
 import domain.shed.Shed;
 import infrastructure.Database;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class OrderDAO implements OrderRepository {
-    private Database database;
+    private final Database database;
 
     public OrderDAO(Database database) {
         this.database = database;
     }
 
+    //TODO: This should be Inner Join - Dyrhoi
+
     @Override
     public List<Order> getOrders() {
-        return null;
-    }
-
-    //TODO: THIS IS HARDCODED NEED FIX
-    @Override
-    public Order getOrder(UUID uuid) throws SQLException {
+        List<Order> orders = new ArrayList<>();
         Carport carport = null;
         Shed shed = null;
         Customer customer = null;
+        UUID uuid;
         try (Connection conn = database.getConnection()) {
-            try {
-                PreparedStatement stmt;
-                ResultSet rs;
+            PreparedStatement stmt;
+            ResultSet rs;
 
-                //Get ID's
-                int customerId;
-                int carportId;
-                stmt = conn.prepareStatement("SELECT * FROM orders WHERE uuid = ?");
-                stmt.setString(1, uuid.toString());
+            //Get ID's
+            int customerId;
+            int carportId;
+            PreparedStatement orderStmt = conn.prepareStatement("SELECT * FROM orders ORDER BY timestamp DESC");
+            ResultSet orderRs = orderStmt.executeQuery();
 
-                rs = stmt.executeQuery();
+            while (orderRs.next()) {
+                uuid = UUID.fromString(orderRs.getString("uuid"));
+                carportId = orderRs.getInt("carports_id");
+                customerId = orderRs.getInt("customers_id");
 
-                if (rs.next()) {
-                    customerId = rs.getInt("customers_id");
-                    carportId = rs.getInt("carports_id");
-                } else {
-                    throw new SQLException("DER SKETE EN FEJL");
-                }
-
-                //Get Carport
                 stmt = conn.prepareStatement("SELECT * FROM carports WHERE id = ?");
                 stmt.setInt(1, carportId);
 
@@ -59,13 +53,12 @@ public class OrderDAO implements OrderRepository {
                 if (rs.next()) {
                     int carportWidth = rs.getInt("width");
                     int carportLength = rs.getInt("length");
+                    int roofAngle = rs.getInt("angle");
                     Carport.roofTypes roofType = Carport.roofTypes.valueOf(rs.getString("roof_type"));
-                    carport = new Carport(carportId, carportWidth, carportLength, roofType);
-                } else {
-                    throw new SQLException();
+                    int roof_material = rs.getInt("roof_material");
+                    carport = new Carport(carportId, carportWidth, carportLength, roofType, roofAngle, roof_material);
                 }
 
-                //Get Shed
                 stmt = conn.prepareStatement("SELECT * FROM sheds WHERE carports_id = ?");
                 stmt.setInt(1, carportId);
 
@@ -78,21 +71,14 @@ public class OrderDAO implements OrderRepository {
                     shed = new Shed(shedId, shedWidth, shedLength);
                 }
 
-                //Get Customer
                 stmt = conn.prepareStatement("SELECT * FROM customers WHERE id = ?");
                 stmt.setInt(1, customerId);
 
                 rs = stmt.executeQuery();
 
-                if (rs.next()){
-                    String name = rs.getString("name");
-                    String[] fullName = name.split("\\s");
-                    StringBuilder firstNameString = new StringBuilder();
-                    for (int i = 0 ; i < fullName.length ; i++){
-                        firstNameString.append(fullName[i]).append(" ");
-                    }
-                    String firstName = firstNameString.toString();
-                    String lastName = fullName[fullName.length - 1];
+                if (rs.next()) {
+                    String firstname = rs.getString("firstname");
+                    String lastname = rs.getString("lastname");
                     String email = rs.getString("email");
                     String phone = rs.getString("phone_number");
                     String address = rs.getString("address");
@@ -100,14 +86,106 @@ public class OrderDAO implements OrderRepository {
                     String city = rs.getString("city");
 
                     Customer.Address customerAddress = new Customer.Address(address, city, postalCode);
-                    customer = new Customer(customerId, firstName, lastName, email, phone, customerAddress);
+                    customer = new Customer(customerId, firstname, lastname, email, phone, customerAddress);
                 }
 
-            } catch (RuntimeException e) {
-                e.printStackTrace();
+                Order order = new Order(uuid, carport, shed, customer);
+                order.setDate(orderRs.getString("timestamp"));
+                orders.add(order);
             }
         }
-        return new Order(uuid, carport, shed, customer);
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException();
+        }
+        return orders;
+    }
+
+
+    //TODO: THIS IS HARDCODED NEED FIX
+    //What do you mean hardcoded? !? What needs fixing?
+    //Anyways this should be an inner join... - Dyrhoi
+
+    @Override
+    public Order getOrder(UUID uuid) throws OrderNotFoundException {
+        Carport carport = null;
+        Shed shed = null;
+        Customer customer = null;
+        try (Connection conn = database.getConnection()) {
+            PreparedStatement stmt;
+            ResultSet rs;
+
+            //Get ID's
+            int customerId;
+            int carportId;
+            String token;
+            stmt = conn.prepareStatement("SELECT * FROM orders WHERE uuid = ?");
+            stmt.setString(1, uuid.toString());
+
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                customerId = rs.getInt("customers_id");
+                carportId = rs.getInt("carports_id");
+                token = rs.getString("token");
+            } else {
+                throw new OrderNotFoundException();
+            }
+
+            //Get Carport
+            stmt = conn.prepareStatement("SELECT * FROM carports WHERE id = ?");
+            stmt.setInt(1, carportId);
+
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                int carportWidth = rs.getInt("width");
+                int carportLength = rs.getInt("length");
+                int roofAngle = rs.getInt("angle");
+                Carport.roofTypes roofType = Carport.roofTypes.valueOf(rs.getString("roof_type"));
+                int roof_material = rs.getInt("roof_material");
+                carport = new Carport(carportId, carportWidth, carportLength, roofType, roofAngle, roof_material);
+            }
+
+            //Get Shed
+            stmt = conn.prepareStatement("SELECT * FROM sheds WHERE carports_id = ?");
+            stmt.setInt(1, carportId);
+
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                int shedId = rs.getInt("id");
+                int shedWidth = rs.getInt("width");
+                int shedLength = rs.getInt("length");
+                shed = new Shed(shedId, shedWidth, shedLength);
+            }
+
+            //Get Customer
+            stmt = conn.prepareStatement("SELECT * FROM customers WHERE id = ?");
+            stmt.setInt(1, customerId);
+
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                String firstname = rs.getString("firstname");
+                String lastname = rs.getString("lastname");
+                String email = rs.getString("email");
+                String phone = rs.getString("phone_number");
+                String address = rs.getString("address");
+                String postalCode = String.valueOf(rs.getInt("postal_code"));
+                String city = rs.getString("city");
+
+                Customer.Address customerAddress = new Customer.Address(address, city, postalCode);
+                customer = new Customer(customerId, firstname, lastname, email, phone, customerAddress);
+            }
+            Order order = new Order(uuid, carport, shed, customer);
+            order.setToken(token);
+            return order;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        throw new RuntimeException("Unkown SQL error.");
     }
 
     @Override
@@ -124,13 +202,15 @@ public class OrderDAO implements OrderRepository {
                         ResultSet rs;
                         //Customer:
                         int customerId = -1;
-                        stmt = conn.prepareStatement("INSERT INTO customers (name, email, phone_number, postal_code, city, address) VALUES (?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-                        stmt.setString(1, getCustomer().getFullName());
-                        stmt.setString(2, getCustomer().getEmail());
-                        stmt.setString(3, getCustomer().getPhone());
-                        stmt.setString(4, getCustomer().getAddress().getPostalCode());
-                        stmt.setString(5, getCustomer().getAddress().getCity());
+                        stmt = conn.prepareStatement("INSERT INTO customers (firstname, lastname, email, phone_number, notes, address, postal_code, city) VALUES (?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+                        stmt.setString(1, getCustomer().getFirstname());
+                        stmt.setString(2, getCustomer().getLastname());
+                        stmt.setString(3, getCustomer().getEmail());
+                        stmt.setString(4, getCustomer().getPhone());
+                        stmt.setString(5, getCustomer().getComment());
                         stmt.setString(6, getCustomer().getAddress().getAddress());
+                        stmt.setString(7, getCustomer().getAddress().getPostalCode());
+                        stmt.setString(8, getCustomer().getAddress().getCity());
 
                         stmt.executeUpdate();
                         rs = stmt.getGeneratedKeys();
@@ -141,13 +221,14 @@ public class OrderDAO implements OrderRepository {
                             throw new SQLException("Couldn't insert customer.");
                         }
 
-
                         //Carport
                         int carportId = -1;
-                        stmt = conn.prepareStatement("INSERT INTO carports (width, length, roof_type) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+                        stmt = conn.prepareStatement("INSERT INTO carports (width, length, roof_type, roof_material, angle) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
                         stmt.setInt(1, getCarport().getWidth());
                         stmt.setInt(2, getCarport().getLength());
                         stmt.setString(3, getCarport().getRoof().toString());
+                        stmt.setInt(4, getCarport().getRoof_material());
+                        stmt.setInt(5, getCarport().getRoofAngle());
 
                         stmt.executeUpdate();
                         rs = stmt.getGeneratedKeys();
@@ -191,12 +272,14 @@ public class OrderDAO implements OrderRepository {
                         e.printStackTrace();
                         System.out.println("Rolling back DB...");
                         conn.rollback();
+                    } catch (OrderNotFoundException e) {
+                        throw new RuntimeException("Couldn't fetch created order... ? Throw runtime Exception.");
                     } finally {
                         conn.setAutoCommit(true);
                     }
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                    throw new RuntimeException(throwables);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    throw new RuntimeException(e);
                 }
                 throw new RuntimeException("Unknown error.");
             }
