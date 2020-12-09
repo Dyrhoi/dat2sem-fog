@@ -68,12 +68,10 @@ public class OrderServlet extends BaseServlet {
             if (roofType.equals(Carport.roofTypes.ANGLED)){
                 roofAngle = Integer.parseInt(req.getParameter("roof-angle"));
                 roof_material = Integer.parseInt(req.getParameter("roof_angled_material"));
-                System.out.println(roofAngle);
             }
             else {
                 roof_material = Integer.parseInt(req.getParameter("roof_flat_material"));
-                roofAngle = null;
-                System.out.println(roofAngle);
+                roofAngle = 0;
             }
 
 

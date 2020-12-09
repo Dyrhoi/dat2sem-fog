@@ -71,14 +71,14 @@ public class OrderDAO implements OrderRepository {
                     shed = new Shed(shedId, shedWidth, shedLength);
                 }
 
-                stmt = conn.prepareStatement("SELECT * FROM customers WHERE id = ?");
+                stmt = conn.prepareStatement("SELECT * FROM customers INNER JOIN users ON user_id = users.id WHERE customers.id = ?");
                 stmt.setInt(1, customerId);
 
                 rs = stmt.executeQuery();
 
                 if (rs.next()) {
-                    String firstname = rs.getString("firstname");
-                    String lastname = rs.getString("lastname");
+                    String firstname = rs.getString("first_name");
+                    String lastname = rs.getString("last_name");
                     String email = rs.getString("email");
                     String phone = rs.getString("phone_number");
                     String address = rs.getString("address");
@@ -161,14 +161,14 @@ public class OrderDAO implements OrderRepository {
             }
 
             //Get Customer
-            stmt = conn.prepareStatement("SELECT * FROM customers WHERE id = ?");
+            stmt = conn.prepareStatement("SELECT * FROM customers INNER JOIN users ON user_id = users.id WHERE customers.id = ?");
             stmt.setInt(1, customerId);
 
             rs = stmt.executeQuery();
 
             if (rs.next()) {
-                String firstname = rs.getString("firstname");
-                String lastname = rs.getString("lastname");
+                String firstname = rs.getString("first_name");
+                String lastname = rs.getString("last_name");
                 String email = rs.getString("email");
                 String phone = rs.getString("phone_number");
                 String address = rs.getString("address");
@@ -201,7 +201,7 @@ public class OrderDAO implements OrderRepository {
                         PreparedStatement stmt;
                         ResultSet rs;
                         //Customer:
-                        int customerId = -1;
+                        int userId = -1;
                         stmt = conn.prepareStatement("INSERT INTO users (first_name, last_name, email, phone_number, address, postal_code, city) VALUES (?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
                         stmt.setString(1, getCustomer().getFirstname());
                         stmt.setString(2, getCustomer().getLastname());
@@ -215,10 +215,25 @@ public class OrderDAO implements OrderRepository {
                         rs = stmt.getGeneratedKeys();
 
                         if (rs.next()) {
+                            userId = rs.getInt(1);
+                        } else {
+                            throw new SQLException("Couldn't insert users.");
+                        }
+
+                        //Customer Specific Info:
+                        int customerId = -1;
+                        stmt = conn.prepareStatement("INSERT INTO customers (user_id) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
+                        stmt.setInt(1, userId);
+
+                        stmt.executeUpdate();
+                        rs = stmt.getGeneratedKeys();
+
+                        if (rs.next()) {
                             customerId = rs.getInt(1);
                         } else {
-                            throw new SQLException("Couldn't insert customer.");
+                            throw new SQLException("Couldn't insert customers.");
                         }
+
 
                         //Carport
                         int carportId = -1;
