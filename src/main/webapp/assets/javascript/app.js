@@ -8,6 +8,25 @@ $(".image-radio--radio").each(function () {
    if($(this).prop("checked")) return false;
 });
 
+let toolbarOptions = [
+   ['bold', 'italic', 'underline'],
+   [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+   [{ 'indent': '-1'}, { 'indent': '+1' }]
+]
+let quill = new Quill('#editor', {
+   theme: 'snow',
+   placeholder: 'Starten på din besked...',
+   modules: {
+      toolbar: toolbarOptions
+   }
+});
+
+
+$('.custom-range').rangeslider({
+   polyfill : false
+});
+
+
 //Events
 $(".image-radio--image").click(function() {
    let targetToUpdate = $(this).parent().data("radio");
@@ -20,10 +39,6 @@ $(".image-radio--radio").change(function () {
 
 $(".custom-range").on("input", function () {
    updateRangeLabels(this);
-});
-
-$('.custom-range').rangeslider({
-   polyfill : false
 });
 
 $("#shed_checkbox").change(function () {
