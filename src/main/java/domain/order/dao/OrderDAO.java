@@ -202,7 +202,7 @@ public class OrderDAO implements OrderRepository {
                         ResultSet rs;
                         //Customer:
                         int customerId = -1;
-                        stmt = conn.prepareStatement("INSERT INTO customers (firstname, lastname, email, phone_number, address, postal_code, city) VALUES (?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+                        stmt = conn.prepareStatement("INSERT INTO users (first_name, last_name, email, phone_number, address, postal_code, city) VALUES (?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
                         stmt.setString(1, getCustomer().getFirstname());
                         stmt.setString(2, getCustomer().getLastname());
                         stmt.setString(3, getCustomer().getEmail());
