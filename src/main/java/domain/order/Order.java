@@ -2,7 +2,7 @@ package domain.order;
 
 import domain.carport.Carport;
 import domain.customer.Customer;
-import domain.shed.Shed;
+import domain.carport.Shed;
 
 import java.util.Objects;
 import java.util.UUID;
