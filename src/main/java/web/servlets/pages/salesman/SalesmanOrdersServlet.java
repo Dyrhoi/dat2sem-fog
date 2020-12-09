@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
-@WebServlet({"/salesman/orders", "/salesman/orders/*"})
+@WebServlet({"/sales/orders", "/sales/orders/*"})
 public class SalesmanOrdersServlet extends BaseServlet {
 
     @Override
