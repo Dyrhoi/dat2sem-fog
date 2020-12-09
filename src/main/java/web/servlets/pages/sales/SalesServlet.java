@@ -1,4 +1,4 @@
-package web.servlets.pages.salesman;
+package web.servlets.pages.sales;
 
 import web.servlets.BaseServlet;
 
@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/sales")
-public class SalesmanServlet extends BaseServlet {
+public class SalesServlet extends BaseServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

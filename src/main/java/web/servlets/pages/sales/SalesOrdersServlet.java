@@ -1,4 +1,4 @@
-package web.servlets.pages.salesman;
+package web.servlets.pages.sales;
 
 import domain.order.Order;
 import domain.order.exceptions.OrderNotFoundException;
@@ -9,12 +9,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
 @WebServlet({"/sales/orders", "/sales/orders/*"})
-public class SalesmanOrdersServlet extends BaseServlet {
+public class SalesOrdersServlet extends BaseServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
