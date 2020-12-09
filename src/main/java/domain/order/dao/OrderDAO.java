@@ -37,7 +37,7 @@ public class OrderDAO implements OrderRepository {
             //Get ID's
             int customerId;
             int carportId;
-            PreparedStatement orderStmt = conn.prepareStatement("SELECT * FROM orders");
+            PreparedStatement orderStmt = conn.prepareStatement("SELECT * FROM orders ORDER BY timestamp DESC");
             ResultSet orderRs = orderStmt.executeQuery();
 
             while (orderRs.next()) {
@@ -90,6 +90,7 @@ public class OrderDAO implements OrderRepository {
                 }
 
                 Order order = new Order(uuid, carport, shed, customer);
+                order.setDate(orderRs.getString("timestamp"));
                 orders.add(order);
             }
         }
@@ -117,6 +118,7 @@ public class OrderDAO implements OrderRepository {
             //Get ID's
             int customerId;
             int carportId;
+            String token;
             stmt = conn.prepareStatement("SELECT * FROM orders WHERE uuid = ?");
             stmt.setString(1, uuid.toString());
 
@@ -125,6 +127,7 @@ public class OrderDAO implements OrderRepository {
             if (rs.next()) {
                 customerId = rs.getInt("customers_id");
                 carportId = rs.getInt("carports_id");
+                token = rs.getString("token");
             } else {
                 throw new OrderNotFoundException();
             }
@@ -175,7 +178,9 @@ public class OrderDAO implements OrderRepository {
                 Customer.Address customerAddress = new Customer.Address(address, city, postalCode);
                 customer = new Customer(customerId, firstname, lastname, email, phone, customerAddress);
             }
-            return new Order(uuid, carport, shed, customer);
+            Order order = new Order(uuid, carport, shed, customer);
+            order.setToken(token);
+            return order;
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -215,7 +220,6 @@ public class OrderDAO implements OrderRepository {
                         } else {
                             throw new SQLException("Couldn't insert customer.");
                         }
-
 
                         //Carport
                         int carportId = -1;

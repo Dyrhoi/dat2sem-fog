@@ -11,6 +11,7 @@
     <div class="row">
         <div class="col-8" id="orderInfo">
             <h3><small class="text-muted">#</small><c:out value="${requestScope.order.uuid}"/></h3>
+            <a href=""><c:out value="${requestScope.order.token}"/> </a>
             <p>Carport: <c:out value="${requestScope.order.carport.length}"/> x <c:out value="${requestScope.order.carport.width}"/></p>
             <p>Overdække: <c:out value="${requestScope.order.carport.roof}"/></p>
             <p>Tagmateriale: <c:out value="${requestScope.roof_material}"/></p>
