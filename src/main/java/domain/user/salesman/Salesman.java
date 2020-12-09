@@ -1,4 +1,6 @@
-package domain.salesman;
+package domain.user.salesman;
+
+import domain.user.User;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -7,8 +9,9 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
-public class Salesman {
+public class Salesman extends User {
 
     private static final int PASSWORD_ITTERATIONS = 65536;
     private static final int PASSWORD_LENGTH = 256; //32 bytes
@@ -22,21 +25,6 @@ public class Salesman {
             e.printStackTrace();
         }
         PASSWORD_FACTORY = factory;
-    }
-
-    private final int id;
-    private final String email;
-    private final LocalDateTime createdAt;
-    private final byte[] salt;
-    private final byte[] secret;
-
-
-    public Salesman(int id, String email, LocalDateTime createdAt, byte[] salt, byte[] secret) {
-        this.id = id;
-        this.email = email;
-        this.createdAt = createdAt;
-        this.salt = salt;
-        this.secret = secret;
     }
 
     public static byte[] generateSalt(){
@@ -69,16 +57,17 @@ public class Salesman {
         return PASSWORD_FACTORY;
     }
 
-    public int getId() {
-        return id;
+    private final byte[] salt;
+    private final byte[] secret;
+
+    public Salesman(int id, String firstname, String lastname, String email, String phone, Address address, byte[] salt, byte[] secret) {
+        super(id, firstname, lastname, email, phone, address, Type.SALESMAN);
+        this.salt = salt;
+        this.secret = secret;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public boolean isPasswordCorrect(String password) {
+        return Arrays.equals(this.secret, calculateSecret(salt, password));
     }
 
     public byte[] getSalt() {
@@ -87,10 +76,5 @@ public class Salesman {
 
     public byte[] getSecret() {
         return secret;
-    }
-
-    //TODO: FIX THIS SHIT
-    public boolean isPasswordCorrect(String password){
-        return false;
     }
 }

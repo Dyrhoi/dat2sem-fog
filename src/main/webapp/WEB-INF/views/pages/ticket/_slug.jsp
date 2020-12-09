@@ -14,6 +14,23 @@
             <p>For ordre: <a href="">#2a5j2-fk99-2221-vfk2a</a></p>
             <p class="mb-0">Ordre status <span class="badge badge-warning">Tilbud afsendt</span></p>
         </section>
+        <article class="message border rounded alert-warning border-warning">
+            <section>
+                <div class="row d-flex align-items-center">
+                    <div class="pl-3 d-flex align-items-center">
+                            <span class="material-icons-outlined">
+                                error
+                            </span>
+                    </div>
+                    <div class="col">
+                        <h2>Du har et ubesvaret tilbud.</h2>
+                        <p>
+                            Besvar tilbudet fra salgsassistenten for at færdiggøre ordren.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </article>
         <section>
             <article class="event">
                 <div class="event-message accept"><a href="">Ordren</a> blev oprettet af klienten. - 6. Dec, 2020</div>
@@ -53,23 +70,6 @@
             </article>
             <article class="event">
                 <div class="event-message accept"><a href="">Tilbud</a> tilsendt af salgsassistenten. - 9 Dec, 2020</div>
-            </article>
-            <article class="message border rounded alert-warning border-warning">
-                <section>
-                    <div class="row d-flex align-items-center">
-                        <div class="pl-3 d-flex align-items-center">
-                            <span class="material-icons-outlined">
-                                error
-                            </span>
-                        </div>
-                        <div class="col">
-                            <h2>Du har et ubesvaret tilbud.</h2>
-                            <p>
-                                Besvar tilbudet fra salgsassistenten for at færdiggøre ordren.
-                            </p>
-                        </div>
-                    </div>
-                </section>
             </article>
             <article class="reply border rounded">
                 <div id="editor"></div>

@@ -1,4 +1,4 @@
-package domain.salesman;
+package domain.user.salesman;
 
 import org.apache.commons.validator.routines.EmailValidator;
 import validation.ValidationErrorException;

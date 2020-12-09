@@ -3,7 +3,7 @@ package domain.order;
 import api.Util;
 import com.mysql.cj.util.StringUtils;
 import domain.carport.Carport;
-import domain.customer.Customer;
+import domain.user.customer.Customer;
 import domain.carport.Shed;
 import org.apache.commons.validator.routines.EmailValidator;
 import validation.ValidationErrorException;
