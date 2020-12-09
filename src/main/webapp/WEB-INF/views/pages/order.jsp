@@ -105,7 +105,7 @@
                                         TODO:Hvid
                                         Make this dynamically fetch roof materials depending on type
                                         -->
-                                        <option>Plasttrapezplader</option>
+                                        <option value="1">Plasttrapezplader</option>
                                     </select>
                                 </div>
                             </div>

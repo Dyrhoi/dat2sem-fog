@@ -40,7 +40,7 @@ public class OrderServlet extends BaseServlet {
         int carportWidth;
         int carportLength;
         Carport.roofTypes roofType;
-        Integer roofAngle = null;
+        Integer roofAngle;
         int roof_material;
 
         int shedWidth;
@@ -68,10 +68,15 @@ public class OrderServlet extends BaseServlet {
             carportHasShed = req.getParameter("shed-checkbox") != null;
             if (roofType.equals(Carport.roofTypes.ANGLED)){
                 roofAngle = Integer.parseInt(req.getParameter("roof-angle"));
+                roof_material = Integer.parseInt(req.getParameter("roof_angled_material"));
+                System.out.println(roofAngle);
             }
-            System.out.println(req.getParameter("roof_angled_material"));
+            else {
+                roof_material = Integer.parseInt(req.getParameter("roof_flat_material"));
+                roofAngle = null;
+                System.out.println(roofAngle);
+            }
 
-            roof_material = Integer.parseInt(req.getParameter("roof_angled_material"));
 
             Carport carport = new Carport(id, carportWidth, carportLength, roofType, roofAngle, roof_material);
 

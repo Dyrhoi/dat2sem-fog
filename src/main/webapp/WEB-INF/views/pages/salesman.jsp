@@ -33,7 +33,7 @@
                     <td class="text-nowrap"><c:out value="${order.customer.fullName}" /></td>
                     <td class="text-nowrap"><c:out value="${order.customer.email}" /></td>
                     <td class="text-nowrap"><c:out value="${order.customer.phone}" /></td>
-                    <td class="text-nowrap"><c:out value="24/12-2020" /></td>
+                    <td class="text-nowrap"><c:out value="${order.date}" /></td>
                     <td colspan="text-nowrap"><c:out value="Ikke tildelt"/></td>
                 </tr>
             </c:forEach>
