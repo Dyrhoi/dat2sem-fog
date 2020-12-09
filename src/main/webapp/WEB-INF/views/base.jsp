@@ -26,9 +26,19 @@
     <!--Header-->
 
     <!--Nav Bar-->
-    <nav class="navbar navbar-light border-bottom mb-3 bg-white">
+    <nav class="navbar navbar-light border-bottom mb-3 bg-white navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand" href="${pageContext.request.contextPath}/">Fog</a>
+            <a class="navbar-brand d-flex" href="${pageContext.request.contextPath}/">Fog</a>
+            <c:if test="true">
+                <ul class="ml-auto navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/salesman">Sælger</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/salesman/orders/">Ordrer</a>
+                    </li>
+                </ul>
+            </c:if>
         </div>
     </nav>
     <!--content-->

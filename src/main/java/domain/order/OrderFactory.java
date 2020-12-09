@@ -59,7 +59,7 @@ public abstract class OrderFactory {
 
     public void validate() throws ValidationErrorException {
         ValidationErrorException valEx = new ValidationErrorException();
-
+        //TODO send fejlbesked til brugeren ved fejl.
         //What can go wrong?
         //Customer:
         validateCustomer(valEx);
@@ -122,5 +122,6 @@ public abstract class OrderFactory {
         return commit();
     }
 
-    protected abstract Order commit();
+    protected abstract Order commit() ;
+            //TODO Dyrhoi
 }

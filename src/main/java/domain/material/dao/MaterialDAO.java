@@ -18,7 +18,7 @@ public class MaterialDAO implements MaterialRepository {
     }
 
     @Override
-    public List<String> getRootTypes() {
+    public List<String> getRoofMaterials() {
         try (Connection conn = db.getConnection()) {
             PreparedStatement query = conn.prepareStatement("SELECT * FROM roof_materials");
             ResultSet resultSet = query.executeQuery();
@@ -29,6 +29,23 @@ public class MaterialDAO implements MaterialRepository {
             }
             return list;
 
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        throw new RuntimeException("Roof material could not be loaded");
+    }
+
+    @Override
+    public String getRoofMaterial(int id) {
+        String roof_material = null;
+        try (Connection conn = db.getConnection()) {
+            PreparedStatement query = conn.prepareStatement("SELECT name FROM roof_materials WHERE id = ?");
+            query.setInt(1, id);
+            ResultSet rs = query.executeQuery();
+            if (rs.next()) {
+                roof_material = rs.getString("name");
+            }
+            return roof_material;
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
