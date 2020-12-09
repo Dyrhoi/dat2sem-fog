@@ -1,4 +1,4 @@
-package domain.salesman;
+package domain.user.salesman;
 
 
 public interface SalesmanRepository {

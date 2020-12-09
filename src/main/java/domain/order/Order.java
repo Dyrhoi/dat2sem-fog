@@ -1,7 +1,7 @@
 package domain.order;
 
 import domain.carport.Carport;
-import domain.customer.Customer;
+import domain.user.customer.Customer;
 import domain.carport.Shed;
 
 import java.util.Objects;

@@ -1,4 +1,4 @@
-package domain.ticket;
+package domain.order.ticket;
 
 import domain.order.Order;
 import domain.user.User;

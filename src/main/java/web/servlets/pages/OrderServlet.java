@@ -2,7 +2,7 @@ package web.servlets.pages;
 
 import api.Util;
 import domain.carport.Carport;
-import domain.customer.Customer;
+import domain.user.customer.Customer;
 import domain.order.OrderFactory;
 import domain.carport.Shed;
 import web.servlets.BaseServlet;
@@ -59,7 +59,6 @@ public class OrderServlet extends BaseServlet {
 
             Customer.Address tmpAddress = new Customer.Address(address, city, postalCode);
             Customer customer = new Customer(id, firstname, lastname, email, phone, tmpAddress);
-            customer.setComment(req.getParameter("comment"));
 
             //create carport
             carportWidth = Integer.parseInt(req.getParameter("carport-width"));

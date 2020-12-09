@@ -1,7 +1,7 @@
 package domain.order.dao;
 
 import domain.carport.Carport;
-import domain.customer.Customer;
+import domain.user.customer.Customer;
 import domain.order.Order;
 import domain.order.OrderFactory;
 import domain.order.exceptions.OrderNotFoundException;
@@ -202,15 +202,14 @@ public class OrderDAO implements OrderRepository {
                         ResultSet rs;
                         //Customer:
                         int customerId = -1;
-                        stmt = conn.prepareStatement("INSERT INTO customers (firstname, lastname, email, phone_number, notes, address, postal_code, city) VALUES (?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+                        stmt = conn.prepareStatement("INSERT INTO customers (firstname, lastname, email, phone_number, address, postal_code, city) VALUES (?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
                         stmt.setString(1, getCustomer().getFirstname());
                         stmt.setString(2, getCustomer().getLastname());
                         stmt.setString(3, getCustomer().getEmail());
                         stmt.setString(4, getCustomer().getPhone());
-                        stmt.setString(5, getCustomer().getComment());
-                        stmt.setString(6, getCustomer().getAddress().getAddress());
-                        stmt.setString(7, getCustomer().getAddress().getPostalCode());
-                        stmt.setString(8, getCustomer().getAddress().getCity());
+                        stmt.setString(5, getCustomer().getAddress().getAddress());
+                        stmt.setString(6, getCustomer().getAddress().getPostalCode());
+                        stmt.setString(7, getCustomer().getAddress().getCity());
 
                         stmt.executeUpdate();
                         rs = stmt.getGeneratedKeys();
