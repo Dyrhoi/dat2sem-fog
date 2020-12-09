@@ -13,6 +13,7 @@ public class SalesmanServlet extends BaseServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
         super.render("Sælger side - Fog", "salesman", req, resp);
     }
 }

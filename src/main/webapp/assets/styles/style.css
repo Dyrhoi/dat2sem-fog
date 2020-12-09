@@ -196,6 +196,8 @@ cus scuffed css variables... :(
     }
 }
 
+[data-href] { cursor: pointer; }
+
 input[type=checkbox].css-checkbox + label.css-label {
     padding-left:35px;
     height:30px;
@@ -223,4 +225,16 @@ label.css-label {
 
 input[type=checkbox].css-checkbox {
     position:absolute; z-index:-1000; left:-1000px; overflow: hidden; clip: rect(0 0 0 0); height:1px; width:1px; margin:-1px; padding:0; border:0;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
 }
