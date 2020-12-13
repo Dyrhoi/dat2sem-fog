@@ -228,13 +228,22 @@ input[type=checkbox].css-checkbox {
 }
 
 /* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
+#submit-offer::-webkit-outer-spin-button,
+#submit-offer::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
 
 /* Firefox */
-input[type=number] {
+#submit-offer {
     -moz-appearance: textfield;
+}
+
+.change-input {
+    width: 60px;
+    height: 30px;
+}
+
+#arrow {
+    color: black;
 }

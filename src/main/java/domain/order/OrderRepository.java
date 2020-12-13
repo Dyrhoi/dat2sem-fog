@@ -11,4 +11,7 @@ public interface OrderRepository {
 
     OrderFactory createOrder();
 
+    void updateOrder(int id);
+
+    int getCarportIdFromUuid(UUID uuid);
 }

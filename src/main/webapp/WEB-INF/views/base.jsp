@@ -32,10 +32,10 @@
             <c:if test="true">
                 <ul class="ml-auto navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/salesman">Sælger</a>
+                        <a class="nav-link" href="${pageContext.request.contextPath}/sales">Sælger</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/salesman/orders/">Ordrer</a>
+                        <a class="nav-link" href="${pageContext.request.contextPath}/sales/orders/">Ordrer</a>
                     </li>
                 </ul>
             </c:if>

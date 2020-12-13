@@ -27,4 +27,8 @@ public class API {
     public List<Order> getOrders () { return orderRepository.getOrders(); }
 
     public Order getOrder(UUID uuid) throws OrderNotFoundException { return orderRepository.getOrder(uuid); }
+
+    public void updateOrder(int id){ }
+
+    public int getCarportIdFromUuid(UUID uuid) {return orderRepository.getCarportIdFromUuid(uuid); }
 }

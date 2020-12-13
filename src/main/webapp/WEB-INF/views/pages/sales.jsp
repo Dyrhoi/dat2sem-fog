@@ -29,7 +29,7 @@
         <c:if test="${requestScope.orders != null}">
             <c:forEach var="order" items="${requestScope.orders}" varStatus="loop">
                 <tr class="d-lg-table-row">
-                    <th scope="row" class="text-nowrap user-id"><a href="${pageContext.request.contextPath}/salesman/orders/${order.uuid}"><c:out value="${order.uuid}"/></a></th>
+                    <th scope="row" class="text-nowrap user-id"><a href="${pageContext.request.contextPath}/sales/orders/${order.uuid}"><c:out value="${order.uuid}"/></a></th>
                     <td class="text-nowrap"><c:out value="${order.customer.fullName}" /></td>
                     <td class="text-nowrap"><c:out value="${order.customer.email}" /></td>
                     <td class="text-nowrap"><c:out value="${order.customer.phone}" /></td>

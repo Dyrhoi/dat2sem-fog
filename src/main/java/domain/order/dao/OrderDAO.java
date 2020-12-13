@@ -228,7 +228,12 @@ public class OrderDAO implements OrderRepository {
                         stmt.setInt(2, getCarport().getLength());
                         stmt.setString(3, getCarport().getRoof().toString());
                         stmt.setInt(4, getCarport().getRoof_material());
-                        stmt.setInt(5, getCarport().getRoofAngle());
+                        if (getCarport().getRoofAngle() != null) {
+                            stmt.setInt(5, getCarport().getRoofAngle());
+                        }
+                        else {
+                            stmt.setNull(5, 0);
+                        }
 
                         stmt.executeUpdate();
                         rs = stmt.getGeneratedKeys();
@@ -284,5 +289,36 @@ public class OrderDAO implements OrderRepository {
                 throw new RuntimeException("Unknown error.");
             }
         };
+    }
+
+    @Override
+    public void updateOrder(int id) {
+        try (Connection conn = database.getConnection()) {
+            PreparedStatement stmt;
+            stmt = conn.prepareStatement("UPDATE carport SET length = ?, width = ?, roof_type = ?, roof_material = ?, angle = ? WHERE id = " + id);
+            stmt.setInt();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    };
+
+    public int getCarportIdFromUuid(UUID uuid) {
+        Integer carportId = null;
+        try (Connection conn = database.getConnection()) {
+            PreparedStatement stmt;
+            stmt = conn.prepareStatement("SELECT * FROM orders WHERE uuid = ?");
+            stmt.setString(1, uuid.toString());
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                carportId = rs.getInt("carports_id");
+            } else {
+                throw new OrderNotFoundException();
+            }
+        } catch (SQLException | OrderNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
+        return carportId;
     }
 }
