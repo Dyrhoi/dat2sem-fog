@@ -1,10 +1,12 @@
 package domain.carport;
 
 public class RoofMaterial {
+    int id;
     String name;
-    String type;
+    Carport.roofTypes type;
 
-    public RoofMaterial(String name, String type) {
+    public RoofMaterial(int id, String name, Carport.roofTypes type) {
+        this.id = id;
         this.name = name;
         this.type = type;
     }
@@ -13,7 +15,11 @@ public class RoofMaterial {
         return name;
     }
 
-    public String getType() {
+    public Carport.roofTypes getType() {
         return type;
+    }
+
+    public int getId() {
+        return id;
     }
 }
