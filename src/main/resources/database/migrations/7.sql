@@ -1,5 +1,8 @@
 SET FOREIGN_KEY_CHECKS = 0;
 
+DROP TABLE IF EXISTS offers;
+DROP TABLE IF EXISTS salesreps;
+
 create TABLE offers(
     id int PRIMARY KEY AUTO_INCREMENT,
     order_uuid VARCHAR(36) NOT NULL,

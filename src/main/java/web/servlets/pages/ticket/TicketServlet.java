@@ -54,7 +54,7 @@ public class TicketServlet extends BaseServlet {
                 PolicyFactory policy = new HtmlPolicyBuilder()
                         .allowElements("p")
                         .allowElements("strong")
-                        .allowElements("<br>")
+                        .allowElements("br")
                         .allowElements("ol")
                         .allowElements("ul")
                         .allowElements("li")

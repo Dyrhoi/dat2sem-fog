@@ -18,9 +18,9 @@
                     #<c:out value="${requestScope.ticket.order.uuid}" />
                 </a>
             </p>
-            <p class="mb-0">Ordre status <span class="badge badge-warning">Tilbud afsendt</span></p>
+            <p class="mb-0">Ordre status <span class="badge badge-light">Ordre oprettet</span></p>
         </section>
-        <article class="message border rounded alert-warning border-warning">
+        <!--<article class="message border rounded alert-warning border-warning">
             <section>
                 <div class="row d-flex align-items-center">
                     <div class="pl-3 d-flex align-items-center">
@@ -36,7 +36,7 @@
                     </div>
                 </div>
             </section>
-        </article>
+        </article>-->
         <section>
             <c:forEach items="${requestScope.ticket.events}" var="eventOrMessage">
                 <c:choose>
