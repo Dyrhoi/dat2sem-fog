@@ -32,6 +32,29 @@
             </section>
         </article>
         <section>
+            <c:forEach items="${requestScope.ticket.events}" var="eventOrMessage">
+                <c:choose>
+                    <c:when test="${eventOrMessage.getClass().simpleName == 'TicketMessage'}">
+                        <article class="message border rounded">
+                            <section class="d-flex justify-content-between align-items-center">
+                                <h2><c:out value="${eventOrMessage.getAuthor().getFullName()}"/></h2>
+                                <span class="small"><c:out value="${eventOrMessage.getDate().toString()}"/></span>
+                            </section>
+                            <section>
+                                <p>
+                                    Carporten skal gerne være i mørke farver.
+                                    <br>
+                                    <br>
+                                    Adgium, tus, et epos. Cur vita messis? Ubi est dexter nutrix? Capios mori! Seculas accelerare in lutetia! Impositios sunt exemplars de placidus buxum.
+                                </p>
+                            </section>
+                        </article>
+                    </c:when>
+                    <c:when test="${eventOrMessage.getClass().simpleName == 'TicketEvent'}">
+                        Der var en event.
+                    </c:when>
+                </c:choose>
+            </c:forEach>
             <article class="event">
                 <div class="event-message accept"><a href="">Ordren</a> blev oprettet af klienten. - 6. Dec, 2020</div>
             </article>

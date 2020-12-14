@@ -8,6 +8,7 @@ import domain.carport.Shed;
 import org.apache.commons.validator.routines.EmailValidator;
 import validation.ValidationErrorException;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public abstract class OrderFactory {
@@ -16,6 +17,15 @@ public abstract class OrderFactory {
     private Carport carport;
     private Shed shed;
     private String token;
+    private String note;
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = Objects.requireNonNullElse(note, "Ingen ekstra bemærkninger noteret.");
+    }
 
     public void setCarport(Carport carport) {
         this.carport = carport;

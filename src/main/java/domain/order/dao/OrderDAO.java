@@ -1,29 +1,36 @@
 package domain.order.dao;
 
 import domain.carport.Carport;
+import domain.order.exceptions.TicketNotFoundException;
+import domain.order.ticket.Ticket;
+import domain.order.ticket.TicketEvent;
+import domain.order.ticket.TicketMessage;
+import domain.user.User;
+import domain.user.UserRepository;
 import domain.user.customer.Customer;
 import domain.order.Order;
 import domain.order.OrderFactory;
 import domain.order.exceptions.OrderNotFoundException;
 import domain.order.OrderRepository;
 import domain.carport.Shed;
-import domain.user.customer.CustomerRepository;
-import domain.user.customer.dao.CustomerDAO;
 import domain.user.customer.exceptions.CustomerNotFoundException;
+import domain.user.exceptions.UserNotFoundException;
 import infrastructure.Database;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
 public class OrderDAO implements OrderRepository {
     private final Database database;
-    private final CustomerRepository customerRepository;
+    private final UserRepository userRepository;
 
-    public OrderDAO(Database database, CustomerRepository customerDAO) {
+    public OrderDAO(Database database, UserRepository userDAO) {
         this.database = database;
-        this.customerRepository = customerDAO;
+        this.userRepository = userDAO;
     }
 
     //TODO: This should be Inner Join - Dyrhoi
@@ -42,6 +49,7 @@ public class OrderDAO implements OrderRepository {
             //Get ID's
             int customerId;
             int carportId;
+            String token;
             PreparedStatement orderStmt = conn.prepareStatement("SELECT * FROM orders ORDER BY timestamp DESC");
             ResultSet orderRs = orderStmt.executeQuery();
 
@@ -49,6 +57,7 @@ public class OrderDAO implements OrderRepository {
                 uuid = UUID.fromString(orderRs.getString("uuid"));
                 carportId = orderRs.getInt("carports_id");
                 customerId = orderRs.getInt("customers_id");
+                token = orderRs.getString("token");
 
                 stmt = conn.prepareStatement("SELECT * FROM carports WHERE id = ?");
                 stmt.setInt(1, carportId);
@@ -76,7 +85,7 @@ public class OrderDAO implements OrderRepository {
                     shed = new Shed(shedId, shedWidth, shedLength);
                 }
 
-                stmt = conn.prepareStatement("SELECT * FROM customers INNER JOIN users ON user_id = users.id WHERE customers.id = ?");
+                stmt = conn.prepareStatement("SELECT * FROM users INNER JOIN customers ON user_id = users.id WHERE users.id = ?");
                 stmt.setInt(1, customerId);
 
                 rs = stmt.executeQuery();
@@ -166,7 +175,7 @@ public class OrderDAO implements OrderRepository {
             }
 
             //Get Customer
-            stmt = conn.prepareStatement("SELECT * FROM customers INNER JOIN users ON user_id = users.id WHERE customers.id = ?");
+            stmt = conn.prepareStatement("SELECT * FROM users INNER JOIN customers ON user_id = users.id WHERE users.id = ?");
             stmt.setInt(1, customerId);
 
             rs = stmt.executeQuery();
@@ -212,9 +221,11 @@ public class OrderDAO implements OrderRepository {
                         int customerId = -1;
                         try {
                             //Customer exists, set id to current customer.
-                            Customer customer = customerRepository.getCustomer(getCustomer().getEmail());
+                            User customer = userRepository.getUser(getCustomer().getEmail());
                             customerId = customer.getId();
-                        } catch (CustomerNotFoundException e) {
+                            if(!(customer instanceof Customer))
+                                throw new CustomerNotFoundException();
+                        } catch (CustomerNotFoundException | UserNotFoundException e) {
                             stmt = conn.prepareStatement("INSERT INTO users (first_name, last_name, email, phone_number, address, postal_code, city) VALUES (?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
                             stmt.setString(1, getCustomer().getFirstname());
                             stmt.setString(2, getCustomer().getLastname());
@@ -285,9 +296,24 @@ public class OrderDAO implements OrderRepository {
                         //Order
                         stmt = conn.prepareStatement("INSERT INTO orders (uuid, customers_id, carports_id, token) VALUES (?, ?, ?, ?)");
                         stmt.setString(1, getUuid().toString());
-                        stmt.setInt(2, customerId);
+                        stmt.setInt(2, userId);
                         stmt.setInt(3, carportId);
                         stmt.setString(4, getToken());
+
+                        stmt.executeUpdate();
+
+                        //Ticket creation, add event and message (order note)
+                        stmt = conn.prepareStatement("INSERT INTO order_events (author_id, scope, order_token) VALUES (?, ?, ?)");
+                        stmt.setInt(1, userId);
+                        stmt.setString(2, TicketEvent.EventType.ORDER_CREATE.toString());
+                        stmt.setString(3, getToken());
+
+                        stmt.executeUpdate();
+
+                        stmt = conn.prepareStatement("INSERT INTO order_messages (author_id, content, order_token) VALUES (?, ?, ?)");
+                        stmt.setInt(1, userId);
+                        stmt.setString(2, getNote());
+                        stmt.setString(3, getToken());
 
                         stmt.executeUpdate();
 
@@ -311,5 +337,100 @@ public class OrderDAO implements OrderRepository {
                 throw new RuntimeException("Unknown error.");
             }
         };
+    }
+
+    private TicketMessage loadMessage(ResultSet rs) throws SQLException {
+        User user = null;
+        try {
+            user = userRepository.getUser(rs.getInt("author_id"));
+        } catch (UserNotFoundException e) {
+            System.out.println("A message was loaded, but the user was has since been deleted from system, displaying a null user.");
+            e.printStackTrace();
+        }
+        return new TicketMessage(
+                rs.getString("content"),
+                user,
+                rs.getTimestamp("_date").toLocalDateTime()
+        );
+    }
+
+    private TicketEvent loadEvent(ResultSet rs) throws SQLException {
+        User user = null;
+        try {
+            user = userRepository.getUser(rs.getInt("author_id"));
+        } catch (UserNotFoundException e) {
+            System.out.println("A message was loaded, but the user was has since been deleted from system, displaying a null user.");
+            e.printStackTrace();
+        }
+        return new TicketEvent(
+                TicketEvent.EventType.valueOf(rs.getString("scope")),
+                user,
+                rs.getTimestamp("_date").toLocalDateTime()
+        );
+    }
+
+    @Override
+    public Ticket getTicket(String orderToken) throws TicketNotFoundException {
+        try(Connection conn = database.getConnection()) {
+            PreparedStatement stmt;
+            ResultSet rs;
+            List<Object> eventsOrMessages = new ArrayList<>();
+
+            //TODO:Hvid - Gør det til en enkel SQL statement, tak :* - dyrhoi
+
+            /*
+            *
+            * Messages:
+            *
+            * */
+            stmt = conn.prepareStatement("SELECT * FROM order_messages WHERE order_token = ?");
+            stmt.setString(1, orderToken);
+
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                eventsOrMessages.add(loadMessage(rs));
+            }
+
+            /*
+            *
+            * Events:
+            *
+            * */
+
+            stmt = conn.prepareStatement("SELECT * FROM order_events WHERE order_token = ?");
+            stmt.setString(1, orderToken);
+
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                eventsOrMessages.add(loadEvent(rs));
+            }
+
+            //Sort?
+            eventsOrMessages.sort((o1, o2) -> {
+                LocalDateTime date1 = null;
+                if(o1 instanceof TicketMessage) {
+                    date1 = ((TicketMessage) o1).getDate();
+                }
+                else {
+                    date1 = ((TicketEvent) o1).getDate();
+                }
+
+                LocalDateTime date2 = null;
+                if(o2 instanceof TicketMessage) {
+                    date2 = ((TicketMessage) o2).getDate();
+                }
+                else {
+                    date2 = ((TicketEvent) o2).getDate();
+                }
+                return date1.compareTo(date2);
+            });
+
+            return new Ticket(null, eventsOrMessages);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        throw new TicketNotFoundException();
     }
 }
