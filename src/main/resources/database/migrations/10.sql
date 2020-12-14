@@ -25,4 +25,4 @@ CREATE TABLE order_events (
 
 SET FOREIGN_KEY_CHECKS = 1;
 
-UPDATE properties SET value = 9 WHERE name = 'version';
+UPDATE properties SET value = 10 WHERE name = 'version';

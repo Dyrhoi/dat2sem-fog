@@ -303,8 +303,8 @@ public class OrderDAO implements OrderRepository {
                             User customer = userRepository.getUser(getCustomer().getEmail());
                             customerId = customer.getId();
                             if (!(customer instanceof Customer))
-                                throw new CustomerNotFoundException();
-                        } catch (CustomerNotFoundException | UserNotFoundException e) {
+                                throw new SQLException("Customer email is already in use by a Sales Rep");
+                        } catch (UserNotFoundException e) {
                             stmt = conn.prepareStatement("INSERT INTO users (first_name, last_name, email, phone_number, address, postal_code, city) VALUES (?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
                             stmt.setString(1, getCustomer().getFirstname());
                             stmt.setString(2, getCustomer().getLastname());
@@ -384,7 +384,7 @@ public class OrderDAO implements OrderRepository {
                         //Ticket creation, add event and message (order note)
                         stmt = conn.prepareStatement("INSERT INTO order_events (author_id, scope, order_token) VALUES (?, ?, ?)");
                         stmt.setInt(1, userId);
-                        stmt.setString(2, TicketEvent.EventType.ORDER_CREATE.toString());
+                        stmt.setString(2, TicketEvent.EventType.ORDER_CREATED.toString());
                         stmt.setString(3, getToken());
 
                         stmt.executeUpdate();

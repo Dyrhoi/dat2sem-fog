@@ -51,9 +51,6 @@ public class TicketServlet extends BaseServlet {
                     //Get session information.
                 }
 
-                ImmutableSet<String> ALLOWED_CLASSES = ImmutableSet.of(
-                        "ql-indent-1", "ql-indent-2", "ql-indent-3", "ql-indent-4", "ql-indent-5" , "ql-indent-6", "ql-indent-7", "ql-indent-8");
-
                 PolicyFactory policy = new HtmlPolicyBuilder()
                         .allowElements("p")
                         .allowElements("strong")
@@ -63,13 +60,6 @@ public class TicketServlet extends BaseServlet {
                         .allowElements("li")
                         .allowElements("em")
                         .allowElements("u")
-                        .allowAttributes("class")
-                        .matching(
-                                (elementName, attributeName, value)
-                                        -> Joiner.on(' ').join(
-                                        Iterables.filter(
-                                                Splitter.onPattern("\\s+").omitEmptyStrings().split(value),
-                                                Predicates.in(ALLOWED_CLASSES)))).onElements("p")
                         .toFactory();
                 String safeHTMLContent = policy.sanitize(content);
 
