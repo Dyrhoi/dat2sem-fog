@@ -7,6 +7,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="api.Util" %>
 <div>
     <div class="container">
         <section>
@@ -38,62 +39,30 @@
                         <article class="message border rounded">
                             <section class="d-flex justify-content-between align-items-center">
                                 <h2><c:out value="${eventOrMessage.getAuthor().getFullName()}"/></h2>
-                                <span class="small"><c:out value="${eventOrMessage.getDate().toString()}"/></span>
+                                <span class="small"><c:out value="${Util.formatDateTime(eventOrMessage.getDate())}"/></span>
                             </section>
                             <section>
-                                <p>
-                                    Carporten skal gerne være i mørke farver.
-                                    <br>
-                                    <br>
-                                    Adgium, tus, et epos. Cur vita messis? Ubi est dexter nutrix? Capios mori! Seculas accelerare in lutetia! Impositios sunt exemplars de placidus buxum.
-                                </p>
+                                <c:out value="${eventOrMessage.getContent()}" />
                             </section>
                         </article>
                     </c:when>
                     <c:when test="${eventOrMessage.getClass().simpleName == 'TicketEvent'}">
-                        Der var en event.
+                        <article class="event">
+                            <div class="event-message">
+                                <c:choose>
+                                    <c:when test="${eventOrMessage.getScope() == 'ORDER_CREATE'}">
+                                        Ordren blev oprettet af klienten.
+                                    </c:when>
+                                    <c:when test="${eventOrMessage.getScope() == 'OFFER_SENT'}">
+                                        Noget andet tekst.
+                                    </c:when>
+                            </c:choose>
+                                - <c:out value="${Util.formatDate(eventOrMessage.getDate())}" />
+                            </div>
+                        </article>
                     </c:when>
                 </c:choose>
             </c:forEach>
-            <article class="event">
-                <div class="event-message accept"><a href="">Ordren</a> blev oprettet af klienten. - 6. Dec, 2020</div>
-            </article>
-            <article class="message border rounded">
-                <section class="d-flex justify-content-between align-items-center">
-                    <h2>Martin Riddel</h2>
-                    <span class="small">19:06, 9. Dec, 2020</span>
-                </section>
-                <section>
-                    <p>
-                        Carporten skal gerne være i mørke farver.
-                        <br>
-                        <br>
-                        Adgium, tus, et epos. Cur vita messis? Ubi est dexter nutrix? Capios mori! Seculas accelerare in lutetia! Impositios sunt exemplars de placidus buxum.
-                    </p>
-                </section>
-            </article>
-            <article class="event">
-                <div class="event-message accept"><a href="">Ordren</a> blev godkendt af salgsassistenten. - 9. Dec, 2020</div>
-            </article>
-            <article class="message border rounded staff">
-                <section class="d-flex justify-content-between align-items-center">
-                    <h2>Emil D.T Jørgensen <span class="badge badge-secondary">Salgsassistent</span></h2>
-                    <span class="small">19:06, 9. Dec, 2020</span>
-                </section>
-                <section>
-                    <p>
-                        Det bliver ikke noget problem.
-                        <br>
-                        <br>
-                        Med venlig hilsen,
-                        <br>
-                        <strong>Kundeservice - Fog</strong>
-                    </p>
-                </section>
-            </article>
-            <article class="event">
-                <div class="event-message accept"><a href="">Tilbud</a> tilsendt af salgsassistenten. - 9 Dec, 2020</div>
-            </article>
             <article class="reply border rounded">
                 <div id="editor"></div>
                 <section class="d-flex justify-content-end align-items-center">

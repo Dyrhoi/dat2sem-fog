@@ -1,6 +1,7 @@
 package web.servlets;
 
 import api.API;
+import api.Util;
 import domain.material.MaterialRepository;
 import domain.material.dao.MaterialDAO;
 import domain.order.OrderRepository;
@@ -31,7 +32,6 @@ public class BaseServlet extends HttpServlet {
             e.printStackTrace();
         }
         api = tmp;
-
     }
     private static API attachAPI() {
         Database db = new Database();

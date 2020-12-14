@@ -25,8 +25,13 @@ public class Util {
         return phonenumber.replaceAll("[\\s-]+", "");
     }
 
-    public static String formateDateTime(LocalDateTime time) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH.ss, dd. MMMM, yyyy").localizedBy(LOCALE);
+    public static String formatDateTime(LocalDateTime time) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH.ss - dd. MMMM, yyyy").localizedBy(LOCALE);
+        return WordUtils.capitalize(time.format(formatter));
+    }
+
+    public static String formatDate(LocalDateTime time) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd. MMMM, yyyy").localizedBy(LOCALE);
         return WordUtils.capitalize(time.format(formatter));
     }
 }
