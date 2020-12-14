@@ -1,6 +1,7 @@
 package domain.carport.carportMaterials;
 
 import domain.carport.Carport;
+import domain.carport.Shed;
 import domain.material.dao.MaterialDAO;
 
 import java.util.List;
@@ -8,8 +9,6 @@ import java.util.List;
 import static domain.carport.carportMaterials.MaterialCalculations.*;
 
 public class FlatMaterials {
-    private final int PERFORATED_TAPE = 2;
-    private final int STERN_SCREW_PACKAGES = 1;
     /*
     ALT SKAL RUNDES OP
     Fladt tag uden skur:
@@ -27,33 +26,15 @@ public class FlatMaterials {
     Spær beslag 1 højre & 1 venstre for hvert spær
     4,5 x 60 mm skruer 1 pakke
     4,0 x 50 mm beslagskruer 250 / (antal spær x 6)
-
+    bræddebolt 2 pr stolpe + 2 ekstra pr ekstra rem
+    firkantskive 2 pr stolpe + 2 ekstra pr ekstra rem
 
      */
 
     public List calcFlat(MaterialDAO repo, Carport carport) {
-        double length = carport.getLength();
-        double width = carport.getWidth();
+        MaterialCalculations.BaseCarport tmpBaseCarport = new BaseCarport(carport);
+        MaterialCalculations.FlatRoof tmpFlatRoof = new FlatRoof(carport);
 
-        int pillars = pillars(length, width);
-        int strops = strops(length, width);
-        int rafters = rafters(length, width);
-        int topSternsSides = sideSterns(length);
-        int buttomSternsSides = sideSterns(length);
-        int topSternsEnds = endSterns(width);
-        int buttomSternsEnds = endSterns(width);
-        int rafterFittingLeft = rafterFitting(rafters);
-        int rafterFittingRight = rafterFitting(rafters);
-        int perforatedTape = PERFORATED_TAPE;
-        int sternScrewsPackages = STERN_SCREW_PACKAGES;
-        int fittingScrewPackages = fittingScrews(rafters);
-        int numberOfLargeRoofPlates = roofPlates(length);
-        int numberOfSmallRoofPlates = 0;
-        if (width > 600) {
-            numberOfSmallRoofPlates = roofPlates(length);
-        }
-        int roofScrewPackages = roofScrews(numberOfLargeRoofPlates, numberOfSmallRoofPlates);
-        int boardBolts = boardBolts(pillars);
 
         return null;
     }
@@ -93,7 +74,9 @@ public class FlatMaterials {
     firkantskive 2 pr stolpe + 2 ekstra pr ekstra rem
      */
 
-    public static List calcFlatShed(MaterialDAO repo, Carport carport) {
+    public List calcFlatShed(MaterialDAO repo, Carport carport, Shed shed) {
+
+
         return null;
     }
 
