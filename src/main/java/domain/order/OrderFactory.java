@@ -25,7 +25,7 @@ public abstract class OrderFactory {
 
     public void setNote(String note) {
         if(note == null || note.isBlank() || note.isEmpty())
-            this.note = "Ingen yderlige kommentare til ordren";
+            this.note = "Ingen yderlige kommentar til ordren";
         else
             this.note = note;
     }
