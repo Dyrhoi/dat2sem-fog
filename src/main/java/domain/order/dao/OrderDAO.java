@@ -6,7 +6,7 @@ import domain.order.Order;
 import domain.order.OrderFactory;
 import domain.order.exceptions.OrderNotFoundException;
 import domain.order.OrderRepository;
-import domain.shed.Shed;
+import domain.carport.Shed;
 import infrastructure.Database;
 
 import java.sql.*;
