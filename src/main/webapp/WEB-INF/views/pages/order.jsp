@@ -216,8 +216,8 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="comment">Evt. bemærkninger</label>
-                        <textarea class="form-control" id="comment" name="comment"></textarea>
+                        <label for="note">Evt. bemærkninger</label>
+                        <textarea class="form-control" id="note" name="note"></textarea>
                     </div>
                 </section>
                 <section class="d-flex justify-content-end align-items-center">

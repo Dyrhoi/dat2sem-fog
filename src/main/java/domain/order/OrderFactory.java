@@ -3,11 +3,12 @@ package domain.order;
 import api.Util;
 import com.mysql.cj.util.StringUtils;
 import domain.carport.Carport;
-import domain.customer.Customer;
+import domain.user.customer.Customer;
 import domain.carport.Shed;
 import org.apache.commons.validator.routines.EmailValidator;
 import validation.ValidationErrorException;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public abstract class OrderFactory {
@@ -16,6 +17,18 @@ public abstract class OrderFactory {
     private Carport carport;
     private Shed shed;
     private String token;
+    private String note;
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        if(note == null || note.isBlank() || note.isEmpty())
+            this.note = "Ingen yderlige kommentar til ordren";
+        else
+            this.note = note;
+    }
 
     public void setCarport(Carport carport) {
         this.carport = carport;

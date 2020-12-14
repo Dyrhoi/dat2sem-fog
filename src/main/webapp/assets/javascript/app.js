@@ -8,6 +8,24 @@ $(".image-radio--radio").each(function () {
    if($(this).prop("checked")) return false;
 });
 
+let toolbarOptions = [
+   ['bold', 'italic', 'underline'],
+   [{ 'list': 'ordered'}, { 'list': 'bullet' }]
+]
+let quill = new Quill('#editor', {
+   theme: 'snow',
+   placeholder: 'Skriv en besked.',
+   modules: {
+      toolbar: toolbarOptions
+   }
+});
+
+
+$('.custom-range').rangeslider({
+   polyfill : false
+});
+
+
 //Events
 $(".image-radio--image").click(function() {
    let targetToUpdate = $(this).parent().data("radio");
@@ -22,13 +40,23 @@ $(".custom-range").on("input", function () {
    updateRangeLabels(this);
 });
 
-$('.custom-range').rangeslider({
-   polyfill : false
-});
-
 $("#shed_checkbox").change(function () {
    $("#shed_dimensions .custom-range").rangeslider("update", true);
+});
+
+$(".ql-editor").on('input paste', function() {
+   updateTicketValue();
 })
+
+$(".ql-toolbar button").on('click', function() {
+   updateTicketValue();
+})
+
+function updateTicketValue() {
+   let value = $(".ql-editor").html();
+   $("input[name='content']").val(value);
+   console.log($("input[name='content']").val());
+}
 
 function updateRangeLabels(element) {
    let targetName = $(element).attr("name");

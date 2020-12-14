@@ -1,9 +1,10 @@
 package domain.order;
 
 import domain.carport.Carport;
-import domain.customer.Customer;
+import domain.user.customer.Customer;
 import domain.carport.Shed;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
