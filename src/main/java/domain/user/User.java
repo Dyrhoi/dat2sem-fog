@@ -1,36 +1,30 @@
-package domain.customer;
+package domain.user;
 
 import java.util.Objects;
 
-public class Customer {
-
+public class User {
     private final int id;
-
     private final String firstname;
     private final String lastname;
     private final String email;
     private final String phone;
     private final Address address;
-    private String comment;
+    private final Type type;
 
-    public Customer(int id, String firstname, String lastname, String email, String phone, Address address) {
+    public User(int id, String firstname, String lastname, String email, String phone, Address address, Type type) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.phone = phone;
         this.address = address;
+        this.type = type;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
 
     public int getId() {
         return id;
     }
-
-    public String getComment() { return comment; }
 
     public String getFirstname() {
         return firstname;
@@ -56,17 +50,21 @@ public class Customer {
         return firstname + " " + lastname;
     }
 
+    public Type getType() {
+        return type;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Customer customer = (Customer) o;
-        return Objects.equals(id, customer.id);
+        User user = (User) o;
+        return Objects.equals(id, user.id);
     }
 
     @Override
     public String toString() {
-        return "Customer{" +
+        return "User{" +
                 "id=" + id +
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
@@ -81,12 +79,12 @@ public class Customer {
         return Objects.hash(id);
     }
 
-    public static class Address{
+    public static class Address {
         private final String address;
         private final String city;
         private final String postalCode;
 
-        public Address(String address, String city, String postalCode){
+        public Address(String address, String city, String postalCode) {
             this.address = address;
             this.city = city;
             this.postalCode = postalCode;
@@ -112,5 +110,10 @@ public class Customer {
         public String getPostalCode() {
             return postalCode;
         }
+    }
+
+    public enum Type {
+        SALESMAN,
+        CLIENT
     }
 }

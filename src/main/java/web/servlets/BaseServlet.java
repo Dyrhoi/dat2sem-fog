@@ -1,10 +1,13 @@
 package web.servlets;
 
 import api.API;
+import api.Util;
 import domain.material.MaterialRepository;
 import domain.material.dao.MaterialDAO;
 import domain.order.OrderRepository;
 import domain.order.dao.OrderDAO;
+import domain.user.UserRepository;
+import domain.user.dao.UserDAO;
 import infrastructure.Database;
 
 import javax.servlet.ServletException;
@@ -29,13 +32,13 @@ public class BaseServlet extends HttpServlet {
             e.printStackTrace();
         }
         api = tmp;
-
     }
     private static API attachAPI() {
         Database db = new Database();
 
         MaterialRepository materialRepository = new MaterialDAO(db);
-        OrderRepository orderRepository = new OrderDAO(db);
+        UserRepository userRepository = new UserDAO(db);
+        OrderRepository orderRepository = new OrderDAO(db, userRepository);
 
         return new API(materialRepository, orderRepository);
     }

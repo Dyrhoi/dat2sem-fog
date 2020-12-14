@@ -8,6 +8,9 @@ import domain.order.Order;
 import domain.order.OrderFactory;
 import domain.order.OrderRepository;
 import domain.order.exceptions.OrderNotFoundException;
+import domain.order.exceptions.TicketNotFoundException;
+import domain.order.ticket.Ticket;
+import domain.order.ticket.TicketMessage;
 
 import java.util.List;
 import java.util.UUID;
@@ -34,4 +37,12 @@ public class API {
     public int updateOrder(int id, Carport carport, Shed shed){ return orderRepository.updateOrder(id, carport, shed);}
 
     public int getCarportIdFromUuid(UUID uuid) {return orderRepository.getCarportIdFromUuid(uuid); }
+  
+    public Ticket getTicket(String token) throws OrderNotFoundException {
+        return orderRepository.getTicket(token);
+    }
+
+    public Ticket updateTicket(String token, TicketMessage ticketMessage) throws OrderNotFoundException {
+        return orderRepository.updateTicket(token, ticketMessage);
+    }
 }

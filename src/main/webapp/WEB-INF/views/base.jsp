@@ -19,7 +19,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
           integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rangeslider.js/2.0.5/rangeslider.min.css" integrity="sha512-DNvC8BVOWih/2JxU9KKi5FvkH8q/pIamVvXr44a3AWmUKM3v54N3tlcM7vMk3R7lagSJbVGqREkqk6pn+4xjtA==" crossorigin="anonymous" />
-    <link href="https://fonts.googleapis.com/css?family=Material+Icons+Round" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons+Round|Material+Icons+Outlined" rel="stylesheet">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/styles/style.css?fc=<%= Math.random() %>">
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
@@ -53,8 +55,9 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/rangeslider.js/2.0.5/rangeslider.min.js" integrity="sha512-0Zzw8ALTo1NhdauXScCE0lVJsHZCequpKQ60MbTJnVi8ZOdkbcUKkxyBbe797l5O/fxNELGDstJg0FkUNtBWcw==" crossorigin="anonymous"></script>
-    <script>let contextPath = "${pageContext.request.contextPath}"</script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 
+    <script>let contextPath = "${pageContext.request.contextPath}"</script>
     <script src="${pageContext.request.contextPath}/assets/javascript/app.js?fc=<%= Math.random() %>"></script>
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
