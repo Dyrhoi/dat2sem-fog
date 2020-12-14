@@ -1,26 +1,23 @@
 package domain.order.dao;
 
 import domain.carport.Carport;
-import domain.order.exceptions.TicketNotFoundException;
+import domain.carport.Shed;
+import domain.order.Order;
+import domain.order.OrderFactory;
+import domain.order.OrderRepository;
+import domain.order.exceptions.OrderNotFoundException;
 import domain.order.ticket.Ticket;
 import domain.order.ticket.TicketEvent;
 import domain.order.ticket.TicketMessage;
 import domain.user.User;
 import domain.user.UserRepository;
 import domain.user.customer.Customer;
-import domain.order.Order;
-import domain.order.OrderFactory;
-import domain.order.exceptions.OrderNotFoundException;
-import domain.order.OrderRepository;
-import domain.carport.Shed;
-import domain.user.customer.exceptions.CustomerNotFoundException;
 import domain.user.exceptions.UserNotFoundException;
 import infrastructure.Database;
 
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -336,7 +333,6 @@ public class OrderDAO implements OrderRepository {
                                 throw new SQLException("Couldn't insert customers.");
                             }
                         }
-
 
                         //Carport
                         int carportId = -1;

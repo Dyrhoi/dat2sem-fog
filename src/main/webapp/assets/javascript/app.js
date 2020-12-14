@@ -95,21 +95,28 @@ function removeShed() {
    $("#shed").append(btn);
 }
 
+let info = $("#changeInfoContainer");
+
 function addShed() {
    $("#shed-text").remove();
    $("#addShedBtn").remove();
    let shedLength = $('<select class="change-input" id="shed-length" name="shed-length"></select>')
    $("#shed").append(shedLength);
 
+   let minLength = parseInt(info.attr("data-shed-minLength"));
+   let maxLength = parseInt(info.attr("data-shed-maxLength"));
+   let minWidth = parseInt(info.attr("data-shed-minWidth"));
+   let maxWidth = parseInt(info.attr("data-shed-maxWidth"));
+
    let i;
-   for (i = 150; i <= 690; i += 30) {
+   for (i = minLength; i <= maxLength; i += 30) {
       $('#shed-length').append($('<option value="' + i + '">' + i + '</option>'));
    }
    $("#shed").append($('<span id="shed-text"> X </span>'));
    let shedWidth = $('<select class="change-input" id="shed-width" name="shed-width"></select>')
    $("#shed").append(shedWidth);
 
-   for (i = 210; i <= 720; i += 30) {
+   for (i = minWidth; i <= maxWidth; i += 30) {
       $('#shed-width').append($('<option value="' + i + '">' + i + '</option>'));
    }
 
@@ -125,16 +132,13 @@ $("#roof-type").change(function() {
       $("#angle").append($('<span id="angle-text">N/A</span>'));
    }
    else if ($("#roof-type").val() === 'ANGLED') {
-      const minAngle = $("#changeInfoContainer").attr("data-carport-minAngle");
-      const maxAngle = $("#changeInfoContainer").attr("data-carport-maxAngle");
-      console.log(minAngle);
-      console.log(maxAngle);
+      const minAngle = parseInt(info.attr("data-carport-minAngle"));
+      const maxAngle = parseInt(info.attr("data-carport-maxAngle"));
 
       $("#angle-text").remove();
       let roofAngle = $('<select name="roof-angle" class="change-input" id="roof-angle"></select>');
       $("#angle").append(roofAngle);
-      for (let i = 15; i <= 45; i += 5) {
-         console.log(i);
+      for (let i = minAngle; i <= maxAngle; i += 5) {
          $("#roof-angle").append($('<option value="' + i + '">' + i + '</option>'));
       }
    }

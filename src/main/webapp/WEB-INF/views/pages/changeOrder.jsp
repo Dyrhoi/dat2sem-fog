@@ -10,10 +10,10 @@
 <%@ page import="domain.carport.Carport" %>
 <%@ page import="domain.carport.Shed" %>
 <div class="container" id="changeInfoContainer"
-    data-carport-maxWidth="${Carport.maxWidth}"
-    data-carport-minWidth="${Carport.minWidth}"
-    data-carport-minLength="${Carport.minLength}"
-    data-carport-maxLength="${Carport.maxLength}"
+    data-shed-minLength="${Shed.minLength}"
+    data-shed-maxLength="${Shed.maxLength}"
+    data-shed-maxWidth="${Shed.maxWidth}"
+    data-shed-minWidth="${Shed.minWidth}"
     data-carport-minAngle="${Carport.minAngle}"
     data-carport-maxAngle="${Carport.maxAngle}">
     <form method="post" action="${pageContext.request.contextPath}/sales/orders/">
@@ -88,21 +88,32 @@
                 <span id="roof-material">
                     <c:choose>
                         <c:when test="${requestScope.order.carport.roof == 'FLAT'}">
-                            <select name="roof_flat_material" class="change-input-height" id="roof_flat_material">
-                                <option value="1" selected="selected"><c:out value="${requestScope.roof_material}"/> </option>
-                            </select>
+                            <c:forEach var="item" items="${requestScope.roofMaterials}" varStatus="loop">
+                                <c:if test="${item.type == 'FLAT'}">
+                                    <c:choose>
+                                        <c:when test="${item == requestScope.roof_material}">
+                                            <option value="${loop.index}" selected="selected"><c:out value="${item.name}"/> </option>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <option value="${loop.index}"><c:out value="${item.name}"/> </option>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </c:if>
+                            </c:forEach>
                         </c:when>
                         <c:otherwise>
                             <select name="roof_angled_material" class="change-input-height" id="roof_angled_material">
                                 <c:forEach var="item" items="${requestScope.roofMaterials}" varStatus="loop">
-                                    <c:choose>
-                                        <c:when test="${item == requestScope.roof_material}">
-                                            <option value="${loop.index}" selected="selected"><c:out value="${item}"/> </option>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <option value="${loop.index}"><c:out value="${item}"/> </option>
-                                        </c:otherwise>
-                                    </c:choose>
+                                    <c:if test="${item.type == 'ANGLED'}">
+                                        <c:choose>
+                                            <c:when test="${item == requestScope.roof_material}">
+                                                <option value="${loop.index}" selected="selected"><c:out value="${item.name}"/> </option>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <option value="${loop.index}"><c:out value="${item.name}"/> </option>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:if>
                                 </c:forEach>
                             </select>
                         </c:otherwise>

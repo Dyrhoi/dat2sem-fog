@@ -104,7 +104,7 @@ public class SalesOrdersServlet extends BaseServlet {
             roof_material = Integer.parseInt(req.getParameter("roof_angled_material"));
         }
         else {
-            roof_material = Integer.parseInt(req.getParameter("roof_angled_material"));
+            roof_material = Integer.parseInt(req.getParameter("roof_flat_material"));
             roofAngle = -1;
         }
 
