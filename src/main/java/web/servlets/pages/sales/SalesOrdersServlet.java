@@ -23,20 +23,22 @@ public class SalesOrdersServlet extends BaseServlet {
         /*
         * UUID IS SET IN URL
         * */
-        if (req.getAttribute("slug") != null) {
+        /*if (req.getAttribute("slug") != null) {
             UUID uuid = null;
             try {
                 uuid = setOrderFromUUID(req, req.getAttribute("slug").toString());
+                System.out.println("1");
             } catch (OrderNotFoundException e) {
                 e.printStackTrace();
             }
             super.render("order - " + uuid, "salesOrders", req, resp);
-        }
-        else if (req.getPathInfo() != null && req.getPathInfo().length() > 1) {
+        }*/
+        if (req.getPathInfo() != null && req.getPathInfo().length() > 1) {
             if (req.getPathInfo().charAt(req.getPathInfo().length() - 1) == '/') {
                 slug = req.getPathInfo().replaceAll("/", "");
                 try {
                     UUID uuid = setOrderFromUUID(req, slug);
+                    System.out.println("2");
                     req.setAttribute("roofMaterials", api.getRoofMaterials());
                     super.render("Changing order - " + uuid, "changeOrder", req, resp);
                 } catch (Exception e) {
@@ -47,6 +49,7 @@ public class SalesOrdersServlet extends BaseServlet {
                 slug = req.getPathInfo().substring(1);
                 try {
                     UUID uuid = setOrderFromUUID(req, slug);
+                    System.out.println("3");
                     super.render("order - " + uuid, "salesOrders", req, resp);
                 } catch (IllegalArgumentException | OrderNotFoundException e) { //Illegal Argument from UUID.fromString (Maybe just pass a string to DAO?)
                     e.printStackTrace();
@@ -69,12 +72,7 @@ public class SalesOrdersServlet extends BaseServlet {
 
         req.setAttribute("order", order);
         req.setAttribute("prePrice", Math.round(Math.random() * (40000-20000) + 20000));
-        if (order.getCarport().getRoof().toString().equals("FLAT")) {
-            req.setAttribute("roof_material", "Plasttrapezplader");
-        }
-        else {
-            req.setAttribute("roof_material", api.getRoofMaterial(order.getCarport().getRoof_material() + 1));
-        }
+        req.setAttribute("roof_material", api.getRoofMaterial(order.getCarport().getRoof_material()));
         return uuid;
     }
 
@@ -88,7 +86,8 @@ public class SalesOrdersServlet extends BaseServlet {
         int carportWidth;
         int carportLength;
         Carport.roofTypes roofType;
-        Integer roofAngle;
+        String roofAngle1;
+        int roofAngle;
         int roof_material;
 
         int shedWidth;
@@ -98,12 +97,14 @@ public class SalesOrdersServlet extends BaseServlet {
 
         carportLength = Integer.parseInt(req.getParameter("carport-length"));
         carportWidth = Integer.parseInt(req.getParameter("carport-width"));
-        roofType = Carport.roofTypes.valueOf(req.getParameter("roof-type").toUpperCase());
-        if (roofType.equals(Carport.roofTypes.ANGLED)){
+        roofAngle1 = req.getParameter("roof-angle");
+        if (roofAngle1 != null) {
+            roofType = Carport.roofTypes.ANGLED;
             roofAngle = Integer.parseInt(req.getParameter("roof-angle"));
             roof_material = Integer.parseInt(req.getParameter("roof_angled_material"));
         }
         else {
+            roofType = Carport.roofTypes.FLAT;
             roof_material = Integer.parseInt(req.getParameter("roof_flat_material"));
             roofAngle = -1;
         }

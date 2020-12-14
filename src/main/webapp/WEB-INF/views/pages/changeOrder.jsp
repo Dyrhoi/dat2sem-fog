@@ -64,7 +64,7 @@
             <p>Tag vinkel:
                 <span id="angle">
                     <c:choose>
-                        <c:when test="${requestScope.order.carport.roofAngle == 0}">
+                        <c:when test="${requestScope.order.carport.roofAngle == -1}">
                             <span id="angle-text">N/A</span>
                         </c:when>
                         <c:otherwise>
@@ -88,18 +88,20 @@
                 <span id="roof-material">
                     <c:choose>
                         <c:when test="${requestScope.order.carport.roof == 'FLAT'}">
-                            <c:forEach var="item" items="${requestScope.roofMaterials}" varStatus="loop">
-                                <c:if test="${item.type == 'FLAT'}">
-                                    <c:choose>
-                                        <c:when test="${item == requestScope.roof_material}">
-                                            <option value="${loop.index}" selected="selected"><c:out value="${item.name}"/> </option>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <option value="${loop.index}"><c:out value="${item.name}"/> </option>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </c:if>
-                            </c:forEach>
+                            <select name="roof_flat_material" class="change-input-height" id="roof_flat_material">
+                                <c:forEach var="item" items="${requestScope.roofMaterials}" varStatus="loop">
+                                    <c:if test="${item.type == 'FLAT'}">
+                                        <c:choose>
+                                            <c:when test="${item == requestScope.roof_material}">
+                                                <option value="${item.id}" selected="selected"><c:out value="${item.name}"/> </option>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <option value="${item.id}"><c:out value="${item.name}"/> </option>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:if>
+                                </c:forEach>
+                            </select>
                         </c:when>
                         <c:otherwise>
                             <select name="roof_angled_material" class="change-input-height" id="roof_angled_material">
@@ -107,10 +109,10 @@
                                     <c:if test="${item.type == 'ANGLED'}">
                                         <c:choose>
                                             <c:when test="${item == requestScope.roof_material}">
-                                                <option value="${loop.index}" selected="selected"><c:out value="${item.name}"/> </option>
+                                                <option value="${item.id}" selected="selected"><c:out value="${item.name}"/> </option>
                                             </c:when>
                                             <c:otherwise>
-                                                <option value="${loop.index}"><c:out value="${item.name}"/> </option>
+                                                <option value="${item.id}"><c:out value="${item.name}"/> </option>
                                             </c:otherwise>
                                         </c:choose>
                                     </c:if>

@@ -440,11 +440,13 @@ public class OrderDAO implements OrderRepository {
                 stmt.executeUpdate();
                 stmt.close();
             }
-            stmt = conn.prepareStatement("UPDATE sheds SET length = ?, width = ? WHERE carports_id =" + id);
-            stmt.setInt(1, shed.getLength());
-            stmt.setInt(2, shed.getWidth());
-            stmt.executeUpdate();
-            stmt.close();
+            else {
+                stmt = conn.prepareStatement("UPDATE sheds SET length = ?, width = ? WHERE carports_id =" + id);
+                stmt.setInt(1, shed.getLength());
+                stmt.setInt(2, shed.getWidth());
+                stmt.executeUpdate();
+                stmt.close();
+            }
 
             System.out.println("Done");
             conn.setAutoCommit(true);
