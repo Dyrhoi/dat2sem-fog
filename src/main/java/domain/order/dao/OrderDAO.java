@@ -301,7 +301,7 @@ public class OrderDAO implements OrderRepository {
                         try {
                             //Customer exists, set id to current customer.
                             User customer = userRepository.getUser(getCustomer().getEmail());
-                            customerId = customer.getId();
+                            userId = customer.getId();
                             if (!(customer instanceof Customer))
                                 throw new SQLException("Customer email is already in use by a Sales Rep");
                         } catch (UserNotFoundException e) {
