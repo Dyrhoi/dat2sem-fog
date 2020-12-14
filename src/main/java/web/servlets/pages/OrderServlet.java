@@ -85,6 +85,9 @@ public class OrderServlet extends BaseServlet {
                 shed = new Shed(id, shedWidth, shedLength);
             }
 
+            String note = req.getParameter("note");
+
+
             //create order
             OrderFactory orderFactory = api.createOrder();
             UUID uuid = UUID.randomUUID();
@@ -94,6 +97,8 @@ public class OrderServlet extends BaseServlet {
 
             orderFactory.setCarport(carport);
             orderFactory.setShed(shed);
+
+            orderFactory.setNote(note);
 
             String token = Util.generateSecureToken();
             orderFactory.setToken(token);
