@@ -1,6 +1,5 @@
 package infrastructure;
 
-import org.apache.ibatis.jdbc.RuntimeSqlException;
 import org.apache.ibatis.jdbc.ScriptRunner;
 
 import java.io.*;
@@ -11,7 +10,7 @@ public class Database {
     private String user = "fog";
     private boolean logging = true;
 
-    private final int version = 7;
+    private final int version = 9;
 
     public Database() {
         try {

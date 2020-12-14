@@ -1,6 +1,8 @@
 package domain.carport;
 
-public class Carport {
+import java.applet.Applet;
+
+public class Carport extends Applet {
 
     private final int id;
 
@@ -37,7 +39,7 @@ public class Carport {
 
     public roofTypes getRoof() { return roof; }
 
-    public int getRoofAngle() { return roofAngle; }
+    public Integer getRoofAngle() { return roofAngle; }
 
     public int getRoof_material() {
         return roof_material;
