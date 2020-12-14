@@ -1,8 +1,16 @@
 package domain.carport.carportMaterials;
 
+import domain.carport.Carport;
+import domain.material.dao.MaterialDAO;
+
+import java.util.List;
+
+import static domain.carport.carportMaterials.MaterialCalculations.*;
+
 public class AngledMaterials {
 
-     /*
+
+    /*
     Vinklet tag uden skur:
     97 x 97 mm tryk : Stolper 4 + 2 pr 300cm længde
     45 x 195 mm 600 spærtræ : Rem 2 stk pr. 600cm
@@ -19,6 +27,11 @@ public class AngledMaterials {
 
 
      */
+     public List calcAngled(MaterialDAO repo, Carport carport) {
+
+         return null;
+     }
+
 
     /*
     Vinklet tag med skur:
