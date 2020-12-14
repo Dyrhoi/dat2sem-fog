@@ -4,7 +4,7 @@ import api.Util;
 import domain.carport.Carport;
 import domain.customer.Customer;
 import domain.order.OrderFactory;
-import domain.shed.Shed;
+import domain.carport.Shed;
 import web.servlets.BaseServlet;
 
 import javax.servlet.ServletException;
