@@ -37,6 +37,9 @@ ALTER TABLE orders
     ADD FOREIGN KEY (sales_representative_id) references sales_representative(id)
 ;
 
+ALTER TABLE carports
+    MODIFY angle int DEFAULT 25;
+    
 SET FOREIGN_KEY_CHECKS = 1;
 
 UPDATE properties SET value = 8 WHERE name = 'version';

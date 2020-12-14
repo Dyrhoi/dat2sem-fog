@@ -101,11 +101,12 @@
                                 <div class="form-group">
                                     <label for="roof_flat_material">Tagmateriale</label>
                                     <select class="form-control" id="roof_flat_material" name="roof_flat_material">
-                                        <!--
-                                        TODO:Hvid
-                                        Make this dynamically fetch roof materials depending on type
-                                        -->
-                                        <option value="1">Plasttrapezplader</option>
+                                        <c:forEach var="item" items="${requestScope.roofMaterials}"
+                                                   varStatus="loop">
+                                            <c:if test="${item.type == 'FLAT'}">
+                                                <option value="${item.id}"><c:out value="${item.name}"/></option>
+                                            </c:if>
+                                        </c:forEach>
                                     </select>
                                 </div>
                             </div>
@@ -129,7 +130,9 @@
                                     <select class="form-control" id="roof_angled_material" name="roof_angled_material">
                                         <c:forEach var="item" items="${requestScope.roofMaterials}"
                                                    varStatus="loop">
-                                            <option value="${loop.index}"><c:out value="${item}"/></option>
+                                            <c:if test="${item.type == 'ANGLED'}">
+                                                <option value="${item.id}"><c:out value="${item.name}"/></option>
+                                            </c:if>
                                         </c:forEach>
                                     </select>
                                 </div>

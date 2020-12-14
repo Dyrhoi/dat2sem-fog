@@ -7,6 +7,7 @@
 --%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="domain.carport.Carport" %>
 <!doctype html>
 <html>
 
@@ -22,6 +23,9 @@
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/styles/style.css?fc=<%= Math.random() %>">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+
 </head>
 
 <body>
@@ -34,10 +38,10 @@
             <c:if test="true">
                 <ul class="ml-auto navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/salesman">Sælger</a>
+                        <a class="nav-link" href="${pageContext.request.contextPath}/sales">Sælger</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/salesman/orders/">Ordrer</a>
+                        <a class="nav-link" href="${pageContext.request.contextPath}/sales/orders/">Ordrer</a>
                     </li>
                 </ul>
             </c:if>
@@ -55,6 +59,8 @@
 
     <script>let contextPath = "${pageContext.request.contextPath}"</script>
     <script src="${pageContext.request.contextPath}/assets/javascript/app.js?fc=<%= Math.random() %>"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
 </body>
 
 </html>

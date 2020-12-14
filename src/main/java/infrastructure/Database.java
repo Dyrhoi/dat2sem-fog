@@ -1,6 +1,5 @@
 package infrastructure;
 
-import org.apache.ibatis.jdbc.RuntimeSqlException;
 import org.apache.ibatis.jdbc.ScriptRunner;
 
 import java.io.*;

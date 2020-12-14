@@ -1,5 +1,8 @@
 package api;
 
+import domain.carport.Carport;
+import domain.carport.RoofMaterial;
+import domain.carport.Shed;
 import domain.material.MaterialRepository;
 import domain.order.Order;
 import domain.order.OrderFactory;
@@ -21,7 +24,7 @@ public class API {
         this.materialRepository = materialRepository;
     }
 
-    public List<String> getRoofMaterials() { return materialRepository.getRoofMaterials(); }
+    public List<RoofMaterial> getRoofMaterials() { return materialRepository.getRoofMaterials(); }
 
     public String getRoofMaterial(int id) { return materialRepository.getRoofMaterial(id); }
 
@@ -31,6 +34,10 @@ public class API {
 
     public Order getOrder(UUID uuid) throws OrderNotFoundException { return orderRepository.getOrder(uuid); }
 
+    public int updateOrder(int id, Carport carport, Shed shed){ return orderRepository.updateOrder(id, carport, shed);}
+
+    public int getCarportIdFromUuid(UUID uuid) {return orderRepository.getCarportIdFromUuid(uuid); }
+  
     public Ticket getTicket(String token) throws OrderNotFoundException {
         return orderRepository.getTicket(token);
     }

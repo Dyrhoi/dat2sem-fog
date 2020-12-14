@@ -71,9 +71,8 @@ public class OrderServlet extends BaseServlet {
             }
             else {
                 roof_material = Integer.parseInt(req.getParameter("roof_flat_material"));
-                roofAngle = 0;
+                roofAngle = -1;
             }
-
 
             Carport carport = new Carport(id, carportWidth, carportLength, roofType, roofAngle, roof_material);
 

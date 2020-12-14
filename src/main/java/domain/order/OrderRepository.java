@@ -1,5 +1,7 @@
 package domain.order;
 
+import domain.carport.Carport;
+import domain.carport.Shed;
 import domain.order.exceptions.OrderNotFoundException;
 import domain.order.exceptions.TicketNotFoundException;
 import domain.order.ticket.Ticket;
@@ -15,7 +17,10 @@ public interface OrderRepository {
 
     OrderFactory createOrder();
 
+    int updateOrder(int id, Carport carport, Shed shed);
+
+    int getCarportIdFromUuid(UUID uuid);
+  
     Ticket getTicket(String orderToken) throws OrderNotFoundException;
     Ticket updateTicket(String token, TicketMessage ticketMessage) throws OrderNotFoundException;
-
 }
