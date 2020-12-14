@@ -1,5 +1,6 @@
 package domain.material.dao;
 
+import domain.carport.Carport;
 import domain.carport.RoofMaterial;
 import domain.material.MaterialRepository;
 import infrastructure.Database;
@@ -26,9 +27,10 @@ public class MaterialDAO implements MaterialRepository {
 
             ArrayList<RoofMaterial> list = new ArrayList<>();
             while (resultSet.next()) {
+                int id = resultSet.getInt("id");
                 String name = resultSet.getString("name");
-                String type = resultSet.getString("type");
-                list.add(new RoofMaterial(name, type));
+                Carport.roofTypes type = Carport.roofTypes.valueOf(resultSet.getString("type"));
+                list.add(new RoofMaterial(id, name, type));
             }
             return list;
 
