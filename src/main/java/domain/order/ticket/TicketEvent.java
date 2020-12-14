@@ -28,12 +28,12 @@ public class TicketEvent {
     }
 
     public enum EventType {
-        ORDER_CREATE,
-        ORDER_UPDATE,
-        ORDER_CLOSE,
+        ORDER_CREATED,
+        ORDER_UPDATED,
+        ORDER_CLOSED,
 
         OFFER_SENT,
-        OFFER_ACCEPT,
-        OFFER_DECLINE
+        OFFER_ACCEPTED,
+        OFFER_DECLINED
     }
 }

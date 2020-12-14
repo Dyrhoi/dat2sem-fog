@@ -55,8 +55,8 @@
                         <article class="event">
                             <div class="event-message">
                                 <c:choose>
-                                    <c:when test="${eventOrMessage.getScope() == 'ORDER_CREATE'}">
-                                        Ordren blev oprettet af klienten.
+                                    <c:when test="${eventOrMessage.getScope() == 'ORDER_CREATED'}">
+                                        Ordren blev oprettet af <c:out value="${eventOrMessage.getAuthor().getFullName()}" />
                                     </c:when>
                                     <c:when test="${eventOrMessage.getScope() == 'OFFER_SENT'}">
                                         Noget andet tekst.
