@@ -24,7 +24,10 @@ public abstract class OrderFactory {
     }
 
     public void setNote(String note) {
-        this.note = Objects.requireNonNullElse(note, "Ingen ekstra bemærkninger noteret.");
+        if(note == null || note.isBlank() || note.isEmpty())
+            this.note = "Ingen yderlige kommentare til ordren";
+        else
+            this.note = note;
     }
 
     public void setCarport(Carport carport) {
