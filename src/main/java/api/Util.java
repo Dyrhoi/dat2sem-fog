@@ -26,7 +26,7 @@ public class Util {
     }
 
     public static String formatDateTime(LocalDateTime time) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH.ss - dd. MMMM, yyyy").localizedBy(LOCALE);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH.mm - dd. MMMM, yyyy").localizedBy(LOCALE);
         return WordUtils.capitalize(time.format(formatter));
     }
 

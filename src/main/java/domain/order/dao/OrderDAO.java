@@ -107,8 +107,7 @@ public class OrderDAO implements OrderRepository {
                 order.setDate(orderRs.getString("timestamp"));
                 orders.add(order);
             }
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException();
         }
@@ -195,8 +194,88 @@ public class OrderDAO implements OrderRepository {
             Order order = new Order(uuid, carport, shed, customer);
             order.setToken(token);
             return order;
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        catch (SQLException e) {
+        throw new RuntimeException("Unkown SQL error.");
+    }
+
+    @Override
+    public Order getOrder(String token) throws OrderNotFoundException {
+        Carport carport = null;
+        Shed shed = null;
+        Customer customer = null;
+        try (Connection conn = database.getConnection()) {
+            PreparedStatement stmt;
+            ResultSet rs;
+
+            //Get ID's
+            int customerId;
+            int carportId;
+            UUID uuid;
+            stmt = conn.prepareStatement("SELECT * FROM orders WHERE token = ?");
+            stmt.setString(1, token);
+
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                customerId = rs.getInt("customers_id");
+                carportId = rs.getInt("carports_id");
+                uuid = UUID.fromString(rs.getString("uuid"));
+            } else {
+                throw new OrderNotFoundException();
+            }
+
+            //Get Carport
+            stmt = conn.prepareStatement("SELECT * FROM carports WHERE id = ?");
+            stmt.setInt(1, carportId);
+
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                int carportWidth = rs.getInt("width");
+                int carportLength = rs.getInt("length");
+                int roofAngle = rs.getInt("angle");
+                Carport.roofTypes roofType = Carport.roofTypes.valueOf(rs.getString("roof_type"));
+                int roof_material = rs.getInt("roof_material");
+                carport = new Carport(carportId, carportWidth, carportLength, roofType, roofAngle, roof_material);
+            }
+
+            //Get Shed
+            stmt = conn.prepareStatement("SELECT * FROM sheds WHERE carports_id = ?");
+            stmt.setInt(1, carportId);
+
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                int shedId = rs.getInt("id");
+                int shedWidth = rs.getInt("width");
+                int shedLength = rs.getInt("length");
+                shed = new Shed(shedId, shedWidth, shedLength);
+            }
+
+            //Get Customer
+            stmt = conn.prepareStatement("SELECT * FROM users INNER JOIN customers ON user_id = users.id WHERE users.id = ?");
+            stmt.setInt(1, customerId);
+
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                String firstname = rs.getString("first_name");
+                String lastname = rs.getString("last_name");
+                String email = rs.getString("email");
+                String phone = rs.getString("phone_number");
+                String address = rs.getString("address");
+                String postalCode = String.valueOf(rs.getInt("postal_code"));
+                String city = rs.getString("city");
+
+                Customer.Address customerAddress = new Customer.Address(address, city, postalCode);
+                customer = new Customer(customerId, firstname, lastname, email, phone, customerAddress);
+            }
+            Order order = new Order(uuid, carport, shed, customer);
+            order.setToken(token);
+            return order;
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         throw new RuntimeException("Unkown SQL error.");
@@ -223,7 +302,7 @@ public class OrderDAO implements OrderRepository {
                             //Customer exists, set id to current customer.
                             User customer = userRepository.getUser(getCustomer().getEmail());
                             customerId = customer.getId();
-                            if(!(customer instanceof Customer))
+                            if (!(customer instanceof Customer))
                                 throw new CustomerNotFoundException();
                         } catch (CustomerNotFoundException | UserNotFoundException e) {
                             stmt = conn.prepareStatement("INSERT INTO users (first_name, last_name, email, phone_number, address, postal_code, city) VALUES (?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
@@ -370,8 +449,8 @@ public class OrderDAO implements OrderRepository {
     }
 
     @Override
-    public Ticket getTicket(String orderToken) throws TicketNotFoundException {
-        try(Connection conn = database.getConnection()) {
+    public Ticket getTicket(String orderToken) throws OrderNotFoundException {
+        try (Connection conn = database.getConnection()) {
             PreparedStatement stmt;
             ResultSet rs;
             List<Object> eventsOrMessages = new ArrayList<>();
@@ -379,10 +458,10 @@ public class OrderDAO implements OrderRepository {
             //TODO:Hvid - Gør det til en enkel SQL statement, tak :* - dyrhoi
 
             /*
-            *
-            * Messages:
-            *
-            * */
+             *
+             * Messages:
+             *
+             * */
             stmt = conn.prepareStatement("SELECT * FROM order_messages WHERE order_token = ?");
             stmt.setString(1, orderToken);
 
@@ -393,10 +472,10 @@ public class OrderDAO implements OrderRepository {
             }
 
             /*
-            *
-            * Events:
-            *
-            * */
+             *
+             * Events:
+             *
+             * */
 
             stmt = conn.prepareStatement("SELECT * FROM order_events WHERE order_token = ?");
             stmt.setString(1, orderToken);
@@ -410,27 +489,45 @@ public class OrderDAO implements OrderRepository {
             //Sort?
             eventsOrMessages.sort((o1, o2) -> {
                 LocalDateTime date1 = null;
-                if(o1 instanceof TicketMessage) {
+                if (o1 instanceof TicketMessage) {
                     date1 = ((TicketMessage) o1).getDate();
-                }
-                else {
+                } else {
                     date1 = ((TicketEvent) o1).getDate();
                 }
 
                 LocalDateTime date2 = null;
-                if(o2 instanceof TicketMessage) {
+                if (o2 instanceof TicketMessage) {
                     date2 = ((TicketMessage) o2).getDate();
-                }
-                else {
+                } else {
                     date2 = ((TicketEvent) o2).getDate();
                 }
                 return date1.compareTo(date2);
             });
 
-            return new Ticket(null, eventsOrMessages);
+            Order order = getOrder(orderToken);
+
+            return new Ticket(order, eventsOrMessages);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        throw new TicketNotFoundException();
+        throw new OrderNotFoundException();
+    }
+
+    @Override
+    public Ticket updateTicket(String token, TicketMessage ticketMessage) throws OrderNotFoundException {
+        try (Connection conn = database.getConnection()) {
+            PreparedStatement stmt;
+
+            stmt = conn.prepareStatement("INSERT INTO order_messages (author_id, content, order_token) VALUE (?, ?, ?)");
+            stmt.setInt(1, ticketMessage.getAuthor().getId());
+            stmt.setString(2, ticketMessage.getContent());
+            stmt.setString(3, token);
+            stmt.executeUpdate();
+
+            return getTicket(token);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        throw new OrderNotFoundException();
     }
 }
