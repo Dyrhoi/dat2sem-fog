@@ -1,5 +1,6 @@
 package domain.material.dao;
 
+import domain.carport.RoofMaterial;
 import domain.material.MaterialRepository;
 import infrastructure.Database;
 
@@ -18,14 +19,16 @@ public class MaterialDAO implements MaterialRepository {
     }
 
     @Override
-    public List<String> getRoofMaterials() {
+    public List<RoofMaterial> getRoofMaterials() {
         try (Connection conn = db.getConnection()) {
             PreparedStatement query = conn.prepareStatement("SELECT * FROM roof_materials");
             ResultSet resultSet = query.executeQuery();
 
-            ArrayList<String> list = new ArrayList<>();
+            ArrayList<RoofMaterial> list = new ArrayList<>();
             while (resultSet.next()) {
-                list.add(resultSet.getString("name"));
+                String name = resultSet.getString("name");
+                String type = resultSet.getString("type");
+                list.add(new RoofMaterial(name, type));
             }
             return list;
 

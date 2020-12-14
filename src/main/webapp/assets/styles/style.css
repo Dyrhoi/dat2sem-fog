@@ -244,6 +244,10 @@ input[type=checkbox].css-checkbox {
     height: 30px;
 }
 
+.change-input-height {
+    height: 30px;
+}
+
 #arrow {
     color: black;
 }

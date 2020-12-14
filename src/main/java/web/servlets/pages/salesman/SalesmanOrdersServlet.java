@@ -1,23 +1,16 @@
 package web.servlets.pages.salesman;
 
-import api.Util;
 import domain.carport.Carport;
 import domain.order.Order;
-import domain.order.OrderFactory;
 import domain.order.exceptions.OrderNotFoundException;
 import domain.shed.Shed;
-import validation.ValidationErrorException;
 import web.servlets.BaseServlet;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.net.URL;
-import java.util.Collections;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,7 +36,6 @@ public class SalesmanOrdersServlet extends BaseServlet {
             if (req.getPathInfo().charAt(req.getPathInfo().length() - 1) == '/') {
                 slug = req.getPathInfo().replaceAll("/", "");
                 try {
-
                     UUID uuid = setOrderFromUUID(req, slug);
                     req.setAttribute("roofMaterials", api.getRoofMaterials());
                     super.render("Changing order - " + uuid, "changeOrder", req, resp);
@@ -55,10 +47,6 @@ public class SalesmanOrdersServlet extends BaseServlet {
                 slug = req.getPathInfo().substring(1);
                 try {
                     UUID uuid = setOrderFromUUID(req, slug);
-
-                    //super.render("Se ordre - #" + slug, "salesman/order", req, resp);
-                /*resp.getWriter().println("<h1>#" + slug + "</h1>");
-                resp.getWriter().println(order.toString());*/
                     super.render("order - " + uuid, "salesOrders", req, resp);
                 } catch (IllegalArgumentException | OrderNotFoundException e) { //Illegal Argument from UUID.fromString (Maybe just pass a string to DAO?)
                     e.printStackTrace();
@@ -111,33 +99,32 @@ public class SalesmanOrdersServlet extends BaseServlet {
         carportLength = Integer.parseInt(req.getParameter("carport-length"));
         carportWidth = Integer.parseInt(req.getParameter("carport-width"));
         roofType = Carport.roofTypes.valueOf(req.getParameter("roof-type").toUpperCase());
-        carportHasShed = req.getParameter("shed-checkbox") != null;
         if (roofType.equals(Carport.roofTypes.ANGLED)){
             roofAngle = Integer.parseInt(req.getParameter("roof-angle"));
             roof_material = Integer.parseInt(req.getParameter("roof_angled_material"));
         }
         else {
-            roof_material = Integer.parseInt(req.getParameter("roof_flat_material"));
-            roofAngle = null;
+            roof_material = Integer.parseInt(req.getParameter("roof_angled_material"));
+            roofAngle = -1;
         }
 
         Carport carport = new Carport(id, carportWidth, carportLength, roofType, roofAngle, roof_material);
 
         //create shed
         Shed shed = null;
-        if (carportHasShed) {
+        if (req.getParameter("shed-length") != null) {
             shedWidth = Integer.parseInt(req.getParameter("shed-width"));
             shedLength = Integer.parseInt(req.getParameter("shed-length"));
             shed = new Shed(id, shedWidth, shedLength);
         }
 
+
         //create order
         System.out.println("Laver ordre");
         int carportId = api.getCarportIdFromUuid(uuid);
-        api.updateOrder(carportId);
-
+        api.updateOrder(carportId, carport, shed);
         System.out.println("Ordre færdig");
 
-        doGet(req, resp);
+        resp.sendRedirect(slug);
     }
 }
