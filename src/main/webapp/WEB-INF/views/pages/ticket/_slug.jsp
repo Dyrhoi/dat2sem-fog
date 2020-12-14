@@ -12,7 +12,12 @@
     <div class="container">
         <section>
             <h1>Kundesamtale</h1>
-            <p>For ordre: <a href="">#2a5j2-fk99-2221-vfk2a</a></p>
+            <p>
+                For ordre:
+                <a href="<c:url value="/sales/orders/${requestScope.ticket.order.uuid}" />">
+                    #<c:out value="${requestScope.ticket.order.uuid}" />
+                </a>
+            </p>
             <p class="mb-0">Ordre status <span class="badge badge-warning">Tilbud afsendt</span></p>
         </section>
         <article class="message border rounded alert-warning border-warning">
@@ -42,7 +47,7 @@
                                 <span class="small"><c:out value="${Util.formatDateTime(eventOrMessage.getDate())}"/></span>
                             </section>
                             <section>
-                                <c:out value="${eventOrMessage.getContent()}" />
+                                <c:out escapeXml="false" value="${eventOrMessage.getContent()}" />
                             </section>
                         </article>
                     </c:when>
@@ -65,10 +70,12 @@
             </c:forEach>
             <article class="reply border rounded">
                 <div id="editor"></div>
-                <section class="d-flex justify-content-end align-items-center">
-                    <textarea hidden></textarea>
-                    <button type="submit" class="btn btn-primary">Svar</button>
-                </section>
+                <form method="post">
+                    <section class="d-flex justify-content-end align-items-center">
+                        <input hidden name="content"/>
+                        <button type="submit" class="btn btn-primary">Svar</button>
+                    </section>
+                </form>
             </article>
         </section>
     </div>

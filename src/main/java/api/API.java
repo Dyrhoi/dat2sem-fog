@@ -7,6 +7,7 @@ import domain.order.OrderRepository;
 import domain.order.exceptions.OrderNotFoundException;
 import domain.order.exceptions.TicketNotFoundException;
 import domain.order.ticket.Ticket;
+import domain.order.ticket.TicketMessage;
 
 import java.util.List;
 import java.util.UUID;
@@ -30,7 +31,11 @@ public class API {
 
     public Order getOrder(UUID uuid) throws OrderNotFoundException { return orderRepository.getOrder(uuid); }
 
-    public Ticket getTicket(String token) throws TicketNotFoundException {
+    public Ticket getTicket(String token) throws OrderNotFoundException {
         return orderRepository.getTicket(token);
+    }
+
+    public Ticket updateTicket(String token, TicketMessage ticketMessage) throws OrderNotFoundException {
+        return orderRepository.updateTicket(token, ticketMessage);
     }
 }
