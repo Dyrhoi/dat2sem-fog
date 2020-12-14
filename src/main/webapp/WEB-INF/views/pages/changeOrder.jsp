@@ -8,7 +8,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="domain.carport.Carport" %>
-<%@ page import="domain.shed.Shed" %>
+<%@ page import="domain.carport.Shed" %>
 <div class="container" id="changeInfoContainer"
     data-carport-maxWidth="${Carport.maxWidth}"
     data-carport-minWidth="${Carport.minWidth}"
