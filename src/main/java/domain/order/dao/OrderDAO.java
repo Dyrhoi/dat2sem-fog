@@ -291,15 +291,41 @@ public class OrderDAO implements OrderRepository {
         };
     }
 
+
     @Override
-    public void updateOrder(int id) {
+    public int updateOrder(int id, Carport carport, Shed shed) {
         try (Connection conn = database.getConnection()) {
+            System.out.println("Start");
+            conn.setAutoCommit(false);
             PreparedStatement stmt;
-            stmt = conn.prepareStatement("UPDATE carport SET length = ?, width = ?, roof_type = ?, roof_material = ?, angle = ? WHERE id = " + id);
-            stmt.setInt();
+            stmt = conn.prepareStatement("UPDATE carports SET length = ?, width = ?, roof_type = ?, roof_material = ?, angle = ? WHERE id =" + id);
+            System.out.println(carport.getLength());
+            stmt.setInt(1, carport.getLength());
+            stmt.setInt(2, carport.getWidth());
+            stmt.setString(3, carport.getRoof().toString());
+            stmt.setInt(4, carport.getRoof_material());
+            stmt.setInt(5, carport.getRoofAngle());
+            stmt.executeUpdate();
+            stmt.close();
+
+            if (shed == null) {
+                stmt = conn.prepareStatement("DELETE FROM sheds WHERE carports_id =" + id);
+                stmt.executeUpdate();
+                stmt.close();
+            }
+            stmt = conn.prepareStatement("UPDATE sheds SET length = ?, width = ? WHERE carports_id =" + id);
+            stmt.setInt(1, shed.getLength());
+            stmt.setInt(2, shed.getWidth());
+            stmt.executeUpdate();
+            stmt.close();
+
+            System.out.println("Done");
+            conn.setAutoCommit(true);
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        return -1;
     };
 
     public int getCarportIdFromUuid(UUID uuid) {

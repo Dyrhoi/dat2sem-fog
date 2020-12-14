@@ -1,6 +1,8 @@
 package domain.carport;
 
-public class Carport {
+import java.applet.Applet;
+
+public class Carport extends Applet {
 
     private final int id;
 

@@ -1,6 +1,8 @@
 package domain.order;
 
+import domain.carport.Carport;
 import domain.order.exceptions.OrderNotFoundException;
+import domain.shed.Shed;
 
 import java.util.List;
 import java.util.UUID;
@@ -11,7 +13,7 @@ public interface OrderRepository {
 
     OrderFactory createOrder();
 
-    void updateOrder(int id);
+    int updateOrder(int id, Carport carport, Shed shed);
 
     int getCarportIdFromUuid(UUID uuid);
 }
