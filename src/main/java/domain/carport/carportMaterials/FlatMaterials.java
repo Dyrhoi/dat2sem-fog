@@ -75,6 +75,9 @@ public class FlatMaterials {
      */
 
     public List calcFlatShed(MaterialDAO repo, Carport carport, Shed shed) {
+        MaterialCalculations.BaseCarport tmpBaseCarport = new BaseCarport(carport);
+        MaterialCalculations.FlatRoof tmpFlatRoof = new FlatRoof(carport);
+        MaterialCalculations.ShedMaterials tmpShed = new ShedMaterials(shed);
 
 
         return null;
