@@ -86,7 +86,7 @@ public class SalesOrdersServlet extends BaseServlet {
         int carportWidth;
         int carportLength;
         Carport.roofTypes roofType;
-        String roofAngle1;
+        String activeRoofAngle;
         int roofAngle;
         int roof_material;
 
@@ -97,8 +97,8 @@ public class SalesOrdersServlet extends BaseServlet {
 
         carportLength = Integer.parseInt(req.getParameter("carport-length"));
         carportWidth = Integer.parseInt(req.getParameter("carport-width"));
-        roofAngle1 = req.getParameter("roof-angle");
-        if (roofAngle1 != null) {
+        activeRoofAngle = req.getParameter("roof-angle");
+        if (activeRoofAngle != null) {
             roofType = Carport.roofTypes.ANGLED;
             roofAngle = Integer.parseInt(req.getParameter("roof-angle"));
             roof_material = Integer.parseInt(req.getParameter("roof_angled_material"));
@@ -106,6 +106,7 @@ public class SalesOrdersServlet extends BaseServlet {
         else {
             roofType = Carport.roofTypes.FLAT;
             roof_material = Integer.parseInt(req.getParameter("roof_flat_material"));
+            System.out.println();
             roofAngle = -1;
         }
 
@@ -118,7 +119,6 @@ public class SalesOrdersServlet extends BaseServlet {
             shedLength = Integer.parseInt(req.getParameter("shed-length"));
             shed = new Shed(id, shedWidth, shedLength);
         }
-
 
         //create order
         System.out.println("Laver ordre");

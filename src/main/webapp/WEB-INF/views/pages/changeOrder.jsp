@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%--
   Created by IntelliJ IDEA.
   User: Mathias
@@ -15,7 +16,11 @@
     data-shed-maxWidth="${Shed.maxWidth}"
     data-shed-minWidth="${Shed.minWidth}"
     data-carport-minAngle="${Carport.minAngle}"
-    data-carport-maxAngle="${Carport.maxAngle}">
+    data-carport-maxAngle="${Carport.maxAngle}"
+    data-material-angled="
+        <c:forEach var="item" items="${requestScope.roofMaterials}" varStatus="loop">
+            <c:out value="${item.name},${item.type};"/>
+        </c:forEach>">
     <form method="post" action="${pageContext.request.contextPath}/sales/orders/">
         <div id="orderInfo">
             <h3><small class="text-muted">#</small><c:out value="${requestScope.order.uuid}"/></h3>
@@ -92,7 +97,7 @@
                                 <c:forEach var="item" items="${requestScope.roofMaterials}" varStatus="loop">
                                     <c:if test="${item.type == 'FLAT'}">
                                         <c:choose>
-                                            <c:when test="${item == requestScope.roof_material}">
+                                            <c:when test="${item.name == requestScope.roof_material}">
                                                 <option value="${item.id}" selected="selected"><c:out value="${item.name}"/> </option>
                                             </c:when>
                                             <c:otherwise>
@@ -108,7 +113,7 @@
                                 <c:forEach var="item" items="${requestScope.roofMaterials}" varStatus="loop">
                                     <c:if test="${item.type == 'ANGLED'}">
                                         <c:choose>
-                                            <c:when test="${item == requestScope.roof_material}">
+                                            <c:when test="${item.name == requestScope.roof_material}">
                                                 <option value="${item.id}" selected="selected"><c:out value="${item.name}"/> </option>
                                             </c:when>
                                             <c:otherwise>

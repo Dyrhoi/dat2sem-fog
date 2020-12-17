@@ -126,21 +126,62 @@ function addShed() {
        '</svg>Fjern skur</button>'));
 }
 
-$("#roof-type").change(function() {
+   let angled_roofs = [];
+   let flat_roofs = [];
+$("#roof-type").change(function () {
+   angled_roofs = [];
+   flat_roofs = [];
+   array();
    if ($("#roof-type").val() === 'FLAT') {
-      $("#roof-angle").remove()
+      $("#roof-angle").remove();
       $("#angle").append($('<span id="angle-text">N/A</span>'));
+      $("#roof_angled_material").remove();
+      let roof_flat_material = $('<select name="roof_flat_material" class="change-input-height" id="roof_flat_material"></select>');
+      $("#roof-material").append(roof_flat_material);
+      console.log(flat_roofs.length);
+      for (let i = 0; i < flat_roofs.length; i++) {
+         let tmp_roof = flat_roofs[i].split(",");
+         $('#roof_flat_material').append($('<option value="' + tmp_roof[0] + '">' + tmp_roof[1] + '</option>'));
+      }
+
    }
    else if ($("#roof-type").val() === 'ANGLED') {
       const minAngle = parseInt(info.attr("data-carport-minAngle"));
       const maxAngle = parseInt(info.attr("data-carport-maxAngle"));
 
+      /*Setting angle dropdox*/
       $("#angle-text").remove();
       let roofAngle = $('<select name="roof-angle" class="change-input" id="roof-angle"></select>');
       $("#angle").append(roofAngle);
       for (let i = minAngle; i <= maxAngle; i += 5) {
          $("#roof-angle").append($('<option value="' + i + '">' + i + '</option>'));
       }
+
+      /*Setting right roof material*/
+      $("#roof_flat_material").remove();
+      let roof_angled_material = $('<select name="roof_angled_material" class="change-input-height" id="roof_angled_material"></select>');
+      $("#roof-material").append(roof_angled_material);
+      console.log(angled_roofs.length);
+      for (let i = 0; i < angled_roofs.length; i++) {
+         let tmp_roof = angled_roofs[i].split(",");
+         $('#roof_angled_material').append($('<option value="' + tmp_roof[0] + '">' + tmp_roof[1] + '</option>'));
+      }
    }
 });
+
+function array() {
+   let roofsString = info.attr("data-material-angled");
+   let allRoofs = roofsString.toString().replaceAll(" ", "").replaceAll("\n", "").replaceAll("-", " - ").split(";");
+   allRoofs.pop();
+   for (let i = 0; i < allRoofs.length; i++) {
+      if (allRoofs[i].split(",")[1] === "ANGLED") {
+         angled_roofs.push([i+1] + "," + allRoofs[i].split(",")[0]);
+      }
+      else {
+         flat_roofs.push([i+1] + "," + allRoofs[i].split(",")[0]);
+      }
+   }
+   console.log(angled_roofs);
+   console.log(flat_roofs);
+}
 
