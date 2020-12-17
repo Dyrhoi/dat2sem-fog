@@ -178,7 +178,7 @@
                 </span>
             </p>
             <button class="btn btn-success" type="submit">Gem</button>
-            <button class="btn btn-danger" type="button">Annuller</button>
+            <button class="btn btn-danger" type="button" onclick="location.href='${pageContext.request.contextPath}/sales/orders/${requestScope.order.uuid}'">Annuller</button>
         </div>
     </form>
 </div>

@@ -422,7 +422,7 @@ public class OrderDAO implements OrderRepository {
     @Override
     public int updateOrder(int id, Carport carport, Shed shed) {
         try (Connection conn = database.getConnection()) {
-            System.out.println("Start");
+            System.out.println("Update started");
             conn.setAutoCommit(false);
             PreparedStatement stmt;
             stmt = conn.prepareStatement("UPDATE carports SET length = ?, width = ?, roof_type = ?, roof_material = ?, angle = ? WHERE id =" + id);
@@ -433,22 +433,33 @@ public class OrderDAO implements OrderRepository {
             stmt.setInt(4, carport.getRoof_material());
             stmt.setInt(5, carport.getRoofAngle());
             stmt.executeUpdate();
-            stmt.close();
-
             if (shed == null) {
                 stmt = conn.prepareStatement("DELETE FROM sheds WHERE carports_id =" + id);
-                stmt.executeUpdate();
-                stmt.close();
+                System.out.println("Shed removed");
             }
             else {
-                stmt = conn.prepareStatement("UPDATE sheds SET length = ?, width = ? WHERE carports_id =" + id);
-                stmt.setInt(1, shed.getLength());
-                stmt.setInt(2, shed.getWidth());
-                stmt.executeUpdate();
-                stmt.close();
+                stmt = conn.prepareStatement("SELECT COUNT(1) FROM sheds WHERE carports_id = " + id);
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    if (rs.getInt(1) == 1) {
+                        stmt = conn.prepareStatement("UPDATE sheds SET length = ?, width = ? WHERE carports_id =" + id);
+                        stmt.setInt(1, shed.getLength());
+                        stmt.setInt(2, shed.getWidth());
+                        System.out.println("Shed updated");
+                    }
+                    else {
+                        stmt = conn.prepareStatement("INSERT INTO sheds (width, length, carports_id) VALUES(?,?,?)");
+                        stmt.setInt(1, shed.getWidth());
+                        stmt.setInt(2, shed.getLength());
+                        stmt.setInt(3, id);
+                        System.out.println("Shed inserted");
+                    }
+                }
             }
+            stmt.executeUpdate();
+            stmt.close();
 
-            System.out.println("Done");
+            System.out.println("Update finished");
             conn.setAutoCommit(true);
 
         } catch (SQLException throwables) {

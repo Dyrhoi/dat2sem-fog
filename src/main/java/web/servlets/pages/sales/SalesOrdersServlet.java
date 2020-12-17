@@ -23,22 +23,12 @@ public class SalesOrdersServlet extends BaseServlet {
         /*
         * UUID IS SET IN URL
         * */
-        /*if (req.getAttribute("slug") != null) {
-            UUID uuid = null;
-            try {
-                uuid = setOrderFromUUID(req, req.getAttribute("slug").toString());
-                System.out.println("1");
-            } catch (OrderNotFoundException e) {
-                e.printStackTrace();
-            }
-            super.render("order - " + uuid, "salesOrders", req, resp);
-        }*/
         if (req.getPathInfo() != null && req.getPathInfo().length() > 1) {
             if (req.getPathInfo().charAt(req.getPathInfo().length() - 1) == '/') {
                 slug = req.getPathInfo().replaceAll("/", "");
                 try {
                     UUID uuid = setOrderFromUUID(req, slug);
-                    System.out.println("2");
+                    System.out.println("3");
                     req.setAttribute("roofMaterials", api.getRoofMaterials());
                     super.render("Changing order - " + uuid, "changeOrder", req, resp);
                 } catch (Exception e) {
@@ -49,7 +39,7 @@ public class SalesOrdersServlet extends BaseServlet {
                 slug = req.getPathInfo().substring(1);
                 try {
                     UUID uuid = setOrderFromUUID(req, slug);
-                    System.out.println("3");
+                    System.out.println("2");
                     super.render("order - " + uuid, "salesOrders", req, resp);
                 } catch (IllegalArgumentException | OrderNotFoundException e) { //Illegal Argument from UUID.fromString (Maybe just pass a string to DAO?)
                     e.printStackTrace();
@@ -61,6 +51,7 @@ public class SalesOrdersServlet extends BaseServlet {
         }
         else {
         List<Order> orders = api.getOrders();
+        System.out.println("1");
         req.setAttribute("orders", orders);
         super.render("Alle ordre - Fog", "sales", req, resp);
         }
@@ -80,8 +71,6 @@ public class SalesOrdersServlet extends BaseServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UUID uuid = UUID.fromString(slug);
         req.setAttribute("slug", slug);
-
-        boolean carportHasShed;
 
         int carportWidth;
         int carportLength;
@@ -106,7 +95,6 @@ public class SalesOrdersServlet extends BaseServlet {
         else {
             roofType = Carport.roofTypes.FLAT;
             roof_material = Integer.parseInt(req.getParameter("roof_flat_material"));
-            System.out.println();
             roofAngle = -1;
         }
 

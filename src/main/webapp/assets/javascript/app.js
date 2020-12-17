@@ -138,7 +138,8 @@ $("#roof-type").change(function () {
       $("#roof_angled_material").remove();
       let roof_flat_material = $('<select name="roof_flat_material" class="change-input-height" id="roof_flat_material"></select>');
       $("#roof-material").append(roof_flat_material);
-      console.log(flat_roofs.length);
+
+      /* Setting flat roof material dropdown*/
       for (let i = 0; i < flat_roofs.length; i++) {
          let tmp_roof = flat_roofs[i].split(",");
          $('#roof_flat_material').append($('<option value="' + tmp_roof[0] + '">' + tmp_roof[1] + '</option>'));
@@ -149,7 +150,7 @@ $("#roof-type").change(function () {
       const minAngle = parseInt(info.attr("data-carport-minAngle"));
       const maxAngle = parseInt(info.attr("data-carport-maxAngle"));
 
-      /*Setting angle dropdox*/
+      /*Setting angle dropdown*/
       $("#angle-text").remove();
       let roofAngle = $('<select name="roof-angle" class="change-input" id="roof-angle"></select>');
       $("#angle").append(roofAngle);
@@ -157,11 +158,10 @@ $("#roof-type").change(function () {
          $("#roof-angle").append($('<option value="' + i + '">' + i + '</option>'));
       }
 
-      /*Setting right roof material*/
+      /*Setting angled roof material dropdown*/
       $("#roof_flat_material").remove();
       let roof_angled_material = $('<select name="roof_angled_material" class="change-input-height" id="roof_angled_material"></select>');
       $("#roof-material").append(roof_angled_material);
-      console.log(angled_roofs.length);
       for (let i = 0; i < angled_roofs.length; i++) {
          let tmp_roof = angled_roofs[i].split(",");
          $('#roof_angled_material').append($('<option value="' + tmp_roof[0] + '">' + tmp_roof[1] + '</option>'));
@@ -181,7 +181,5 @@ function array() {
          flat_roofs.push([i+1] + "," + allRoofs[i].split(",")[0]);
       }
    }
-   console.log(angled_roofs);
-   console.log(flat_roofs);
 }
 
