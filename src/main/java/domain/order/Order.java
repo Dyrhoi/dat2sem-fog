@@ -1,10 +1,9 @@
 package domain.order;
 
 import domain.carport.Carport;
-import domain.user.customer.Customer;
 import domain.carport.Shed;
+import domain.user.customer.Customer;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -15,6 +14,7 @@ public class Order {
     private final Customer customer;
     private String date;
     private String token;
+    private int offer;
 
     public Order(UUID uuid, Carport carport, Shed shed, Customer customer) {
         this.uuid = uuid;
@@ -53,6 +53,14 @@ public class Order {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public int getOffer() {
+        return offer;
+    }
+
+    public void setOffer(int offer) {
+        this.offer = offer;
     }
 
     @Override

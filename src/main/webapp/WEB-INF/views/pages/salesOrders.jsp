@@ -34,19 +34,19 @@
                     <p>Shed size: N/A</p>
                 </c:otherwise>
             </c:choose>
-            <form>
+            <form method="post" action="${pageContext.request.contextPath}/sales/orders/">
                 <div class="input-group">
-                    <input type="number" value="${requestScope.prePrice}">
+                    <input type="number" value="${requestScope.order.offer}" name="offer">
                     <div class="input-group-append">
                         <span class="input-group-text">kr</span>
                     </div>
                 </div>
-                <input type="button" id="submit-offer" value="Send tilbud">
+                <button class="btn btn-outline-success" type="submit" name="order-offer">Send tilbud</button>
             </form>
         </div>
         <div class="bg-light col-4 float-right" id="customerInfo">
             <p><h4>Brugerinfo</h4></p>
-            <p>Kunde: <c:out value="${order.customer.firstname}"/> <c:out value="${order.customer.lastname}"/></p>
+            <p>Kunde: <c:out value="${order.customer.firstname}"/> <c:out value="${requestScope.order.customer.lastname}"/></p>
             <p>Email: <c:out value="${order.customer.email}"/></p>
             <p>Telefon: <c:out value="${order.customer.phone}"/></p>
             <p>Adresse: <c:out value="${order.customer.address.address}"/></p>

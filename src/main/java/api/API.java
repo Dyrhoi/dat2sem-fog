@@ -8,10 +8,10 @@ import domain.order.Order;
 import domain.order.OrderFactory;
 import domain.order.OrderRepository;
 import domain.order.exceptions.OrderNotFoundException;
-import domain.order.exceptions.TicketNotFoundException;
 import domain.order.ticket.Ticket;
 import domain.order.ticket.TicketMessage;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
@@ -45,4 +45,6 @@ public class API {
     public Ticket updateTicket(String token, TicketMessage ticketMessage) throws OrderNotFoundException {
         return orderRepository.updateTicket(token, ticketMessage);
     }
+
+    public int updateOffer(UUID uuid, int offer) throws SQLException { return orderRepository.updateOffer(uuid, offer); }
 }
