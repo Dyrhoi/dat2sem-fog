@@ -193,7 +193,6 @@ public class OrderDAO implements OrderRepository {
             if (rs.next()) {
                 offer = rs.getInt("offer");
             }
-            
             Order order = new Order(uuid, carport, shed, customer);
             order.setToken(token);
             order.setOffer(offer);

@@ -183,3 +183,41 @@ function array() {
    }
 }
 
+function getProfitPercent() {
+   let orderInfo = $('#orderInfo');
+   let profitSpan = $('#profitPercentSpan');
+   const evenProfit = parseInt(orderInfo.attr("data-evenOffer"));
+   let orderOffer = $('#offer').val();
+   console.log(orderOffer);
+   let profitPercent = ((orderOffer - evenProfit) / evenProfit * 100).toFixed(1);
+   console.log(profitPercent);
+
+   if (profitPercent >= 40) {
+      profitSpan.css("backgroundColor", "green");
+      profitSpan.css("color", "white");
+      profitSpan.text(profitPercent);
+      console.log("Over 40");
+   }
+   else if (profitPercent < 40 && profitPercent >= 30) {
+      profitSpan.css("backgroundColor", "yellow");
+      profitSpan.css("color", "black");
+      profitSpan.text(profitPercent);
+      console.log("Under 40 og over 30");
+   }
+   else {
+      profitSpan.css("backgroundColor", "red");
+      profitSpan.css("color", "white");
+      profitSpan.text(profitPercent);
+      console.log("Under 30");
+   }
+   profitSpan.append("%");
+}
+
+$('#offer').bind('keyup', function(){
+   getProfitPercent();
+});
+
+function onLoad() {
+   getProfitPercent();
+}
+onLoad();

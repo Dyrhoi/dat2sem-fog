@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class Order {
+    public static final double evenOffer = 20000;
     private final UUID uuid;
     private final Carport carport;
     private final Shed shed;
