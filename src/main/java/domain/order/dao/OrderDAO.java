@@ -115,10 +115,7 @@ public class OrderDAO implements OrderRepository {
     }
 
 
-    //TODO: THIS IS HARDCODED NEED FIX
-    //What do you mean hardcoded? !? What needs fixing?
-    //Anyways this should be an inner join... - Dyrhoi
-
+    //TODO: I will change to inner join - Jack
     @Override
     public Order getOrder(UUID uuid) throws OrderNotFoundException {
         Carport carport = null;

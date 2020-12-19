@@ -1,7 +1,10 @@
 package domain.carport.carportMaterials;
 
-import domain.carport.Carport;
-import domain.carport.Shed;
+import domain.carport.*;
+import domain.order.Order;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MaterialCalculations {
     private static final int NUMBER_OF_SIDES = 2;
@@ -9,7 +12,7 @@ public class MaterialCalculations {
     public static class BaseCarport {
 
         private final int pillars;
-        private final int strops;
+        private final int straps;
         private final int rafters;
         private final int topSternsSides;
         private final int bottomSternsSides;
@@ -44,7 +47,7 @@ public class MaterialCalculations {
             return (int) Math.ceil((width / MAXIMUM_PILLAR_DISTANCE_ENDS) + MINIMUM_NUMBER_OF_PILLARS);
         }
 
-        public static int strops(double length, double width) {
+        public static int straps(double length, double width) {
             return (int) Math.ceil((length / MAXIMUM_STROP_DISTANCE) * pillarRows(width));
         }
 
@@ -72,8 +75,8 @@ public class MaterialCalculations {
             return pillars;
         }
 
-        public int getStrops() {
-            return strops;
+        public int getStraps() {
+            return straps;
         }
 
         public int getRafters() {
@@ -124,6 +127,10 @@ public class MaterialCalculations {
             return sternScrewsPackages;
         }
 
+        public int getBottomSternsEnds() {
+            return bottomSternsEnds;
+        }
+
         public static int fittingScrews(int rafters) {
             return (int) Math.ceil((rafters * NUMBER_OF_SCREWS_PER_FITTING)) / FITTING_SCREW_PACKAGE_SIZE;
         }
@@ -141,7 +148,7 @@ public class MaterialCalculations {
             double width = carport.getWidth();
 
             this.pillars = pillars(length, width);
-            this.strops = strops(length, width);
+            this.straps = straps(length, width);
             this.rafters = rafters(length, width);
             this.topSternsSides = sideSterns(length);
             this.bottomSternsSides = sideSterns(length);
@@ -237,7 +244,7 @@ public class MaterialCalculations {
             return (int) stepThree * 2;
         }
 
-        private static int topBar(double length){
+        private static int topBar(double length) {
             return (int) Math.ceil(length / TOP_BAR_LENGTH);
         }
 
@@ -258,11 +265,11 @@ public class MaterialCalculations {
             return (int) Math.ceil(length / topTileAdjustedLength);
         }
 
-        public static int tileBinders(int regularTiles, int topTiles){
+        public static int tileBinders(int regularTiles, int topTiles) {
             return (int) Math.ceil(regularTiles * topTiles) / TILEBINDER_PACKAGE_SIZE;
         }
 
-        public static int roofScrews(int roofTileWood, int roofTopWood){
+        public static int roofScrews(int roofTileWood, int roofTopWood) {
             double roofWood = roofTileWood + roofTopWood;
             return (int) Math.ceil((roofWood * SCREWS_PER_ROOF_WOOD) / ROOF_WOOD_SCREW_PACKAGE_SIZE);
         }
@@ -319,7 +326,7 @@ public class MaterialCalculations {
         }
     }
 
-    public static class ShedMaterials {
+    public static class ShedConstructor {
         private final int looseWoodSides;
         private final int looseWoodEnds;
         private final int looseWoodFittings;
@@ -419,7 +426,7 @@ public class MaterialCalculations {
             return outerCladdingScrewPackages;
         }
 
-        public ShedMaterials(Shed shed) {
+        public ShedConstructor(Shed shed) {
             double length = shed.getLength();
             double width = shed.getWidth();
 
@@ -435,6 +442,110 @@ public class MaterialCalculations {
             this.outerCladdingScrewPackages = outerCladdingScrews(outerCladding(innerCladding(length, width)));
         }
     }
+
+    public static List<OrderMaterial> calcBaseCarport(ConstructionMaterialList repo, Order order){
+        Carport carport = order.getCarport();
+        ArrayList<OrderMaterial> list = new ArrayList<>();
+        MaterialCalculations.BaseCarport tmpBaseCarport = new BaseCarport(carport);
+
+        list.add(new OrderMaterial(tmpBaseCarport.getPillars(), repo.get(MaterialHandler.PILLARS_FLAT_ROOF)));
+        list.add(new OrderMaterial(tmpBaseCarport.getStraps(), repo.get(MaterialHandler.STRAPS_FOR_SIDES)));
+        list.add(new OrderMaterial(tmpBaseCarport.getRafters(), repo.get(MaterialHandler.RAFTERS_MOUNTED_IN_STRAP)));
+        list.add(new OrderMaterial(tmpBaseCarport.getTopSternsSides(), repo.get(MaterialHandler.OVER_STERN_BOARD_FOR_SIDES)));
+        list.add(new OrderMaterial(tmpBaseCarport.getBottomSternsSides(), repo.get(MaterialHandler.UNDER_STERN_BOARD_FOR_SIDES)));
+        list.add(new OrderMaterial(tmpBaseCarport.getBottomSternsEnds(), repo.get(MaterialHandler.OVER_STERN_BOARD_FOR_FRONT_AND_BACK)));
+        list.add(new OrderMaterial(tmpBaseCarport.getBottomSternsEnds(), repo.get(MaterialHandler.OVER_STERN_BOARD_FOR_FRONT_AND_BACK)));
+        list.add(new OrderMaterial(tmpBaseCarport.getRafterFittingLeft(), repo.get(MaterialHandler.FOR_MOUNTING_RAFT_ON_STRAP_LEFT_FLAT)));
+        list.add(new OrderMaterial(tmpBaseCarport.getRafterFittingRight(), repo.get(MaterialHandler.FOR_MOUNTING_RAFT_ON_STRAP_RIGHT_FLAT)));
+        list.add(new OrderMaterial(tmpBaseCarport.getFittingScrewPackages(), repo.get(MaterialHandler.SCREWS_FOR_UNIVERSAL_FITTING_AND_PERFORATED_TAPE)));
+        list.add(new OrderMaterial(tmpBaseCarport.getBoardBolts(), repo.get(MaterialHandler.BOLTS_FOR_MOUNTING_RAFTERS_ON_STRAPS_FLAT)));
+        list.add(new OrderMaterial(tmpBaseCarport.getSquareDiscs(), repo.get(MaterialHandler.SQUARE_DISCS_FOR_MOUNTING_RAFTERS_ON_STRAPS_FLAT)));
+
+        return list;
+    }
+
+    public static List<OrderMaterial> calcBaseCarportFlat(ConstructionMaterialList repo, Order order){
+        Carport carport = order.getCarport();
+        List<OrderMaterial> finalList = calcBaseCarport(repo, order);
+        MaterialCalculations.FlatRoof tmpFlatRoof = new FlatRoof(carport);
+
+        //Flat Roof
+        finalList.add(new OrderMaterial(tmpFlatRoof.getNumberOfLargeRoofPlates(), repo.get(MaterialHandler.ROOF_PLATE_LARGE)));
+        if (tmpFlatRoof.getNumberOfSmallRoofPlates() != 0){
+            finalList.add(new OrderMaterial(tmpFlatRoof.getNumberOfSmallRoofPlates(), repo.get(MaterialHandler.ROOF_PLATE_SMALL)));
+        }
+        finalList.add(new OrderMaterial(tmpFlatRoof.getRoofScrewPackages(), repo.get(MaterialHandler.SCREWS_FOR_ROOF_PLATE)));
+
+        return finalList;
+    }
+
+    public static List<OrderMaterial> calcBaseCarportAngled(ConstructionMaterialList repo, Order order){
+        Carport carport = order.getCarport();
+        List<OrderMaterial> finalList = calcBaseCarport(repo, order);
+        MaterialCalculations.AngledRoof tmpAngledRoof = new AngledRoof(carport);
+
+        finalList.add(new OrderMaterial(tmpAngledRoof.getWaterBoard(), repo.get(MaterialHandler.WATER_BOARD)));
+        finalList.add(new OrderMaterial(tmpAngledRoof.getRoofFramePackage(), repo.get(MaterialHandler.DO_IT_YOURSELF_RAFTERS)));
+        finalList.add(new OrderMaterial(tmpAngledRoof.getRoofTopBar(), repo.get(MaterialHandler.TOP_BATTEN_FOR_ROOF_TILES)));
+        finalList.add(new OrderMaterial(tmpAngledRoof.getRoofTileWood(), repo.get(MaterialHandler.FOR_MOUNTING_ON_RAFTERS)));
+        finalList.add(new OrderMaterial(tmpAngledRoof.getRoofRegularTiles(), repo.get(MaterialHandler.ROOF_TILES_REGULAR)));
+        finalList.add(new OrderMaterial(tmpAngledRoof.getRoofTopTiles(), repo.get(MaterialHandler.ROOF_TILES_TOP)));
+        finalList.add(new OrderMaterial(tmpAngledRoof.getTopTilesFittings(), repo.get(MaterialHandler.FOR_ROOF_TILES_TOP_MOUNTING)));
+        finalList.add(new OrderMaterial(tmpAngledRoof.getTileBindersAndHooks(), repo.get(MaterialHandler.FOR_ROOF_TILES_REGULAR_MOUNTING)));
+        finalList.add(new OrderMaterial(tmpAngledRoof.getRoofWoodScrewPackages(), repo.get(MaterialHandler.SCREWS_FOR_MOUNTING_LOOSE_WOOD)));
+
+        return finalList;
+    }
+
+    public static List<OrderMaterial> calcShed(ConstructionMaterialList repo, Order order){
+        List<OrderMaterial> list = new ArrayList<>();
+        Shed shed = order.getShed();
+
+        ShedConstructor tmpShed = new ShedConstructor(shed);
+
+        list.add(new OrderMaterial(tmpShed.getPillars(), repo.get(MaterialHandler.PILLARS_FLAT_ROOF)));
+        list.add(new OrderMaterial(tmpShed.getLooseWoodSides(), repo.get(MaterialHandler.LOOSE_WOOD_SIDES)));
+        list.add(new OrderMaterial(tmpShed.getLooseWoodEnds(), repo.get(MaterialHandler.LOOSE_WOOD_ENDS)));
+        list.add(new OrderMaterial(tmpShed.getLooseWoodFittings(), repo.get(MaterialHandler.ANGLED_FITTING_FOR_LOOSE_WOOD)));
+        list.add(new OrderMaterial(tmpShed.getCladding(), repo.get(MaterialHandler.CLADDING_FLAT_ROOF)));
+        list.add(new OrderMaterial(tmpShed.getDoorWood(), repo.get(MaterialHandler.FOR_Z_BEHIND_DOOR_ANGLED)));
+        list.add(new OrderMaterial(tmpShed.getDoorHinges(), repo.get(MaterialHandler.DOOR_HINGES)));
+        list.add(new OrderMaterial(tmpShed.getDoorHandle(), repo.get(MaterialHandler.HANDLE_FOR_DOOR_IN_SHED)));
+        list.add(new OrderMaterial(tmpShed.getInnerCladdingScrewPackages(), repo.get(MaterialHandler.SCREWS_FOR_MOUNTING_INNER_CLADDING_FLAT)));
+        list.add(new OrderMaterial(tmpShed.getOuterCladdingScrewPackages(), repo.get(MaterialHandler.SCREWS_FOR_MOUNTING_OUTER_CLADDING_FLAT)));
+
+        return list;
+    }
+
+    public static List<OrderMaterial> calcFlat(ConstructionMaterialList repo, Order order){
+        return calcBaseCarportFlat(repo, order);
+    }
+
+    public static List<OrderMaterial> calcFlatShed(ConstructionMaterialList repo, Order order){
+        List<OrderMaterial> baseCarportList = calcBaseCarportFlat(repo, order);
+        List<OrderMaterial> shedList = calcShed(repo, order);
+
+        List<OrderMaterial> finalList = new ArrayList<>(baseCarportList);
+        finalList.addAll(shedList);
+
+        return finalList;
+    }
+
+    public static List<OrderMaterial> calcAngled(ConstructionMaterialList repo, Order order){
+        return calcBaseCarportAngled(repo, order);
+    }
+
+    public static List<OrderMaterial> calcAngledShed(ConstructionMaterialList repo, Order order){
+        List<OrderMaterial> baseCarportList = calcBaseCarportAngled(repo, order);
+        List<OrderMaterial> shedList = calcShed(repo, order);
+
+        List<OrderMaterial> finalList = new ArrayList<>(baseCarportList);
+        finalList.addAll(shedList);
+
+        return finalList;
+    }
+
+
 
 
 }
