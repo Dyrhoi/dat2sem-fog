@@ -95,21 +95,28 @@ function removeShed() {
    $("#shed").append(btn);
 }
 
+let info = $("#changeInfoContainer");
+
 function addShed() {
    $("#shed-text").remove();
    $("#addShedBtn").remove();
    let shedLength = $('<select class="change-input" id="shed-length" name="shed-length"></select>')
    $("#shed").append(shedLength);
 
+   let minLength = parseInt(info.attr("data-shed-minLength"));
+   let maxLength = parseInt(info.attr("data-shed-maxLength"));
+   let minWidth = parseInt(info.attr("data-shed-minWidth"));
+   let maxWidth = parseInt(info.attr("data-shed-maxWidth"));
+
    let i;
-   for (i = 150; i <= 690; i += 30) {
+   for (i = minLength; i <= maxLength; i += 30) {
       $('#shed-length').append($('<option value="' + i + '">' + i + '</option>'));
    }
    $("#shed").append($('<span id="shed-text"> X </span>'));
    let shedWidth = $('<select class="change-input" id="shed-width" name="shed-width"></select>')
    $("#shed").append(shedWidth);
 
-   for (i = 210; i <= 720; i += 30) {
+   for (i = minWidth; i <= maxWidth; i += 30) {
       $('#shed-width').append($('<option value="' + i + '">' + i + '</option>'));
    }
 
@@ -119,24 +126,98 @@ function addShed() {
        '</svg>Fjern skur</button>'));
 }
 
-$("#roof-type").change(function() {
+let angled_roofs = [];
+let flat_roofs = [];
+$("#roof-type").change(function () {
+   angled_roofs = [];
+   flat_roofs = [];
+   getRoofMaterials();
    if ($("#roof-type").val() === 'FLAT') {
-      $("#roof-angle").remove()
+      $("#roof-angle").remove();
       $("#angle").append($('<span id="angle-text">N/A</span>'));
+      $("#roof_angled_material").remove();
+      let roof_flat_material = $('<select name="roof_flat_material" class="change-input-height" id="roof_flat_material"></select>');
+      $("#roof-material").append(roof_flat_material);
+
+      /* Setting flat roof material dropdown*/
+      for (let i = 0; i < flat_roofs.length; i++) {
+         let tmp_roof = flat_roofs[i].split(",");
+         $('#roof_flat_material').append($('<option value="' + tmp_roof[0] + '">' + tmp_roof[1] + '</option>'));
+      }
+
    }
    else if ($("#roof-type").val() === 'ANGLED') {
-      const minAngle = $("#changeInfoContainer").attr("data-carport-minAngle");
-      const maxAngle = $("#changeInfoContainer").attr("data-carport-maxAngle");
-      console.log(minAngle);
-      console.log(maxAngle);
+      const minAngle = parseInt(info.attr("data-carport-minAngle"));
+      const maxAngle = parseInt(info.attr("data-carport-maxAngle"));
 
+      /*Setting angle dropdown*/
       $("#angle-text").remove();
       let roofAngle = $('<select name="roof-angle" class="change-input" id="roof-angle"></select>');
       $("#angle").append(roofAngle);
-      for (let i = 15; i <= 45; i += 5) {
-         console.log(i);
+      for (let i = minAngle; i <= maxAngle; i += 5) {
          $("#roof-angle").append($('<option value="' + i + '">' + i + '</option>'));
+      }
+
+      /*Setting angled roof material dropdown*/
+      $("#roof_flat_material").remove();
+      let roof_angled_material = $('<select name="roof_angled_material" class="change-input-height" id="roof_angled_material"></select>');
+      $("#roof-material").append(roof_angled_material);
+      for (let i = 0; i < angled_roofs.length; i++) {
+         let tmp_roof = angled_roofs[i].split(",");
+         $('#roof_angled_material').append($('<option value="' + tmp_roof[0] + '">' + tmp_roof[1] + '</option>'));
       }
    }
 });
 
+function getRoofMaterials() {
+   let roofsString = info.attr("data-material-angled");
+   let allRoofs = roofsString.toString().replaceAll(" ", "").replaceAll("\n", "").replaceAll("-", " - ").split(";");
+   allRoofs.pop();
+   for (let i = 0; i < allRoofs.length; i++) {
+      if (allRoofs[i].split(",")[1] === "ANGLED") {
+         angled_roofs.push([i+1] + "," + allRoofs[i].split(",")[0]);
+      }
+      else {
+         flat_roofs.push([i+1] + "," + allRoofs[i].split(",")[0]);
+      }
+   }
+}
+
+function getProfitPercent() {
+   let orderInfo = $('#orderInfo');
+   let profitSpan = $('#profitPercentSpan');
+   const evenProfit = parseInt(orderInfo.attr("data-evenOffer"));
+   let orderOffer = $('#offer').val();
+   console.log(orderOffer);
+   let profitPercent = ((orderOffer - evenProfit) / evenProfit * 100).toFixed(1);
+   console.log(profitPercent);
+
+   if (profitPercent >= 40) {
+      profitSpan.css("backgroundColor", "green");
+      profitSpan.css("color", "white");
+      profitSpan.text(profitPercent);
+      console.log("Over 40");
+   }
+   else if (profitPercent < 40 && profitPercent >= 30) {
+      profitSpan.css("backgroundColor", "yellow");
+      profitSpan.css("color", "black");
+      profitSpan.text(profitPercent);
+      console.log("Under 40 og over 30");
+   }
+   else {
+      profitSpan.css("backgroundColor", "red");
+      profitSpan.css("color", "white");
+      profitSpan.text(profitPercent);
+      console.log("Under 30");
+   }
+   profitSpan.append("%");
+}
+
+$('#offer').bind('keyup', function(){
+   getProfitPercent();
+});
+
+function onLoad() {
+   getProfitPercent();
+}
+onLoad();

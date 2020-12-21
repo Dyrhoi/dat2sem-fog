@@ -7,6 +7,7 @@ import domain.order.exceptions.TicketNotFoundException;
 import domain.order.ticket.Ticket;
 import domain.order.ticket.TicketMessage;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,4 +24,6 @@ public interface OrderRepository {
   
     Ticket getTicket(String orderToken) throws OrderNotFoundException;
     Ticket updateTicket(String token, TicketMessage ticketMessage) throws OrderNotFoundException;
+
+    int updateOffer(UUID uuid, int offer) throws SQLException;
 }

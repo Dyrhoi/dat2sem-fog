@@ -14,6 +14,7 @@ import domain.order.ticket.TicketMessage;
 import domain.user.UserRepository;
 import domain.user.sales_representative.*;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
@@ -57,4 +58,6 @@ public class API {
     public SalesRepresentative authorizeSalesRepresentative(String email, String password) throws SalesRepresentativeNotFoundException, SalesRepresentativeNonMatchingPasswordException {
         return userRepository.authorizeSalesRepresentative(email, password);
     }
+
+    public int updateOffer(UUID uuid, int offer) throws SQLException { return orderRepository.updateOffer(uuid, offer); }
 }

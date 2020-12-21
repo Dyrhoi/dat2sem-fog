@@ -191,7 +191,17 @@ public class OrderDAO implements OrderRepository {
                 Customer.Address customerAddress = new Customer.Address(address, city, postalCode);
                 customer = new Customer(customerId, firstname, lastname, email, phone, customerAddress);
             }
+            int offer = 0;
+            //Get offer for order
+            stmt = conn.prepareStatement("SELECT offer FROM offers WHERE order_uuid = ? ORDER BY timestamp DESC;");
+            stmt.setString(1, uuid.toString());
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                offer = rs.getInt("offer");
+            }
+
             Order order = new Order(uuid, carport, shed, customer);
+            order.setOffer(offer);
             order.setToken(token);
             return order;
         } catch (SQLException e) {
@@ -272,7 +282,18 @@ public class OrderDAO implements OrderRepository {
                 Customer.Address customerAddress = new Customer.Address(address, city, postalCode);
                 customer = new Customer(customerId, firstname, lastname, email, phone, customerAddress);
             }
+
+            int offer = 0;
+            //Get offer for order
+            stmt = conn.prepareStatement("SELECT offer FROM offers INNER JOIN orders ON orders.uuid = offers.order_uuid WHERE orders.token = ? ORDER BY timestamp DESC;");
+            stmt.setString(1, token);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                offer = rs.getInt("offer");
+            }
+
             Order order = new Order(uuid, carport, shed, customer);
+            order.setOffer(offer);
             order.setToken(token);
             return order;
         } catch (SQLException e) {
@@ -399,6 +420,13 @@ public class OrderDAO implements OrderRepository {
                         stmt.setString(2, getNote());
                         stmt.setString(3, getToken());
 
+                        stmt.executeUpdate();
+
+                        //Creating price for order
+                        int preOffer = (int) Math.round(Math.random() * (40000-20000) + 20000);
+                        stmt = conn.prepareStatement("INSERT INTO offers (order_uuid, offer) VALUES (?,?)");
+                        stmt.setString(1, getUuid().toString());
+                        stmt.setInt(2, preOffer);
                         stmt.executeUpdate();
 
                         conn.commit();
@@ -590,5 +618,18 @@ public class OrderDAO implements OrderRepository {
             throwables.printStackTrace();
         }
         throw new OrderNotFoundException();
+    }
+
+    @Override
+    public int updateOffer(UUID uuid, int offer) throws SQLException {
+        try (Connection conn = database.getConnection()) {
+            PreparedStatement stmt;
+
+            stmt = conn.prepareStatement("INSERT INTO offers (order_uuid, offer) VALUES (?,?)");
+            stmt.setString(1, uuid.toString());
+            stmt.setInt(2, offer);
+            stmt.executeUpdate();
+        }
+        return -1;
     }
 }
