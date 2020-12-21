@@ -4,14 +4,10 @@ import domain.user.User;
 import domain.user.customer.Customer;
 import domain.user.exceptions.UserNotFoundException;
 import domain.user.UserRepository;
-import domain.user.salesman.Salesman;
+import domain.user.sales_representative.*;
 import infrastructure.Database;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class UserDAO implements UserRepository {
 
@@ -21,7 +17,7 @@ public class UserDAO implements UserRepository {
         this.database = database;
     }
 
-    private Salesman loadSalesman(int id, ResultSet rs) throws SQLException {
+    private SalesRepresentative loadSalesman(int id, ResultSet rs) throws SQLException {
         String firstname = rs.getString("first_name");
         String lastname = rs.getString("last_name");
         String email = rs.getString("email");
@@ -33,7 +29,7 @@ public class UserDAO implements UserRepository {
         byte[] secret = rs.getBytes("secret");
 
         Customer.Address customerAddress = new Customer.Address(address, city, postalCode);
-        return new Salesman(id, firstname, lastname, email, phone, customerAddress, salt, secret );
+        return new SalesRepresentative(id, firstname, lastname, email, phone, customerAddress, salt, secret );
     }
 
     private Customer loadCustomer(int id, ResultSet rs) throws SQLException {
@@ -77,11 +73,10 @@ public class UserDAO implements UserRepository {
                     return loadCustomer(id, rsCustomer);
                 }
 
-                stmt = conn.prepareStatement("SELECT * FROM sales_representative INNER JOIN users ON sales_representative.user_id = users.id = users.id WHERE user_id = ?");
+                stmt = conn.prepareStatement("SELECT * FROM sales_representative INNER JOIN users ON sales_representative.user_id = users.id WHERE user_id = ?");
                 stmt.setInt(1, id);
 
                 ResultSet rsSalesRep = stmt.executeQuery();
-
                 if(rsSalesRep.next()) {
                     return loadSalesman(id, rsSalesRep);
                 }
@@ -113,7 +108,7 @@ public class UserDAO implements UserRepository {
                     return loadCustomer(id, rsCustomer);
                 }
 
-                stmt = conn.prepareStatement("SELECT * FROM sales_representative INNER JOIN users ON sales_representative.user_id = users.id = users.id WHERE user_id = ?");
+                stmt = conn.prepareStatement("SELECT * FROM sales_representative INNER JOIN users ON sales_representative.user_id = users.id WHERE user_id = ?");
                 stmt.setInt(1, id);
 
                 ResultSet rsSalesRep = stmt.executeQuery();
@@ -126,5 +121,93 @@ public class UserDAO implements UserRepository {
             throwables.printStackTrace();
         }
         throw new UserNotFoundException();
+    }
+
+    @Override
+    public SalesRepresentativeFactory createSalesRepresentative() {
+        return new SalesRepresentativeFactory() {
+            @Override
+            public SalesRepresentative commit() throws SalesRepresentativeExistsException {
+                int id;
+                String firstName = super.getFirstName();
+                String lastName = super.getLastName();
+                String email = super.getEmail();
+                String phoneNumber = super.getPhone();
+                User.Address address = super.getAddress();
+                byte[] salt = SalesRepresentative.generateSalt();
+                byte[] secret = SalesRepresentative.calculateSecret(salt, super.getPassword());
+
+                try (Connection conn = database.getConnection()) {
+                    conn.setAutoCommit(false);
+
+                    try {
+                        PreparedStatement ps =
+                                conn.prepareStatement(
+                                        "INSERT INTO users (first_name, last_name, email, phone_number, address, postal_code, city) " +
+                                                "VALUE (?,?,?,?,?,?,?);",
+                                        Statement.RETURN_GENERATED_KEYS);
+                        ps.setString(1, firstName);
+                        ps.setString(2, lastName);
+                        ps.setString(3, email);
+                        ps.setString(4, phoneNumber);
+                        ps.setString(5, address.getAddress());
+                        ps.setString(6, address.getPostalCode());
+                        ps.setString(7, address.getCity());
+                        ps.executeUpdate();
+
+                        ResultSet rs = ps.getGeneratedKeys();
+                        if(rs.next())
+                            id = rs.getInt(1);
+                        else
+                            throw new SQLException("Couldn't insert user.");
+
+                        ps = conn.prepareStatement("INSERT INTO sales_representative (salt, secret, user_id) VALUES (?, ?, ?)");
+                        ps.setBytes(1, salt);
+                        ps.setBytes(2, secret);
+                        ps.setInt(3, id);
+                        ps.executeUpdate();
+
+                        conn.commit();
+                        try {
+                            User user = getUser(id);
+                            if (user instanceof SalesRepresentative)
+                                return (SalesRepresentative) user;
+                            else throw new UserNotFoundException();
+                        } catch (UserNotFoundException e) {
+                            throw new RuntimeException("The created user was not found, probably an SQL connection loss.", e);
+                        }
+                    } catch (SQLIntegrityConstraintViolationException e) {
+                        throw new SalesRepresentativeExistsException();
+                    } catch (SQLException e) {
+                        System.out.println("SQL Fired error, rolling back");
+                        conn.rollback();
+                        throw new RuntimeException(e);
+                    }
+                    finally {
+                        conn.setAutoCommit(true);
+                    }
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        };
+
+    }
+
+    @Override
+    public SalesRepresentative authorizeSalesRepresentative(String email, String password) throws SalesRepresentativeNonMatchingPasswordException, SalesRepresentativeNotFoundException {
+        try {
+            User user = getUser(email);
+            if(!(user instanceof SalesRepresentative))
+                throw new SalesRepresentativeNotFoundException();
+
+            SalesRepresentative salesRepresentative = (SalesRepresentative) user;
+            if(!salesRepresentative.isPasswordCorrect(password))
+                throw new SalesRepresentativeNonMatchingPasswordException();
+
+            return salesRepresentative;
+        } catch (UserNotFoundException e) {
+            throw new SalesRepresentativeNotFoundException();
+        }
     }
 }

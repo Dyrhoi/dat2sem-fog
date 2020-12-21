@@ -40,7 +40,7 @@ public class BaseServlet extends HttpServlet {
         UserRepository userRepository = new UserDAO(db);
         OrderRepository orderRepository = new OrderDAO(db, userRepository);
 
-        return new API(materialRepository, orderRepository);
+        return new API(materialRepository, orderRepository, userRepository);
     }
 
     /*

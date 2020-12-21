@@ -1,12 +1,53 @@
-package domain.user.salesman;
+package domain.user.sales_representative;
 
+import domain.user.User;
 import org.apache.commons.validator.routines.EmailValidator;
 import validation.ValidationErrorException;
 
-public abstract class SalesmanFactory {
+public abstract class SalesRepresentativeFactory {
+    private String firstName;
+    private String lastName;
+    private String phone;
+    private User.Address address;
     private String email;
     private String password;
     private String passwordConfirm;
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public User.Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(User.Address address) {
+        this.address = address;
+    }
+
+    public String getPasswordConfirm() {
+        return passwordConfirm;
+    }
 
     public void setEmail(String email) {
         this.email = email;
@@ -41,10 +82,10 @@ public abstract class SalesmanFactory {
         validationErrorException.validate();
     }
 
-    public Salesman validateAndCommit() throws ValidationErrorException {
+    public SalesRepresentative validateAndCommit() throws ValidationErrorException, SalesRepresentativeExistsException {
         validate();
         return commit();
     }
 
-    protected abstract Salesman commit();
+    protected abstract SalesRepresentative commit() throws SalesRepresentativeExistsException;
 }

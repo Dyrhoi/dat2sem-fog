@@ -41,9 +41,14 @@
             <c:forEach items="${requestScope.ticket.events}" var="eventOrMessage">
                 <c:choose>
                     <c:when test="${eventOrMessage.getClass().simpleName == 'TicketMessage'}">
-                        <article class="message border rounded">
+                        <article class="message border rounded <c:if test="${eventOrMessage.getAuthor().getClass().simpleName == 'SalesRepresentative'}">staff</c:if>">
                             <section class="d-flex justify-content-between align-items-center">
-                                <h2><c:out value="${eventOrMessage.getAuthor().getFullName()}"/></h2>
+                                <h2>
+                                    <c:out value="${eventOrMessage.getAuthor().getFullName()}"/>
+                                    <c:if test="${eventOrMessage.getAuthor().getClass().simpleName == 'SalesRepresentative'}">
+                                        <span class="badge badge-primary">Salgsassistent</span>
+                                    </c:if>
+                                </h2>
                                 <span class="small"><c:out value="${Util.formatDateTime(eventOrMessage.getDate())}"/></span>
                             </section>
                             <section>
@@ -73,7 +78,19 @@
                 <form method="post">
                     <section class="d-flex justify-content-end align-items-center">
                         <input hidden name="content"/>
-                        <button type="submit" class="btn btn-primary">Svar</button>
+                        <p class="mb-0 mr-3">
+                            Du svarer som
+                            <b>
+                                <c:choose>
+                                    <c:when test="${sessionScope.user != null}">
+                                        ${sessionScope.user.fullName}
+                                    </c:when>
+                                    <c:otherwise>
+                                        ${requestScope.ticket.order.customer.fullName}
+                                    </c:otherwise>
+                                </c:choose>
+                            </b>
+                        </p><button type="submit" class="btn btn-primary">Svar</button>
                     </section>
                 </form>
             </article>
