@@ -1,0 +1,68 @@
+package domain.carport;
+
+public class MaterialHandler {
+
+    public static final int WINDSHIELDS_ON_LEVITATION = 1;
+    public static final int STERN_BOARDS_FOR_CARPORT_SIDES = 2;
+    public static final int STERN_BOARDS_FOR_CARPORT_SHED = 3;
+    public static final int DO_IT_YOURSELF_RAFTERS = 4;
+    public static final int PILLARS_ANGLED_ROOF = 5;
+    public static final int STRAPS_FOR_SIDES_CARPORT = 6;
+    public static final int STRAPS_FOR_SIDES_SHED_ANGLED = 7;
+    public static final int LOOSE_WOOD_SIDES = 8;
+    public static final int LOOSE_WOOD_ENDS = 9;
+    public static final int WATER_BOARD = 10;
+    public static final int CLADDING_OF_GABLE = 11;
+    public static final int CLADDING_ANGLED_ROOF = 12;
+    public static final int FOR_MOUNTING_ON_ROOF_FOOT_BATTENS = 13;
+    public static final int FOR_Z_BEHIND_DOOR_ANGLED = 14;
+    public static final int FOR_MOUNTING_ON_RAFTERS = 15;
+    public static final int TOP_BATTEN_FOR_ROOF_TILES = 16;
+    public static final int ROOF_TILES_REGULAR = 17;
+    public static final int ROOF_TILES_TOP = 18;
+    public static final int MOUNTED_ON_TOP_OF_RAFT = 19;
+    public static final int FOR_ROOF_TILES_TOP_MOUNTING = 20;
+    public static final int FOR_ROOF_TILES_REGULAR_MOUNTING = 21;
+    public static final int FOR_MOUNTING_OF_RAFT_ON_STRAP_RIGHT_ANGLED = 22;
+    public static final int FOR_MOUNTING_OF_RAFT_ON_STRAP_LEFT_ANGLED = 23;
+    public static final int HANDLE_FOR_DOOR_IN_SHED = 24;
+    public static final int LOCK_FOR_DOOR_IN_SHED = 25;
+    public static final int ANGLED_FITTING_FOR_LOOSE_WOOD = 26;
+    public static final int SCREWS_FOR_MOUNTING_LOOSE_WOOD = 27;
+    public static final int SCREWS_FOR_MOUNTING_STERN_WIND_WOOD = 28;
+    public static final int SCREWS_FOR_MOUNTING_ROOF_RAFTERS = 29;
+    public static final int BOLTS_FOR_MOUNTING_RAFTERS_ON_STRAPS_ANGLED = 30;
+    public static final int SQUARE_DISCS_FOR_MOUNTING_RAFTERS_ON_STRAPS_ANGLED = 31;
+    public static final int SCREWS_FOR_MOUNTING_OUTER_CLADDING_ANGLED = 32;
+    public static final int SCREWS_FOR_MOUNTING_INNER_CLADDING_ANGLED = 33;
+    public static final int UNDER_STERN_BOARD_FOR_FRONT_AND_BACK = 34;
+    public static final int UNDER_STERN_BOARD_FOR_SIDES = 35;
+    public static final int OVER_STERN_BOARD_FOR_FRONT_AND_BACK = 36;
+    public static final int OVER_STERN_BOARD_FOR_SIDES = 37;
+    public static final int FOR_Z_BEHIND_DOOR_FLAT = 38;
+    public static final int LOOSE_WOOD_FOR_SHED_GABLE = 39;
+    public static final int LOOSE_WOOD_FOR_SHED_SIDES = 40;
+    public static final int STRAPS_FOR_SIDES = 41;
+    public static final int STRAPS_FOR_SIDES_SHED_FLAT = 42;
+    public static final int RAFTERS_MOUNTED_IN_STRAP = 43;
+    public static final int PILLARS_FLAT_ROOF = 44;
+    public static final int CLADDING_FLAT_ROOF = 45;
+    public static final int WATER_BOARD_FOR_STERN_SIDES = 46;
+    public static final int WATER_BOARD_FOR_STERN_FRONT_AND_BACK = 47;
+    public static final int ROOF_PLATE_LARGE = 48;
+    public static final int ROOF_PLATE_SMALL = 49;
+    public static final int PERFORATED_TAPE = 50;
+    public static final int FOR_MOUNTING_RAFT_ON_STRAP_RIGHT_FLAT = 51;
+    public static final int FOR_MOUNTING_RAFT_ON_STRAP_LEFT_FLAT = 52;
+    public static final int HANDLE_FOR_DOOR = 53;
+    public static final int DOOR_HINGES = 54;
+    public static final int ANGLED_FITTING_DOOR = 55;
+    public static final int SCREWS_FOR_ROOF_PLATE = 56;
+    public static final int SCREWS_FOR_MOUNTING_STERN_AND_WATER_BOARD = 57;
+    public static final int SCREWS_FOR_UNIVERSAL_FITTING_AND_PERFORATED_TAPE = 58;
+    public static final int BOLTS_FOR_MOUNTING_RAFTERS_ON_STRAPS_FLAT = 59;
+    public static final int SQUARE_DISCS_FOR_MOUNTING_RAFTERS_ON_STRAPS_FLAT = 60;
+    public static final int SCREWS_FOR_MOUNTING_OUTER_CLADDING_FLAT = 61;
+    public static final int SCREWS_FOR_MOUNTING_INNER_CLADDING_FLAT = 62;
+
+}
