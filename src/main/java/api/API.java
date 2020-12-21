@@ -11,6 +11,8 @@ import domain.order.exceptions.OrderNotFoundException;
 import domain.order.exceptions.TicketNotFoundException;
 import domain.order.ticket.Ticket;
 import domain.order.ticket.TicketMessage;
+import domain.user.UserRepository;
+import domain.user.sales_representative.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,10 +20,12 @@ import java.util.UUID;
 public class API {
     private final MaterialRepository materialRepository;
     private final OrderRepository orderRepository;
+    private final UserRepository userRepository;
 
-    public API(MaterialRepository materialRepository, OrderRepository orderRepository) {
+    public API(MaterialRepository materialRepository, OrderRepository orderRepository, UserRepository userRepository) {
         this.orderRepository = orderRepository;
         this.materialRepository = materialRepository;
+        this.userRepository = userRepository;
     }
 
     public List<RoofMaterial> getRoofMaterials() { return materialRepository.getRoofMaterials(); }
@@ -44,5 +48,13 @@ public class API {
 
     public Ticket updateTicket(String token, TicketMessage ticketMessage) throws OrderNotFoundException {
         return orderRepository.updateTicket(token, ticketMessage);
+    }
+
+    public SalesRepresentativeFactory createSalesRepresentative() throws SalesRepresentativeExistsException {
+        return userRepository.createSalesRepresentative();
+    }
+
+    public SalesRepresentative authorizeSalesRepresentative(String email, String password) throws SalesRepresentativeNotFoundException, SalesRepresentativeNonMatchingPasswordException {
+        return userRepository.authorizeSalesRepresentative(email, password);
     }
 }

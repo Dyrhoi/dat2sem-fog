@@ -1,4 +1,4 @@
-package domain.user.salesman;
+package domain.user.sales_representative;
 
 import domain.user.User;
 
@@ -8,10 +8,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 
-public class Salesman extends User {
+public class SalesRepresentative extends User {
 
     private static final int PASSWORD_ITTERATIONS = 65536;
     private static final int PASSWORD_LENGTH = 256; //32 bytes
@@ -60,7 +59,7 @@ public class Salesman extends User {
     private final byte[] salt;
     private final byte[] secret;
 
-    public Salesman(int id, String firstname, String lastname, String email, String phone, Address address, byte[] salt, byte[] secret) {
+    public SalesRepresentative(int id, String firstname, String lastname, String email, String phone, Address address, byte[] salt, byte[] secret) {
         super(id, firstname, lastname, email, phone, address, Type.SALESMAN);
         this.salt = salt;
         this.secret = secret;

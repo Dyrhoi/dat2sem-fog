@@ -10,6 +10,7 @@ import domain.order.exceptions.TicketNotFoundException;
 import domain.order.ticket.Ticket;
 import domain.order.ticket.TicketMessage;
 import domain.user.User;
+import domain.user.sales_representative.SalesRepresentative;
 import org.owasp.html.HtmlPolicyBuilder;
 import org.owasp.html.PolicyFactory;
 import web.servlets.BaseServlet;
@@ -47,8 +48,8 @@ public class TicketServlet extends BaseServlet {
                 String content = req.getParameter("content");
                 User user = ticket.getOrder().getCustomer();
 
-                if(false) { //TODO: If is user logged in (Sales Rep)
-                    //Get session information.
+                if(req.getSession().getAttribute("user") instanceof SalesRepresentative) { //TODO: If is user logged in (Sales Rep)
+                    user = (SalesRepresentative) req.getSession().getAttribute("user");
                 }
 
                 PolicyFactory policy = new HtmlPolicyBuilder()
