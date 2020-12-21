@@ -5,6 +5,7 @@ import org.apache.commons.validator.routines.EmailValidator;
 import validation.ValidationErrorException;
 
 public abstract class SalesRepresentativeFactory {
+    private int id;
     private String firstName;
     private String lastName;
     private String phone;
@@ -12,6 +13,14 @@ public abstract class SalesRepresentativeFactory {
     private String email;
     private String password;
     private String passwordConfirm;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getFirstName() {
         return firstName;

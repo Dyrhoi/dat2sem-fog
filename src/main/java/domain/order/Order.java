@@ -1,10 +1,10 @@
 package domain.order;
 
 import domain.carport.Carport;
-import domain.user.customer.Customer;
 import domain.carport.Shed;
+import domain.user.customer.Customer;
+import domain.user.sales_representative.SalesRepresentative;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -17,6 +17,7 @@ public class Order {
     private String date;
     private String token;
     private int offer;
+    private SalesRepresentative salesRepresentative;
 
     public Order(UUID uuid, Carport carport, Shed shed, Customer customer) {
         this.uuid = uuid;
@@ -63,6 +64,14 @@ public class Order {
 
     public void setOffer(int offer) {
         this.offer = offer;
+    }
+
+    public SalesRepresentative getSalesRepresentative() {
+        return salesRepresentative;
+    }
+
+    public void setSalesRepresentative(SalesRepresentative salesRepresentative) {
+        this.salesRepresentative = salesRepresentative;
     }
 
     @Override

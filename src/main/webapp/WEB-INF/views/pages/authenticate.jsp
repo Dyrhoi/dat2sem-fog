@@ -16,11 +16,11 @@
                 <div class="row">
                     <div class="form-group col">
                         <label for="email">E-mail</label>
-                        <input class="form-control" name="email" id="email" type="email">
+                        <input class="form-control" name="email" id="email" type="email" value="sales_andersen@fog.dk">
                     </div>
                     <div class="form-group col">
                         <label for="password">Password</label>
-                        <input class="form-control" name="password" id="password" type="password">
+                        <input class="form-control" name="password" id="password" type="password" value="password123">
                     </div>
                 </div>
                 <input type="submit" class="btn btn-primary" value="Log ind">

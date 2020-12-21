@@ -90,7 +90,7 @@
                                     </c:otherwise>
                                 </c:choose>
                             </b>
-                        </p><button type="submit" class="btn btn-primary">Svar</button>
+                        </p><button type="submit" class="btn btn-primary">Send</button>
                     </section>
                 </form>
             </article>
