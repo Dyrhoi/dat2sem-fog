@@ -10,7 +10,7 @@ public class Database {
     private String user = "fog";
     private boolean logging = true;
 
-    private final int version = 11;
+    private final int version = 13;
 
     public Database() {
         try {
