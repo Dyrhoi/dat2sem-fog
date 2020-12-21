@@ -131,7 +131,7 @@ function addShed() {
 $("#roof-type").change(function () {
    angled_roofs = [];
    flat_roofs = [];
-   array();
+   getRoofMaterials();
    if ($("#roof-type").val() === 'FLAT') {
       $("#roof-angle").remove();
       $("#angle").append($('<span id="angle-text">N/A</span>'));
@@ -169,7 +169,7 @@ $("#roof-type").change(function () {
    }
 });
 
-function array() {
+function getRoofMaterials() {
    let roofsString = info.attr("data-material-angled");
    let allRoofs = roofsString.toString().replaceAll(" ", "").replaceAll("\n", "").replaceAll("-", " - ").split(";");
    allRoofs.pop();
