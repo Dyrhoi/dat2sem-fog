@@ -454,11 +454,9 @@ public class OrderDAO implements OrderRepository {
     @Override
     public int updateOrder(int id, Carport carport, Shed shed) {
         try (Connection conn = database.getConnection()) {
-            System.out.println("Start");
             conn.setAutoCommit(false);
             PreparedStatement stmt;
             stmt = conn.prepareStatement("UPDATE carports SET length = ?, width = ?, roof_type = ?, roof_material = ?, angle = ? WHERE id =" + id);
-            System.out.println(carport.getLength());
             stmt.setInt(1, carport.getLength());
             stmt.setInt(2, carport.getWidth());
             stmt.setString(3, carport.getRoof().toString());
@@ -467,18 +465,31 @@ public class OrderDAO implements OrderRepository {
             stmt.executeUpdate();
             stmt.close();
 
+            //TODO: MAKE PREPARED STATEMENTS PREPARED STATEMENTS :)
+
             if (shed == null) {
                 stmt = conn.prepareStatement("DELETE FROM sheds WHERE carports_id =" + id);
-                stmt.executeUpdate();
-                stmt.close();
             }
-            stmt = conn.prepareStatement("UPDATE sheds SET length = ?, width = ? WHERE carports_id =" + id);
-            stmt.setInt(1, shed.getLength());
-            stmt.setInt(2, shed.getWidth());
+            else {
+                stmt = conn.prepareStatement("SELECT COUNT(1) FROM sheds WHERE carports_id = " + id);
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    if (rs.getInt(1) == 1) {
+                        stmt = conn.prepareStatement("UPDATE sheds SET length = ?, width = ? WHERE carports_id =" + id);
+                        stmt.setInt(1, shed.getLength());
+                        stmt.setInt(2, shed.getWidth());
+                    }
+                    else {
+                        stmt = conn.prepareStatement("INSERT INTO sheds (width, length, carports_id) VALUES(?,?,?)");
+                        stmt.setInt(1, shed.getWidth());
+                        stmt.setInt(2, shed.getLength());
+                        stmt.setInt(3, id);
+                    }
+                }
+            }
             stmt.executeUpdate();
             stmt.close();
 
-            System.out.println("Done");
             conn.setAutoCommit(true);
 
         } catch (SQLException throwables) {

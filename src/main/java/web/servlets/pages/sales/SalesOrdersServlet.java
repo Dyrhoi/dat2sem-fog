@@ -29,7 +29,6 @@ public class SalesOrdersServlet extends BaseServlet {
                 slug = req.getPathInfo().replaceAll("/", "");
                 try {
                     UUID uuid = setOrderFromUUID(req, slug);
-                    System.out.println("3");
                     req.setAttribute("roofMaterials", api.getRoofMaterials());
                     super.render("Changing order - " + uuid, "changeOrder", req, resp);
                 } catch (Exception e) {
@@ -41,7 +40,6 @@ public class SalesOrdersServlet extends BaseServlet {
                 try {
                     UUID uuid = setOrderFromUUID(req, slug);
                     req.setAttribute("page", 2);
-                    System.out.println("2");
                     super.render("order - " + uuid, "salesOrders", req, resp);
                 } catch (IllegalArgumentException | OrderNotFoundException e) { //Illegal Argument from UUID.fromString (Maybe just pass a string to DAO?)
                     e.printStackTrace();
@@ -53,7 +51,6 @@ public class SalesOrdersServlet extends BaseServlet {
         }
         else {
             List<Order> orders = api.getOrders();
-            System.out.println("1");
             req.setAttribute("orders", orders);
             super.render("Alle ordre - Fog", "sales", req, resp);
         }
@@ -75,7 +72,6 @@ public class SalesOrdersServlet extends BaseServlet {
 
         if (req.getParameter("order-offer") != null) {
             int offer = Integer.parseInt(req.getParameter("offer"));
-            System.out.println(offer);
             try {
                 api.updateOffer(uuid, offer);
             } catch (SQLException throwables) {
@@ -120,10 +116,8 @@ public class SalesOrdersServlet extends BaseServlet {
             }
 
             //create order
-            System.out.println("Laver ordre");
             int carportId = api.getCarportIdFromUuid(uuid);
             api.updateOrder(carportId, carport, shed);
-            System.out.println("Ordre færdig");
         }
         resp.sendRedirect(slug);
     }
