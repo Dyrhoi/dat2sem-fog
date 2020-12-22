@@ -635,7 +635,6 @@ public class OrderDAO implements OrderRepository {
     public int updateOffer(UUID uuid, int offer) throws SQLException {
         try (Connection conn = database.getConnection()) {
             PreparedStatement stmt;
-
             stmt = conn.prepareStatement("INSERT INTO offers (order_uuid, offer) VALUES (?,?)");
             stmt.setString(1, uuid.toString());
             stmt.setInt(2, offer);
