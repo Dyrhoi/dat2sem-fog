@@ -27,9 +27,10 @@ public class MaterialCalculations {
         private final int sternScrewsPackages = 1;
 
         private static final int MINIMUM_NUMBER_OF_PILLARS = 2;
-        private static final int MAXIMUM_PILLAR_DISTANCE_SIDES = 300;
-        private static final int MAXIMUM_PILLAR_DISTANCE_ENDS = 600;
-        private static final int MAXIMUM_STROP_DISTANCE = 600;
+        private static final int PILLAR_EDGE_DISTANCE_SIDES = 70;
+        private static final int PILLAR_EDGE_DISTANCE_ENDS = 140;
+        private static final int MAXIMUM_PILLAR_DISTANCE = 600;
+        private static final int MAXIMUM_STRAP_DISTANCE = 600;
         private static final int MAXIMUM_RAFTER_DISTANCE = 60;
         private static final int STERN_SIDES_LENGTH = 540;
         private static final int STERN_ENDS_LENGTH = 360;
@@ -40,19 +41,19 @@ public class MaterialCalculations {
         private static final int NUMBER_OF_SIDES = 2;
 
         public static int pillars(double length, double width) {
-            return (int) Math.ceil((length / MAXIMUM_PILLAR_DISTANCE_SIDES) + MINIMUM_NUMBER_OF_PILLARS) * pillarRows(width);
+            return (int) Math.floor(((length - PILLAR_EDGE_DISTANCE_ENDS) / MAXIMUM_PILLAR_DISTANCE) + MINIMUM_NUMBER_OF_PILLARS) * pillarRows(width);
         }
 
         public static int pillarRows(double width) {
-            return (int) Math.ceil((width / MAXIMUM_PILLAR_DISTANCE_ENDS) + MINIMUM_NUMBER_OF_PILLARS);
+            return (int) Math.floor(((width - PILLAR_EDGE_DISTANCE_SIDES) / MAXIMUM_PILLAR_DISTANCE) + MINIMUM_NUMBER_OF_PILLARS);
         }
 
         public static int straps(double length, double width) {
-            return (int) Math.ceil((length / MAXIMUM_STROP_DISTANCE) * pillarRows(width));
+            return (int) Math.ceil((length / MAXIMUM_STRAP_DISTANCE) * pillarRows(width));
         }
 
         public static int rafterRows(double width) {
-            return (int) Math.ceil((width / MAXIMUM_PILLAR_DISTANCE_ENDS) - 1);
+            return (int) Math.floor((width / MAXIMUM_PILLAR_DISTANCE));
         }
 
         public static int rafters(double length, double width) {
