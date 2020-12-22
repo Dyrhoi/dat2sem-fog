@@ -2,9 +2,12 @@ package web.servlets.pages;
 
 import api.Util;
 import domain.carport.Carport;
+import domain.order.Order;
 import domain.user.customer.Customer;
 import domain.order.OrderFactory;
 import domain.carport.Shed;
+import validation.ValidationErrorException;
+import web.plugins.Notifier;
 import web.servlets.BaseServlet;
 
 import javax.servlet.ServletException;
@@ -102,13 +105,12 @@ public class OrderServlet extends BaseServlet {
             String token = Util.generateSecureToken();
             orderFactory.setToken(token);
 
-            orderFactory.validateAndCommit();
-
-            //Todo:Dyrhoi - Better catch exceptions and validation.
-        } catch (Exception e){
-            e.printStackTrace();
+            Order order = orderFactory.validateAndCommit();
+            resp.sendRedirect(req.getContextPath() + "/ticket/" + order.getToken());
+        } catch (ValidationErrorException e) {
+            Notifier notifier = new Notifier(Notifier.Type.DANGER, "Vi kunne ikke oprette ordren, disse inputs va ikke udfyldt korrekt.", e);
+            super.addNotifcation(req, notifier);
+            resp.sendRedirect(req.getContextPath() + "/");
         }
-
-        doGet(req, resp);
     }
 }

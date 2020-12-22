@@ -77,6 +77,8 @@ public abstract class OrderFactory {
         //Customer:
         validateCustomer(valEx);
 
+        validateCarport(valEx);
+
 
 
         valEx.validate();
@@ -107,27 +109,12 @@ public abstract class OrderFactory {
     }
 
     private void validateCarport(ValidationErrorException valEx) {
-        if(customer == null)
-            valEx.addProblem("customer", "We did not receive all expected inputs.");
-        EmailValidator emailValidator = EmailValidator.getInstance();
-
-        if(!emailValidator.isValid(customer.getEmail()))
-            valEx.addProblem("email", "E-mail is not valid.");
-
-        if(StringUtils.isNullOrEmpty(customer.getFirstname()) || StringUtils.isNullOrEmpty(customer.getLastname()))
-            valEx.addProblem("name", "First and last name should be set.");
-
-        String phoneNumberStrip = Util.phoneNumberStrip(customer.getPhone());
-        try {
-            Integer.parseInt(phoneNumberStrip);
-        } catch (NumberFormatException e) {
-            valEx.addProblem("phone", "Not a valid phone number.");
-        }
-
-        if(StringUtils.isNullOrEmpty(customer.getAddress().getAddress()) ||
-                StringUtils.isNullOrEmpty(customer.getAddress().getCity()) ||
-                StringUtils.isNullOrEmpty(customer.getAddress().getPostalCode()))
-            valEx.addProblem("address", "Invalid address, empty fields not allowed.");
+        if(carport == null)
+            valEx.addProblem("carport", "Could not generate carport.");
+        if(carport.getLength() > Carport.maxLength || carport.getLength() < Carport.minLength || (Carport.maxLength - carport.getLength()) % 30 != 0)
+            valEx.addProblem("carport-length", "Incorrect length given.");
+        if(carport.getWidth() > Carport.maxWidth || carport.getWidth() < Carport.minWidth || (Carport.maxWidth - carport.getWidth()) % 30 != 0)
+            valEx.addProblem("carport-width", "Incorrect width given.");
     }
 
     public Order validateAndCommit() throws ValidationErrorException {

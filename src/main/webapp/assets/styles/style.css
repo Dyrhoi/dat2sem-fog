@@ -165,6 +165,10 @@ article.message.alert-warning section, article.reply.alert-warning  section {
     border-bottom: 1px solid #ffc107;
 }
 
+article.message .footer, article.reply .footer {
+    background-color:#f1f8ff;
+}
+
 .ql-toolbar.ql-snow {
     background-color:rgba(0,0,0,.025);
     border:0;
