@@ -31,4 +31,14 @@ public class ConstructionMaterial {
     public String getDescription() {
         return description;
     }
+
+    @Override
+    public String toString() {
+        return "ConstructionMaterial{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", materialType='" + materialType + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }
