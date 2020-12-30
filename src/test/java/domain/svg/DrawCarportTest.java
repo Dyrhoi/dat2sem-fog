@@ -13,7 +13,7 @@ class DrawCarportTest {
 
     @BeforeEach
     void setUp() {
-        carport = new Carport(-1, 780, 600, null, null, -1);
+        carport = new Carport(-1, 800, 1000, null, null, -1);
         drawCarport = new DrawCarport(carport);
     }
 

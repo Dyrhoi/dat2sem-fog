@@ -104,8 +104,8 @@ public class MaterialSpecs {
     public static List<Coordinate> getRafters(int length, int width) {
         List<Coordinate> coordinates = new ArrayList<>();
 
-        int raftersAmount = MaterialCalculations.BaseCarport.rafters(length, width);
-        double distance = (length / (double) raftersAmount) - RAFTER_WIDTH;
+        double raftersAmount = MaterialCalculations.BaseCarport.rafters(length, width);
+        double distance = (width / raftersAmount) - (RAFTER_WIDTH / 2);
         double x = 0;
         for(int i = 1; i <= raftersAmount; i++) {
             x = (distance * i);
