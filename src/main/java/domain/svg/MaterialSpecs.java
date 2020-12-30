@@ -19,6 +19,8 @@ public class MaterialSpecs {
     public static final double PILLAR_BACK_EDGE_DISTANCE = 30;
     public static final double PILLAR_SIDE_EDGE_DISTANCE = 35;
 
+    public static Coordinate topRightPillar = null;
+
 
     /*
     Roof box:
@@ -69,7 +71,6 @@ public class MaterialSpecs {
         int pillarsPerRow = pillarAmount/pillarRows;
 
         int remainingPillarRows = pillarRows - 2;
-
         for (int i = 1; i <= pillarRows; i++) {
 
             //int y = 400 * i +PILLAR_SIDE_EDGE_DISTANCE;
@@ -88,10 +89,15 @@ public class MaterialSpecs {
                 double x = (length - PILLAR_FRONT_EDGE_DISTANCE - PILLAR_BACK_EDGE_DISTANCE) / remainingPillarCalcSpace(remainingPillarsPerRow) * j + PILLAR_FRONT_EDGE_DISTANCE;
                 x -= PILLAR_LENGTH / 2;
                 coordinates.add(new Coordinate(x, y));
+
             }
 
             //Set last pillar.
-            coordinates.add(new Coordinate(length - PILLAR_BACK_EDGE_DISTANCE, y));
+            Coordinate lastPillar = new Coordinate(length - PILLAR_BACK_EDGE_DISTANCE, y);
+            if (i == 1) {
+                topRightPillar = lastPillar;
+            }
+            coordinates.add(lastPillar);
         }
 
         return coordinates;
@@ -101,16 +107,19 @@ public class MaterialSpecs {
         List<Coordinate> coordinates = new ArrayList<>();
 
         double raftersAmount = MaterialCalculations.BaseCarport.rafters(length, width);
+        if (width > 600) {
+            raftersAmount = Math.ceil(raftersAmount / 2);
+        }
         double rafterSpaceAmount = raftersAmount + 1;
         double distance = (length / rafterSpaceAmount);
         double x = 0;
+
         for(int i = 1; i <= raftersAmount; i++) {
             //x = ((distance - RAFTER_WIDTH / 2) * i);
             x += distance;
             double xPosition = x - RAFTER_WIDTH / 2;
             coordinates.add(new Coordinate(xPosition, 0));
         }
-        //System.out.println(coordinates);
         return coordinates;
     }
 
@@ -140,11 +149,37 @@ public class MaterialSpecs {
         return coordinateSets;
     }
 
-    public static List<Coordinate> getShed (int length, int width){
+    public static List<Coordinate> getShedPillars (int length, int width){
         List<Coordinate> coordinates = new ArrayList<>();
 
+        int pillarColumns = MaterialCalculations.ShedConstructor.calcShedPillarsLength(length);
+        int pillarRows = MaterialCalculations.ShedConstructor.calcShedPillarsWidth(width);
+        System.out.println(pillarRows);
+        double pillarDistanceLength = length / pillarColumns;
+        double pillarDistanceWidth = width / pillarRows;
+        System.out.println("distLength " + pillarDistanceLength);
+        System.out.println("distWidth " + pillarDistanceWidth);
 
-        return null;
+        int remainingPillarRows = pillarRows - 1;
+                double y = topRightPillar.getY();
+    double x = topRightPillar.getX();
+        System.out.println("x: " + x + " y: " + y);
+
+        for (int i = 0; i <= pillarRows; i++) {
+            //double y = topRightPillar.getY();
+            //double x = topRightPillar.getX();
+
+            //Set remaining pillars.
+            double remainingPillarsPerRow = pillarColumns - 2;
+            y += y + (pillarDistanceWidth * i) - PILLAR_WIDTH;
+
+            for (int j = 0; j <= remainingPillarsPerRow; j++) {
+                x -= x - (pillarDistanceLength * j) + PILLAR_LENGTH;
+            System.out.println("x: " + x + " y: " + y);
+            }
+                coordinates.add(new Coordinate(x, y));
+        }
+        return coordinates;
     }
 
     private static int remainingPillarCalcSpace(int pillarAmount){

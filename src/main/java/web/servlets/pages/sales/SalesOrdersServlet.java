@@ -105,7 +105,7 @@ public class SalesOrdersServlet extends BaseServlet {
                 roofAngle = -1;
             }
 
-            Carport carport = new Carport(id, carportWidth, carportLength, roofType, roofAngle, roof_material);
+            Carport carport = new Carport(id, null, carportWidth, carportLength, roofType, roofAngle, roof_material);
 
             //create shed
             Shed shed = null;
