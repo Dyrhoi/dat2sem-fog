@@ -14,12 +14,12 @@ class DrawCarportTest {
 
     @BeforeEach
     void setUp() {
-        carport = new Carport(-1, 600, 800, null, null, -1);
+        carport = new Carport(-1, new Shed (-1, 400, 200),800, 800, Carport.roofTypes.FLAT, null, 15);
         drawCarport = new DrawCarport(carport);
     }
 
     @Test
     void drawSVG() {
-        System.out.println(drawCarport.drawSVG());
+        System.out.println(drawCarport.drawSVGWithViewBox());
     }
 }

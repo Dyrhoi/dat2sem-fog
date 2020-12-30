@@ -1,8 +1,12 @@
 package domain.svg;
 
+import api.Util;
 import domain.carport.Carport;
 import org.jfree.svg.SVGGraphics2D;
-import org.jfree.svg.SVGUtils;
+import org.jfree.svg.ViewBox;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -10,6 +14,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.HashMap;
 import java.util.List;
 
@@ -41,8 +47,23 @@ public class DrawCarport {
         drawStraps();
         drawRafters();
         drawPillars();
-
         return g2.getSVGElement();
+    }
+
+    public String drawSVGWithViewBox() {
+        String svgString = drawSVG();
+        try {
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            InputSource is = new InputSource(new StringReader(svgString));
+            Document doc = dBuilder.parse(is);
+            doc.getDocumentElement().normalize();
+            doc.getDocumentElement().setAttribute("viewBox", "0 0 " + carport.getLength() + " " + carport.getWidth());
+            return Util.toString(doc);
+        } catch (IOException | SAXException | ParserConfigurationException e) {
+            e.printStackTrace();
+            return svgString;
+        }
     }
 
     private void drawRoof() {
