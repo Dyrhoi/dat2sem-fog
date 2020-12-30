@@ -1,6 +1,7 @@
 package domain.svg;
 
 import domain.carport.Carport;
+import domain.carport.Shed;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

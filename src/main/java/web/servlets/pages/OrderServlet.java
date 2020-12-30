@@ -77,8 +77,6 @@ public class OrderServlet extends BaseServlet {
                 roofAngle = -1;
             }
 
-            Carport carport = new Carport(id, carportWidth, carportLength, roofType, roofAngle, roof_material);
-
             //create shed
             Shed shed = null;
             if (carportHasShed) {
@@ -86,6 +84,7 @@ public class OrderServlet extends BaseServlet {
                 shedLength = Integer.parseInt(req.getParameter("shed-length"));
                 shed = new Shed(id, shedWidth, shedLength);
             }
+            Carport carport = new Carport(id, shed, carportWidth, carportLength, roofType, roofAngle, roof_material);
 
             String note = req.getParameter("note");
 

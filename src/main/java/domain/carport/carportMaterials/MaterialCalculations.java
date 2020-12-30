@@ -333,7 +333,7 @@ public class MaterialCalculations {
         private final int looseWoodSides;
         private final int looseWoodEnds;
         private final int looseWoodFittings;
-        private final int pillars;
+        private final int shedPillars;
         private final int cladding;
         private final int doorWood;
         private final int doorHinges;
@@ -341,19 +341,19 @@ public class MaterialCalculations {
         private final int innerCladdingScrewPackages;
         private final int outerCladdingScrewPackages;
 
-        private static final int SHED_PILLAR_FRAME = 4;
-        private static final int MINIMUM_LOOSE_WOOD_DISTANCE_ENDS = 270;
-        private static final int MINIMUM_LOOSE_WOOD_DISTANCE_SIDES = 240;
-        private static final int LOOSE_WOOD_FITTINGS_PER_LOOSE_WOOD = 2;
-        private static final int INNER_CLADDING_WIDTH = 44;
-        private static final int OUTER_CLADDING_DIVISION_NUMBER = 2;
-        private static final int DOOR_WOOD_PIECE_Z = 1;
-        private static final int DOOR_HINGES = 2;
-        private static final int DOOR_HANDLE = 1;
-        private static final int INNERCLADDING_SCREW_PACKAGE_SIZE = 300;
-        private static final int INNERCLADDING_SCREWS_PER_CLADDING = 3;
-        private static final int OUTERCLADDING_SCREW_PACKAGE_SIZE = 400;
-        private static final int OUTERCLADDING_SCREWS_PER_CLADDING = 6;
+        public static final int STATIC_PILLAR_FOR_SHED = 1;
+        public static final int MINIMUM_LOOSE_WOOD_DISTANCE_ENDS = 270;
+        public static final int MINIMUM_LOOSE_WOOD_DISTANCE_SIDES = 240;
+        public static final int LOOSE_WOOD_FITTINGS_PER_LOOSE_WOOD = 2;
+        public static final int INNER_CLADDING_WIDTH = 44;
+        public static final int OUTER_CLADDING_DIVISION_NUMBER = 2;
+        public static final int DOOR_WOOD_PIECE_Z = 1;
+        public static final int DOOR_HINGES = 2;
+        public static final int DOOR_HANDLE = 1;
+        public static final int INNERCLADDING_SCREW_PACKAGE_SIZE = 300;
+        public static final int INNERCLADDING_SCREWS_PER_CLADDING = 3;
+        public static final int OUTERCLADDING_SCREW_PACKAGE_SIZE = 400;
+        public static final int OUTERCLADDING_SCREWS_PER_CLADDING = 6;
 
         public static int looseWoodSides(double length) {
             return (int) Math.ceil((length / MINIMUM_LOOSE_WOOD_DISTANCE_SIDES) * NUMBER_OF_SIDES);
@@ -389,6 +389,10 @@ public class MaterialCalculations {
             return (int) Math.ceil(outerCladding) * OUTERCLADDING_SCREWS_PER_CLADDING / OUTERCLADDING_SCREW_PACKAGE_SIZE;
         }
 
+        public static int calcShedPillars(double length, double width) {
+            return calcShedPillarsLength(length) * calcShedPillarsWidth(width);
+        }
+
         public int getLooseWoodSides() {
             return looseWoodSides;
         }
@@ -401,8 +405,8 @@ public class MaterialCalculations {
             return looseWoodFittings;
         }
 
-        public int getPillars() {
-            return pillars;
+        public int getShedPillars() {
+            return shedPillars;
         }
 
         public int getCladding() {
@@ -433,7 +437,7 @@ public class MaterialCalculations {
             double length = shed.getLength();
             double width = shed.getWidth();
 
-            this.pillars = SHED_PILLAR_FRAME;
+            this.shedPillars = calcShedPillars(length, width);
             this.looseWoodSides = looseWoodSides(length);
             this.looseWoodEnds = looseWoodsEnds(width);
             this.looseWoodFittings = loosWoodFittings(looseWoodEnds, looseWoodSides);
@@ -507,7 +511,7 @@ public class MaterialCalculations {
 
         ShedConstructor tmpShed = new ShedConstructor(shed);
 
-        list.add(new OrderMaterial(tmpShed.getPillars(), repo.get(MaterialHandler.PILLARS_FLAT_ROOF)));
+        list.add(new OrderMaterial(tmpShed.getShedPillars(), repo.get(MaterialHandler.PILLARS_FLAT_ROOF)));
         list.add(new OrderMaterial(tmpShed.getLooseWoodSides(), repo.get(MaterialHandler.LOOSE_WOOD_SIDES)));
         list.add(new OrderMaterial(tmpShed.getLooseWoodEnds(), repo.get(MaterialHandler.LOOSE_WOOD_ENDS)));
         list.add(new OrderMaterial(tmpShed.getLooseWoodFittings(), repo.get(MaterialHandler.ANGLED_FITTING_FOR_LOOSE_WOOD)));

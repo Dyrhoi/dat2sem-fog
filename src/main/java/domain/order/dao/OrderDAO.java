@@ -157,7 +157,7 @@ public class OrderDAO implements OrderRepository {
                 int roofAngle = rs.getInt("angle");
                 Carport.roofTypes roofType = Carport.roofTypes.valueOf(rs.getString("roof_type"));
                 int roof_material = rs.getInt("roof_material");
-                carport = new Carport(carportId, carportWidth, carportLength, roofType, roofAngle, roof_material);
+                carport = new Carport(carportId, null, carportWidth, carportLength, roofType, roofAngle, roof_material);
             }
 
             //Get Shed
@@ -248,7 +248,7 @@ public class OrderDAO implements OrderRepository {
                 int roofAngle = rs.getInt("angle");
                 Carport.roofTypes roofType = Carport.roofTypes.valueOf(rs.getString("roof_type"));
                 int roof_material = rs.getInt("roof_material");
-                carport = new Carport(carportId, carportWidth, carportLength, roofType, roofAngle, roof_material);
+                carport = new Carport(carportId, null, carportWidth, carportLength, roofType, roofAngle, roof_material);
             }
 
             //Get Shed
