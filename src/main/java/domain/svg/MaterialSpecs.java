@@ -121,7 +121,7 @@ public class MaterialSpecs {
         Coordinate firstRafter = getRafters(length, width).get(0);
         Coordinate lastRafter = getRafters(length, width).get(rafters.size() - 1);
 
-        HashMap<String, Double> firstTapeLine= new HashMap<>();
+        HashMap<String, Double> firstTapeLine = new HashMap<>();
         firstTapeLine.put("x1", firstRafter.x);
         firstTapeLine.put("x2", lastRafter.x);
         firstTapeLine.put("y1", PILLAR_SIDE_EDGE_DISTANCE);
