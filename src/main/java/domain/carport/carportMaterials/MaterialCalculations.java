@@ -429,9 +429,9 @@ public class MaterialCalculations {
             return outerCladdingScrewPackages;
         }
 
-        public ShedConstructor(Carport carport) {
-            double length = carport.getShed().getLength();
-            double width = carport.getShed().getWidth();
+        public ShedConstructor(Shed shed) {
+            double length = shed.getLength();
+            double width = shed.getWidth();
 
             this.pillars = SHED_PILLAR_FRAME;
             this.looseWoodSides = looseWoodSides(length);
@@ -503,7 +503,7 @@ public class MaterialCalculations {
 
     public static List<OrderMaterial> calcShed(ConstructionMaterialList repo, Order order){
         List<OrderMaterial> list = new ArrayList<>();
-        Shed shed = order.getShed();
+        Shed shed = order.getCarport().getShed();
 
         ShedConstructor tmpShed = new ShedConstructor(shed);
 
