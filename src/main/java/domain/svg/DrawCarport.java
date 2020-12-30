@@ -49,7 +49,7 @@ public class DrawCarport {
     }
 
     private void drawStraps() {
-        List<MaterialSpecs.Coordinate> coordinates = MaterialSpecs.getStraps(carport.getWidth(), carport.getLength());
+        List<MaterialSpecs.Coordinate> coordinates = MaterialSpecs.getStraps(carport.getLength(), carport.getWidth());
         for (MaterialSpecs.Coordinate coordinate : coordinates) {
             Rectangle2D strap = new Rectangle2D.Double(coordinate.getX(), coordinate.getY(), carport.getWidth(), MaterialSpecs.STRAP_WIDTH);
             addObject(strap);
@@ -65,7 +65,7 @@ public class DrawCarport {
     }
 
     private void drawPerforatedTape() {
-        List<HashMap<String, Double>> coordinates = MaterialSpecs.getPerforatedTape(carport.getWidth(), carport.getLength());
+        List<HashMap<String, Double>> coordinates = MaterialSpecs.getPerforatedTape(carport.getLength(), carport.getWidth());
         for (HashMap<String, Double> coordinateSets : coordinates) {
             g2.setStroke(new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, new float[] {20.0f, 20.0f}, 0.0f));
             Line2D line = new Line2D.Double(coordinateSets.get("x1"), coordinateSets.get("y1"), coordinateSets.get("x2"), coordinateSets.get("y2"));

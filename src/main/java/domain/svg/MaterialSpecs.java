@@ -105,9 +105,10 @@ public class MaterialSpecs {
         double distance = (length / rafterSpaceAmount);
         double x = 0;
         for(int i = 1; i <= raftersAmount; i++) {
-            x = (distance * i);
-            //x += distance;
-            coordinates.add(new Coordinate(x, 0));
+            //x = ((distance - RAFTER_WIDTH / 2) * i);
+            x += distance;
+            double xPosition = x - RAFTER_WIDTH / 2;
+            coordinates.add(new Coordinate(xPosition, 0));
         }
         System.out.println(coordinates);
         return coordinates;
