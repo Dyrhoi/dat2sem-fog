@@ -28,7 +28,7 @@ public class APICarportDrawSVGServlet extends BaseServlet {
                 shedLength = Integer.parseInt(req.getParameter("shed-length"));
                 shed = new Shed(-1, shedWidth, shedLength);
             }
-            Carport carport = new Carport(-1, carportWidth, carportLength, null, null, -1);
+            Carport carport = new Carport(-1, shed, carportWidth, carportLength, null, null, -1);
 
             String svg = api.getSVGDrawing(carport);
             resp.getWriter().println(svg);

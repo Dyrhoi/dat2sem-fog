@@ -66,6 +66,6 @@ public class API {
     public List<OrderMaterial> getOrderMaterials(Order order){return materialRepository.getOrderMaterials(order);}
 
     public String getSVGDrawing(Carport carport) {
-        return new DrawCarport(carport).drawSVG();
+        return new DrawCarport(carport).drawSVGWithViewBox();
     }
 }
