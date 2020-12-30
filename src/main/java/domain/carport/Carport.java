@@ -11,7 +11,7 @@ public class Carport extends Applet {
     private final roofTypes roof;
     private Integer roofAngle;
     private final int roof_material;
-    private final Shed shed;
+    private Shed shed;
 
     public static final int minWidth = 240;
     public static final int maxWidth = 750;

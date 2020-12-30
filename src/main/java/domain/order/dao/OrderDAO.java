@@ -70,7 +70,7 @@ public class OrderDAO implements OrderRepository {
                     int roofAngle = rs.getInt("angle");
                     Carport.roofTypes roofType = Carport.roofTypes.valueOf(rs.getString("roof_type"));
                     int roof_material = rs.getInt("roof_material");
-                    carport = new Carport(carportId, carportWidth, carportLength, roofType, roofAngle, roof_material);
+                    carport = new Carport(carportId, null, carportWidth, carportLength, roofType, roofAngle, roof_material);
                 }
 
                 stmt = conn.prepareStatement("SELECT * FROM sheds WHERE carports_id = ?");

@@ -19,6 +19,8 @@ public class MaterialSpecs {
     public static final double PILLAR_BACK_EDGE_DISTANCE = 30;
     public static final double PILLAR_SIDE_EDGE_DISTANCE = 35;
 
+    public static Coordinate topRightPillar = null;
+
 
     /*
     Roof box:
@@ -69,7 +71,6 @@ public class MaterialSpecs {
         int pillarsPerRow = pillarAmount/pillarRows;
 
         int remainingPillarRows = pillarRows - 2;
-
         for (int i = 1; i <= pillarRows; i++) {
 
             //int y = 400 * i +PILLAR_SIDE_EDGE_DISTANCE;
@@ -88,10 +89,15 @@ public class MaterialSpecs {
                 double x = (length - PILLAR_FRONT_EDGE_DISTANCE - PILLAR_BACK_EDGE_DISTANCE) / remainingPillarCalcSpace(remainingPillarsPerRow) * j + PILLAR_FRONT_EDGE_DISTANCE;
                 x -= PILLAR_LENGTH / 2;
                 coordinates.add(new Coordinate(x, y));
+
             }
 
             //Set last pillar.
-            coordinates.add(new Coordinate(length - PILLAR_BACK_EDGE_DISTANCE, y));
+            Coordinate lastPillar = new Coordinate(length - PILLAR_BACK_EDGE_DISTANCE, y);
+            if (i == 1) {
+                topRightPillar = lastPillar;
+            }
+            coordinates.add(lastPillar);
         }
 
         return coordinates;
@@ -101,16 +107,19 @@ public class MaterialSpecs {
         List<Coordinate> coordinates = new ArrayList<>();
 
         double raftersAmount = MaterialCalculations.BaseCarport.rafters(length, width);
+        if (width > 600) {
+            raftersAmount = Math.ceil(raftersAmount / 2);
+        }
         double rafterSpaceAmount = raftersAmount + 1;
         double distance = (length / rafterSpaceAmount);
         double x = 0;
+
         for(int i = 1; i <= raftersAmount; i++) {
             //x = ((distance - RAFTER_WIDTH / 2) * i);
             x += distance;
             double xPosition = x - RAFTER_WIDTH / 2;
             coordinates.add(new Coordinate(xPosition, 0));
         }
-        //System.out.println(coordinates);
         return coordinates;
     }
 

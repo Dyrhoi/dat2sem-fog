@@ -52,7 +52,7 @@ public class MaterialCalculations {
         }
 
         public static int rafterRows(double width) {
-            return (int) Math.floor((width / MAXIMUM_PILLAR_DISTANCE));
+            return (int) Math.ceil((width / MAXIMUM_PILLAR_DISTANCE));
         }
 
         public static int rafters(double length, double width) {
@@ -363,6 +363,10 @@ public class MaterialCalculations {
             return (int) Math.ceil((width / MINIMUM_LOOSE_WOOD_DISTANCE_ENDS) * NUMBER_OF_SIDES);
         }
 
+        public static int shedPillarRows(double width) {
+            return (int) Math.ceil(width / MINIMUM_LOOSE_WOOD_DISTANCE_SIDES);
+        }
+
         public static int loosWoodFittings(int looseWoodEnds, int looseWoodSides) {
             return (looseWoodEnds + looseWoodSides) * LOOSE_WOOD_FITTINGS_PER_LOOSE_WOOD;
         }
@@ -387,6 +391,14 @@ public class MaterialCalculations {
 
         public static int outerCladdingScrews(int outerCladding) {
             return (int) Math.ceil(outerCladding) * OUTERCLADDING_SCREWS_PER_CLADDING / OUTERCLADDING_SCREW_PACKAGE_SIZE;
+        }
+
+        public static int calcShedPillarsLength(double length) {
+            return (int) Math.ceil(length / MINIMUM_LOOSE_WOOD_DISTANCE_SIDES) + STATIC_PILLAR_FOR_SHED;
+        }
+
+        public static int calcShedPillarsWidth(double width) {
+            return (int) Math.ceil(width/ MINIMUM_LOOSE_WOOD_DISTANCE_ENDS) + STATIC_PILLAR_FOR_SHED;
         }
 
         public static int calcShedPillars(double length, double width) {
