@@ -22,7 +22,7 @@ public class DrawCarport {
 
     public DrawCarport (Carport carport) {
         this.carport = carport;
-        this.g2 = new SVGGraphics2D(carport.getWidth(), carport.getLength());
+        this.g2 = new SVGGraphics2D(carport.getLength(), carport.getWidth());
     }
 
     public String drawSVG() {
@@ -41,7 +41,7 @@ public class DrawCarport {
     }
 
     private void drawPillars() {
-        List<MaterialSpecs.Coordinate> coordinates = MaterialSpecs.getPillars(carport.getWidth(), carport.getLength());
+        List<MaterialSpecs.Coordinate> coordinates = MaterialSpecs.getPillars(carport.getLength(), carport.getWidth());
         for (MaterialSpecs.Coordinate coordinate : coordinates) {
             Rectangle2D pillar = new Rectangle2D.Double(coordinate.getX(), coordinate.getY(), MaterialSpecs.PILLAR_LENGTH, MaterialSpecs.PILLAR_WIDTH);
             addObject(pillar);
@@ -51,15 +51,15 @@ public class DrawCarport {
     private void drawStraps() {
         List<MaterialSpecs.Coordinate> coordinates = MaterialSpecs.getStraps(carport.getLength(), carport.getWidth());
         for (MaterialSpecs.Coordinate coordinate : coordinates) {
-            Rectangle2D strap = new Rectangle2D.Double(coordinate.getX(), coordinate.getY(), carport.getWidth(), MaterialSpecs.STRAP_WIDTH);
+            Rectangle2D strap = new Rectangle2D.Double(coordinate.getX(), coordinate.getY(), carport.getLength(), MaterialSpecs.STRAP_WIDTH);
             addObject(strap);
         }
     }
 
     private void drawRafters() {
-        List<MaterialSpecs.Coordinate> coordinates = MaterialSpecs.getRafters(carport.getWidth(), carport.getLength());
+        List<MaterialSpecs.Coordinate> coordinates = MaterialSpecs.getRafters(carport.getLength(), carport.getWidth());
         for (MaterialSpecs.Coordinate coordinate : coordinates) {
-            Rectangle2D rafter = new Rectangle2D.Double(coordinate.getX(), coordinate.getY(), MaterialSpecs.RAFTER_WIDTH, carport.getLength());
+            Rectangle2D rafter = new Rectangle2D.Double(coordinate.getX(), coordinate.getY(), MaterialSpecs.RAFTER_WIDTH, carport.getWidth());
             addObject(rafter);
         }
     }

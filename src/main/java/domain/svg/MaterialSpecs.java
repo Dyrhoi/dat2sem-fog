@@ -110,7 +110,7 @@ public class MaterialSpecs {
             double xPosition = x - RAFTER_WIDTH / 2;
             coordinates.add(new Coordinate(xPosition, 0));
         }
-        System.out.println(coordinates);
+        //System.out.println(coordinates);
         return coordinates;
     }
 
