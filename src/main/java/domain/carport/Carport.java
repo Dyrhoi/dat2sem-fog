@@ -47,6 +47,10 @@ public class Carport extends Applet {
         return roof_material;
     }
 
+    public Shed getShed() {
+        return shed;
+    }
+
     @Override
     public String toString() {
         return "Carport{" +

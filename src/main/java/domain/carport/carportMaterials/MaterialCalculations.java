@@ -429,9 +429,9 @@ public class MaterialCalculations {
             return outerCladdingScrewPackages;
         }
 
-        public ShedConstructor(Shed shed) {
-            double length = shed.getLength();
-            double width = shed.getWidth();
+        public ShedConstructor(Carport carport) {
+            double length = carport.getShed().getLength();
+            double width = carport.getShed().getWidth();
 
             this.pillars = SHED_PILLAR_FRAME;
             this.looseWoodSides = looseWoodSides(length);
