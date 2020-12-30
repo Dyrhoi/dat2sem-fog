@@ -3,7 +3,6 @@ package domain.svg;
 import api.Util;
 import domain.carport.Carport;
 import org.jfree.svg.SVGGraphics2D;
-import org.jfree.svg.ViewBox;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;

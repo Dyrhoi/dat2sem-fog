@@ -154,30 +154,25 @@ public class MaterialSpecs {
 
         int pillarColumns = MaterialCalculations.ShedConstructor.calcShedPillarsLength(length);
         int pillarRows = MaterialCalculations.ShedConstructor.calcShedPillarsWidth(width);
-        System.out.println(pillarRows);
-        double pillarDistanceLength = length / pillarColumns;
-        double pillarDistanceWidth = width / pillarRows;
-        System.out.println("distLength " + pillarDistanceLength);
-        System.out.println("distWidth " + pillarDistanceWidth);
+        double pillarDistanceLength = length / (pillarColumns - 1);
+        double pillarDistanceWidth = width / (pillarRows - 1);
+        double y = topRightPillar.getY();
 
-        int remainingPillarRows = pillarRows - 1;
-                double y = topRightPillar.getY();
-    double x = topRightPillar.getX();
-        System.out.println("x: " + x + " y: " + y);
+        for (int i = 1; i <= pillarRows; i++) {
 
-        for (int i = 0; i <= pillarRows; i++) {
-            //double y = topRightPillar.getY();
-            //double x = topRightPillar.getX();
+            for (int j = 0; j < pillarColumns; j++) {
+                double x = topRightPillar.getX();
+                if (j != 0) {
+                    x = x - (pillarDistanceLength * j) + PILLAR_LENGTH;
+                }
+                else {
+                    x = x - (pillarDistanceLength * j);
+                }
+                System.out.println(i + "," + j + " x: " + x + " y: " + y);
 
-            //Set remaining pillars.
-            double remainingPillarsPerRow = pillarColumns - 2;
-            y += y + (pillarDistanceWidth * i) - PILLAR_WIDTH;
-
-            for (int j = 0; j <= remainingPillarsPerRow; j++) {
-                x -= x - (pillarDistanceLength * j) + PILLAR_LENGTH;
-            System.out.println("x: " + x + " y: " + y);
-            }
                 coordinates.add(new Coordinate(x, y));
+            }
+            y = topRightPillar.y +  (pillarDistanceWidth * i);
         }
         return coordinates;
     }

@@ -5,8 +5,6 @@ import domain.carport.Shed;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class DrawCarportTest {
 
     Carport carport;
@@ -14,7 +12,7 @@ class DrawCarportTest {
 
     @BeforeEach
     void setUp() {
-        carport = new Carport(-1, new Shed (-1, 400, 200),800, 800, Carport.roofTypes.FLAT, null, 15);
+        carport = new Carport(-1, new Shed (-1, 700, 700),800, 800, Carport.roofTypes.FLAT, null, 15);
         drawCarport = new DrawCarport(carport);
     }
 
