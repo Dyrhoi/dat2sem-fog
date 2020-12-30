@@ -56,7 +56,7 @@ public class MaterialCalculations {
         }
 
         public static int rafters(double length, double width) {
-            return (int) Math.ceil((length / MAXIMUM_RAFTER_DISTANCE) * rafterRows(width));
+            return (int) Math.ceil((length / MAXIMUM_RAFTER_DISTANCE)) * rafterRows(width);
         }
 
         public static int sideSterns(double length) {
@@ -503,7 +503,7 @@ public class MaterialCalculations {
 
     public static List<OrderMaterial> calcShed(ConstructionMaterialList repo, Order order){
         List<OrderMaterial> list = new ArrayList<>();
-        Shed shed = order.getShed();
+        Shed shed = order.getCarport().getShed();
 
         ShedConstructor tmpShed = new ShedConstructor(shed);
 

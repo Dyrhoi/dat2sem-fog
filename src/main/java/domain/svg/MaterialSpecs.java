@@ -19,10 +19,6 @@ public class MaterialSpecs {
     public static final double PILLAR_BACK_EDGE_DISTANCE = 30;
     public static final double PILLAR_SIDE_EDGE_DISTANCE = 35;
 
-    private int strapLength;
-    private int shedCladdingBox;
-    private int perforatedTapeLength;
-    private int roofFrameBox;
 
     /*
     Roof box:
@@ -104,15 +100,17 @@ public class MaterialSpecs {
     public static List<Coordinate> getRafters(int length, int width) {
         List<Coordinate> coordinates = new ArrayList<>();
 
-        int raftersAmount = MaterialCalculations.BaseCarport.rafters(length, width);
-        double distance = (length / (double) raftersAmount) - RAFTER_WIDTH;
+        double raftersAmount = MaterialCalculations.BaseCarport.rafters(length, width);
+        double rafterSpaceAmount = raftersAmount + 1;
+        double distance = (length / rafterSpaceAmount);
         double x = 0;
         for(int i = 1; i <= raftersAmount; i++) {
-            x = (distance * i);
-            //x += distance;
-            coordinates.add(new Coordinate(x, 0));
+            //x = ((distance - RAFTER_WIDTH / 2) * i);
+            x += distance;
+            double xPosition = x - RAFTER_WIDTH / 2;
+            coordinates.add(new Coordinate(xPosition, 0));
         }
-        System.out.println(coordinates);
+        //System.out.println(coordinates);
         return coordinates;
     }
 
@@ -123,7 +121,7 @@ public class MaterialSpecs {
         Coordinate firstRafter = getRafters(length, width).get(0);
         Coordinate lastRafter = getRafters(length, width).get(rafters.size() - 1);
 
-        HashMap<String, Double> firstTapeLine= new HashMap<>();
+        HashMap<String, Double> firstTapeLine = new HashMap<>();
         firstTapeLine.put("x1", firstRafter.x);
         firstTapeLine.put("x2", lastRafter.x);
         firstTapeLine.put("y1", PILLAR_SIDE_EDGE_DISTANCE);
@@ -140,6 +138,13 @@ public class MaterialSpecs {
         coordinateSets.add(secondTapeLine);
 
         return coordinateSets;
+    }
+
+    public static List<Coordinate> getShed (int length, int width){
+        List<Coordinate> coordinates = new ArrayList<>();
+
+
+        return null;
     }
 
     private static int remainingPillarCalcSpace(int pillarAmount){

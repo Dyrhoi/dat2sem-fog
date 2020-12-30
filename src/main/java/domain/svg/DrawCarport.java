@@ -22,7 +22,7 @@ public class DrawCarport {
 
     public DrawCarport (Carport carport) {
         this.carport = carport;
-        this.g2 = new SVGGraphics2D(carport.getWidth(), carport.getLength());
+        this.g2 = new SVGGraphics2D(carport.getLength(), carport.getWidth());
     }
 
     public String drawSVG() {
@@ -36,12 +36,12 @@ public class DrawCarport {
     }
 
     private void drawRoof() {
-        Rectangle2D roof = new Rectangle2D.Double(0, 0, carport.getWidth(), carport.getLength());
+        Rectangle2D roof = new Rectangle2D.Double(0, 0, carport.getLength(), carport.getWidth());
         addObject(roof);
     }
 
     private void drawPillars() {
-        List<MaterialSpecs.Coordinate> coordinates = MaterialSpecs.getPillars(carport.getWidth(), carport.getLength());
+        List<MaterialSpecs.Coordinate> coordinates = MaterialSpecs.getPillars(carport.getLength(), carport.getWidth());
         for (MaterialSpecs.Coordinate coordinate : coordinates) {
             Rectangle2D pillar = new Rectangle2D.Double(coordinate.getX(), coordinate.getY(), MaterialSpecs.PILLAR_LENGTH, MaterialSpecs.PILLAR_WIDTH);
             addObject(pillar);
@@ -49,23 +49,23 @@ public class DrawCarport {
     }
 
     private void drawStraps() {
-        List<MaterialSpecs.Coordinate> coordinates = MaterialSpecs.getStraps(carport.getWidth(), carport.getLength());
+        List<MaterialSpecs.Coordinate> coordinates = MaterialSpecs.getStraps(carport.getLength(), carport.getWidth());
         for (MaterialSpecs.Coordinate coordinate : coordinates) {
-            Rectangle2D strap = new Rectangle2D.Double(coordinate.getX(), coordinate.getY(), carport.getWidth(), MaterialSpecs.STRAP_WIDTH);
+            Rectangle2D strap = new Rectangle2D.Double(coordinate.getX(), coordinate.getY(), carport.getLength(), MaterialSpecs.STRAP_WIDTH);
             addObject(strap);
         }
     }
 
     private void drawRafters() {
-        List<MaterialSpecs.Coordinate> coordinates = MaterialSpecs.getRafters(carport.getWidth(), carport.getLength());
+        List<MaterialSpecs.Coordinate> coordinates = MaterialSpecs.getRafters(carport.getLength(), carport.getWidth());
         for (MaterialSpecs.Coordinate coordinate : coordinates) {
-            Rectangle2D rafter = new Rectangle2D.Double(coordinate.getX(), coordinate.getY(), MaterialSpecs.RAFTER_WIDTH, carport.getLength());
+            Rectangle2D rafter = new Rectangle2D.Double(coordinate.getX(), coordinate.getY(), MaterialSpecs.RAFTER_WIDTH, carport.getWidth());
             addObject(rafter);
         }
     }
 
     private void drawPerforatedTape() {
-        List<HashMap<String, Double>> coordinates = MaterialSpecs.getPerforatedTape(carport.getWidth(), carport.getLength());
+        List<HashMap<String, Double>> coordinates = MaterialSpecs.getPerforatedTape(carport.getLength(), carport.getWidth());
         for (HashMap<String, Double> coordinateSets : coordinates) {
             g2.setStroke(new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, new float[] {20.0f, 20.0f}, 0.0f));
             Line2D line = new Line2D.Double(coordinateSets.get("x1"), coordinateSets.get("y1"), coordinateSets.get("x2"), coordinateSets.get("y2"));
