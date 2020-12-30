@@ -66,7 +66,7 @@ function refreshSVG() {
    if(svgRequest != null)
       svgRequest.abort();
 
-   svgRequest = $.get(contextPath + "/api/carport-svg-drawing", $("#order_form").serialize(), function (data) {
+   svgRequest = $.get(contextPath + "/api/carport-svg-drawing", $("#order_form section:not(#user_section) :input").serialize(), function (data) {
       $("#svg-request-updater").html(data);
       svgRequest = null;
    });
