@@ -56,7 +56,7 @@ public class MaterialCalculations {
         }
 
         public static int rafters(double length, double width) {
-            return (int) Math.ceil((length / MAXIMUM_RAFTER_DISTANCE) * rafterRows(width));
+            return (int) Math.ceil((length / MAXIMUM_RAFTER_DISTANCE)) * rafterRows(width);
         }
 
         public static int sideSterns(double length) {

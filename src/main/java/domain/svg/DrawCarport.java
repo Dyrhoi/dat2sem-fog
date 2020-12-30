@@ -36,7 +36,7 @@ public class DrawCarport {
     }
 
     private void drawRoof() {
-        Rectangle2D roof = new Rectangle2D.Double(0, 0, carport.getWidth(), carport.getLength());
+        Rectangle2D roof = new Rectangle2D.Double(0, 0, carport.getLength(), carport.getWidth());
         addObject(roof);
     }
 

@@ -19,10 +19,6 @@ public class MaterialSpecs {
     public static final double PILLAR_BACK_EDGE_DISTANCE = 30;
     public static final double PILLAR_SIDE_EDGE_DISTANCE = 35;
 
-    private int strapLength;
-    private int shedCladdingBox;
-    private int perforatedTapeLength;
-    private int roofFrameBox;
 
     /*
     Roof box:
@@ -105,7 +101,8 @@ public class MaterialSpecs {
         List<Coordinate> coordinates = new ArrayList<>();
 
         double raftersAmount = MaterialCalculations.BaseCarport.rafters(length, width);
-        double distance = (width / raftersAmount) - (RAFTER_WIDTH / 2);
+        double rafterSpaceAmount = raftersAmount + 1;
+        double distance = (length / rafterSpaceAmount);
         double x = 0;
         for(int i = 1; i <= raftersAmount; i++) {
             x = (distance * i);
