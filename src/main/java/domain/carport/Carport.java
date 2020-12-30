@@ -11,6 +11,7 @@ public class Carport extends Applet {
     private final roofTypes roof;
     private Integer roofAngle;
     private final int roof_material;
+    private final Shed shed;
 
     public static final int minWidth = 240;
     public static final int maxWidth = 750;
@@ -20,7 +21,8 @@ public class Carport extends Applet {
     public static final int maxAngle = 45;
 
 
-    public Carport(int id, int width, int length, roofTypes roof, Integer roofAngle, int roof_material) {
+    public Carport(int id, Shed shed, int width, int length, roofTypes roof, Integer roofAngle, int roof_material) {
+        this.shed = shed;
         this.id = id;
         this.width = width;
         this.length = length;

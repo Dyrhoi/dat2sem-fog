@@ -140,6 +140,13 @@ public class MaterialSpecs {
         return coordinateSets;
     }
 
+    public static List<Coordinate> getShed (int length, int width){
+        List<Coordinate> coordinates = new ArrayList<>();
+
+
+        return null;
+    }
+
     private static int remainingPillarCalcSpace(int pillarAmount){
         return pillarAmount + 1;
     }
