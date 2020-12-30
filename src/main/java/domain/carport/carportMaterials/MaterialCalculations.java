@@ -51,7 +51,7 @@ public class MaterialCalculations {
         }
 
         public static int rafterRows(double width) {
-            return (int) Math.floor((width / MAXIMUM_PILLAR_DISTANCE_ENDS) - 1);
+            return (int) Math.floor((width / MAXIMUM_PILLAR_DISTANCE_ENDS));
         }
 
         public static int rafters(double length, double width) {
@@ -127,7 +127,7 @@ public class MaterialCalculations {
         }
 
         public static int fittingScrews(int rafters) {
-            return (int) Math.ceil((rafters * NUMBER_OF_SCREWS_PER_FITTING)) / FITTING_SCREW_PACKAGE_SIZE;
+            return (int) Math.ceil((double) FITTING_SCREW_PACKAGE_SIZE / (rafters * NUMBER_OF_SCREWS_PER_FITTING));
         }
 
         public static int boardBolts(int pillars) {
