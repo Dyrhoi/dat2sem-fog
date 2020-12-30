@@ -1,6 +1,7 @@
 package api;
 
 import domain.carport.Carport;
+import domain.carport.OrderMaterial;
 import domain.carport.RoofMaterial;
 import domain.carport.Shed;
 import domain.material.MaterialRepository;
@@ -60,4 +61,6 @@ public class API {
     }
 
     public int updateOffer(UUID uuid, int offer) throws SQLException { return orderRepository.updateOffer(uuid, offer); }
+
+    public List<OrderMaterial> getOrderMaterials(Order order){return materialRepository.getOrderMaterials(order);}
 }

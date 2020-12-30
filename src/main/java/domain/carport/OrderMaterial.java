@@ -8,4 +8,12 @@ public class OrderMaterial {
         this.quantity = quantity;
         this.constructionMaterial = constructionMaterial;
     }
+
+    @Override
+    public String toString() {
+        return "OrderMaterial{" +
+                "quantity=" + quantity +
+                ", constructionMaterial=" + constructionMaterial +
+                '}';
+    }
 }

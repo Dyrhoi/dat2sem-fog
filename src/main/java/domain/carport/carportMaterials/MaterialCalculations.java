@@ -23,7 +23,6 @@ public class MaterialCalculations {
         private final int fittingScrewPackages;
         private final int boardBolts;
         private final int squareDiscs;
-        private final int perforatedTape = 2;
         private final int sternScrewsPackages = 1;
 
         private static final int MINIMUM_NUMBER_OF_PILLARS = 2;
@@ -120,10 +119,6 @@ public class MaterialCalculations {
             return squareDiscs;
         }
 
-        public int getPerforatedTape() {
-            return perforatedTape;
-        }
-
         public int getSternScrewsPackages() {
             return sternScrewsPackages;
         }
@@ -133,7 +128,7 @@ public class MaterialCalculations {
         }
 
         public static int fittingScrews(int rafters) {
-            return (int) Math.ceil((rafters * NUMBER_OF_SCREWS_PER_FITTING)) / FITTING_SCREW_PACKAGE_SIZE;
+            return (int) Math.ceil((double) FITTING_SCREW_PACKAGE_SIZE / (rafters * NUMBER_OF_SCREWS_PER_FITTING));
         }
 
         public static int boardBolts(int pillars) {
@@ -167,10 +162,12 @@ public class MaterialCalculations {
         private int numberOfLargeRoofPlates;
         private int numberOfSmallRoofPlates;
         private int roofScrewPackages;
+        private int perforatedTape;
 
         private static final int ROOF_PLATE_WIDTH = 106;
         private static final int ROOF_SCREWS_PER_PLATE = 50;
         private static final int ROOF_SCREW_PACKAGE_SIZE = 200;
+        private static final int ROLLS_OF_PERFORATED_TAPE = 2;
 
         public static int roofPlates(double length) {
             return (int) Math.ceil(length / ROOF_PLATE_WIDTH);
@@ -178,6 +175,10 @@ public class MaterialCalculations {
 
         public static int roofScrews(double largeRoofPlates, double smallRoofPlates) {
             return (int) Math.ceil(((largeRoofPlates + smallRoofPlates) * ROOF_SCREWS_PER_PLATE) / ROOF_SCREW_PACKAGE_SIZE);
+        }
+
+        public int getPerforatedTape() {
+            return perforatedTape;
         }
 
         public int getNumberOfLargeRoofPlates() {
@@ -196,6 +197,7 @@ public class MaterialCalculations {
             double length = carport.getLength();
             double width = carport.getWidth();
 
+            this.perforatedTape = ROLLS_OF_PERFORATED_TAPE;
             this.numberOfLargeRoofPlates = roofPlates(length);
             this.numberOfSmallRoofPlates = 0;
             if (width > 600) {
@@ -471,6 +473,7 @@ public class MaterialCalculations {
         MaterialCalculations.FlatRoof tmpFlatRoof = new FlatRoof(carport);
 
         //Flat Roof
+        finalList.add(new OrderMaterial(tmpFlatRoof.getPerforatedTape(), repo.get(MaterialHandler.PERFORATED_TAPE)));
         finalList.add(new OrderMaterial(tmpFlatRoof.getNumberOfLargeRoofPlates(), repo.get(MaterialHandler.ROOF_PLATE_LARGE)));
         if (tmpFlatRoof.getNumberOfSmallRoofPlates() != 0){
             finalList.add(new OrderMaterial(tmpFlatRoof.getNumberOfSmallRoofPlates(), repo.get(MaterialHandler.ROOF_PLATE_SMALL)));
