@@ -113,7 +113,7 @@ public class User {
     }
 
     public enum Type {
-        SALESMAN,
-        CLIENT
+        SALES_REPRESENTATIVE,
+        CUSTOMER
     }
 }

@@ -3,6 +3,7 @@ package web.servlets.pages.authentication;
 import domain.user.sales_representative.SalesRepresentative;
 import domain.user.sales_representative.SalesRepresentativeNonMatchingPasswordException;
 import domain.user.sales_representative.SalesRepresentativeNotFoundException;
+import web.plugins.Notifier;
 import web.servlets.BaseServlet;
 
 import javax.servlet.ServletException;
@@ -30,9 +31,11 @@ public class Authenticate extends BaseServlet {
             req.getSession().setAttribute("user", salesRepresentative);
             resp.sendRedirect(req.getContextPath() + "/sales");
         } catch (SalesRepresentativeNotFoundException e) {
-            e.printStackTrace();
+            super.addNotifcation(req, new Notifier(Notifier.Type.DANGER, "Der fandtes ingen Salgsassistenter med denne e-mail."));
+            resp.sendRedirect(req.getContextPath() + "/authenticate");
         } catch (SalesRepresentativeNonMatchingPasswordException e) {
-            e.printStackTrace();
+            super.addNotifcation(req, new Notifier(Notifier.Type.DANGER, "Kodeordet var forkert."));
+            resp.sendRedirect(req.getContextPath() + "/authenticate");
         }
     }
 }

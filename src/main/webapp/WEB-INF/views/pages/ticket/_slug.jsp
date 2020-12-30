@@ -93,6 +93,11 @@
                         </p><button type="submit" class="btn btn-primary">Svar</button>
                     </section>
                 </form>
+                <c:if test="${sessionScope.user.type == 'SALES_REPRESENTATIVE'}">
+                    <section class="footer justify-content-end d-flex align-content-center">
+                        <p class="m-0 text-uppercase small font-weight-bold">Du er logget ind som Salgsassistent</p>
+                    </section>
+                </c:if>
             </article>
         </section>
     </div>

@@ -9,6 +9,7 @@ import domain.order.dao.OrderDAO;
 import domain.user.UserRepository;
 import domain.user.dao.UserDAO;
 import infrastructure.Database;
+import web.plugins.Notifier;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -55,5 +56,9 @@ public class BaseServlet extends HttpServlet {
         req.setAttribute("content", content);
 
         req.getRequestDispatcher("/WEB-INF/views/base.jsp").forward(req, resp);
+    }
+
+    protected void addNotifcation(HttpServletRequest req, Notifier notifier) {
+        req.getSession().setAttribute("notifier", notifier);
     }
 }

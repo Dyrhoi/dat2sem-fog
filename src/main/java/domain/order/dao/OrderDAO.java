@@ -285,7 +285,7 @@ public class OrderDAO implements OrderRepository {
 
             int offer = 0;
             //Get offer for order
-            stmt = conn.prepareStatement("SELECT offer FROM offers INNER JOIN orders ON orders.uuid = offers.order_uuid WHERE orders.token = ? ORDER BY timestamp DESC;");
+            stmt = conn.prepareStatement("SELECT offer FROM offers INNER JOIN orders ON orders.uuid = offers.order_uuid WHERE orders.token = ? ORDER BY offers.timestamp DESC;");
             stmt.setString(1, token);
             rs = stmt.executeQuery();
             if (rs.next()) {

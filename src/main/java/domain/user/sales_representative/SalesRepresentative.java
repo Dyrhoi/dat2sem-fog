@@ -60,7 +60,7 @@ public class SalesRepresentative extends User {
     private final byte[] secret;
 
     public SalesRepresentative(int id, String firstname, String lastname, String email, String phone, Address address, byte[] salt, byte[] secret) {
-        super(id, firstname, lastname, email, phone, address, Type.SALESMAN);
+        super(id, firstname, lastname, email, phone, address, Type.SALES_REPRESENTATIVE);
         this.salt = salt;
         this.secret = secret;
     }

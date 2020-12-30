@@ -32,7 +32,7 @@ public class TicketServlet extends BaseServlet {
                 req.setAttribute("ticket", ticket);
                 super.render("Sag #UUID - Fog", "ticket/_slug", req, resp);
             } catch (OrderNotFoundException e) {
-                e.printStackTrace();
+                resp.sendError(404, "Vi kunne ikke finde ordren, prøv igen.");
             }
         }
     }
@@ -69,7 +69,7 @@ public class TicketServlet extends BaseServlet {
                 api.updateTicket(slug, ticketMessage);
                 resp.sendRedirect(req.getContextPath() + "/ticket/" + slug);
             } catch (OrderNotFoundException e) {
-                e.printStackTrace();
+                resp.sendError(500, "Ugyldig kundesamtale.");
             }
         }
     }
