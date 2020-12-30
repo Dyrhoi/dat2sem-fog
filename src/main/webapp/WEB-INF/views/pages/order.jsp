@@ -55,9 +55,10 @@
                 </div>
             </div>
         </section>
-
-        <section>
-            <form method="post" action="${pageContext.request.contextPath}/" id="order_form">
+    </div>
+    <section>
+        <form method="post" action="${pageContext.request.contextPath}/" id="order_form">
+            <div class="container">
                 <section>
                     <h2>Dimensioner</h2>
                     <div id="carportDimensions" class="form-group row">
@@ -179,7 +180,27 @@
                         </div>
                     </div>
                 </section>
-                <section>
+            </div>
+
+            <section class="bg-primary text-light" id="your_carport">
+                <div class="container">
+                    <div class="row">
+                        <div class="col d-flex align-items-center">
+                            <div>
+                                <h2>Din carport</h2>
+                                <p class="mb-0">Her kan du se din genereret carport plan-tegning.</p>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div id="svg-request-updater">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="container">
+                <section id="user_section">
                     <h2>Kunde</h2>
                     <div class="form-row">
                         <div class="col-md form-group">
@@ -223,7 +244,7 @@
                 <section class="d-flex justify-content-end align-items-center">
                     <button type="submit" class="btn btn-primary">Indsend forespørgsel</button>
                 </section>
-            </form>
-        </section>
-    </div>
+            </div>
+        </form>
+    </section>
 </div>

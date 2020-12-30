@@ -137,6 +137,32 @@ input[type="radio"]:checked + .image-radio .image-radio--image {
 }
 
 /*
+
+*/
+
+.bg-primary {
+    background-color:#003d76 !important;
+}
+
+#your_carport {
+    margin:45px 0;
+}
+
+#svg-request-updater svg {
+    max-width: 100%;
+    max-height: 400px;
+}
+
+#svg-request-updater svg rect, #svg-request-updater svg line {
+    stroke: #61b0fb !important;
+    fill: #03498a !important;
+}
+
+#svg-request-updater {
+    border-radius: 6px;
+}
+
+/*
 Default paddings
  */
 
