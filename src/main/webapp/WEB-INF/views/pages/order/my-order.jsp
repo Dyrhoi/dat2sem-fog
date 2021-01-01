@@ -11,15 +11,12 @@
 <div>
     <section>
         <div class="container">
-            <h1>Carport Ordre <span class="badge badge-warning">Afventer</span></h1>
-            <div class="row">
-                <div class="col-sm">
-                    <p><strong>Ordre Nr.: </strong>#${requestScope.order.uuid}</p>
-                </div>
-                <div class="col-sm text-right">
-                    <p><strong>Ordre afgivet:</strong> ${Util.formatDateTime(requestScope.order.date)}</p>
-                </div>
-            </div>
+            <h1>Carport Ordre</h1>
+            <p>
+                <span class="badge badge-dyrhoi border" style="background-color:${requestScope.order.status.getColorRGBA(0.2)}; border-color:${requestScope.order.status.colorRGBA} !important;">${requestScope.order.status.name}</span>
+                <strong>#${requestScope.order.uuid}</strong>.
+                Oprettet ${Util.formatDateTime(requestScope.order.date)}
+            </p>
             <h3>Kunde</h3>
             <div class="row">
                 <div class="col-sm">
