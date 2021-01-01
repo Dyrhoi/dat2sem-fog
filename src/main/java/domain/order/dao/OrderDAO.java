@@ -104,7 +104,7 @@ public class OrderDAO implements OrderRepository {
                 }
 
                 Order order = new Order(uuid, carport, shed, customer);
-                order.setDate(orderRs.getString("timestamp"));
+                order.setDate(orderRs.getTimestamp("timestamp").toLocalDateTime());
                 orders.add(order);
             }
         } catch (SQLException e) {
@@ -131,6 +131,7 @@ public class OrderDAO implements OrderRepository {
             //Get ID's
             int customerId;
             int carportId;
+            LocalDateTime date;
             String token;
             stmt = conn.prepareStatement("SELECT * FROM orders WHERE uuid = ?");
             stmt.setString(1, uuid.toString());
@@ -141,6 +142,7 @@ public class OrderDAO implements OrderRepository {
                 customerId = rs.getInt("customers_id");
                 carportId = rs.getInt("carports_id");
                 token = rs.getString("token");
+                date = rs.getTimestamp("timestamp").toLocalDateTime();
             } else {
                 throw new OrderNotFoundException();
             }
@@ -201,6 +203,7 @@ public class OrderDAO implements OrderRepository {
             }
 
             Order order = new Order(uuid, carport, shed, customer);
+            order.setDate(date);
             order.setOffer(offer);
             order.setToken(token);
             return order;
@@ -222,6 +225,7 @@ public class OrderDAO implements OrderRepository {
             //Get ID's
             int customerId;
             int carportId;
+            LocalDateTime date;
             UUID uuid;
             stmt = conn.prepareStatement("SELECT * FROM orders WHERE token = ?");
             stmt.setString(1, token);
@@ -232,6 +236,7 @@ public class OrderDAO implements OrderRepository {
                 customerId = rs.getInt("customers_id");
                 carportId = rs.getInt("carports_id");
                 uuid = UUID.fromString(rs.getString("uuid"));
+                date = rs.getTimestamp("timestamp").toLocalDateTime();
             } else {
                 throw new OrderNotFoundException();
             }
@@ -295,6 +300,7 @@ public class OrderDAO implements OrderRepository {
             Order order = new Order(uuid, carport, shed, customer);
             order.setOffer(offer);
             order.setToken(token);
+            order.setDate(date);
             return order;
         } catch (SQLException e) {
             e.printStackTrace();

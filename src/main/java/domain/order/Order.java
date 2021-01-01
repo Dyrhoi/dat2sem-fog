@@ -4,6 +4,8 @@ import domain.carport.Carport;
 import domain.user.customer.Customer;
 import domain.carport.Shed;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -14,7 +16,7 @@ public class Order {
     private final Carport carport;
     private final Shed shed;
     private final Customer customer;
-    private String date;
+    private LocalDateTime date;
     private String token;
     private int offer;
 
@@ -41,11 +43,11 @@ public class Order {
         return shed;
     }
 
-    public String getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 

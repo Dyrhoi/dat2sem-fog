@@ -67,7 +67,7 @@ public class TicketServlet extends BaseServlet {
                 TicketMessage ticketMessage = new TicketMessage(safeHTMLContent, user, null);
 
                 api.updateTicket(slug, ticketMessage);
-                resp.sendRedirect(req.getContextPath() + "/ticket/" + slug);
+                resp.sendRedirect(req.getContextPath() + "/order/my-order/" + slug);
             } catch (OrderNotFoundException e) {
                 resp.sendError(500, "Ugyldig kundesamtale.");
             }

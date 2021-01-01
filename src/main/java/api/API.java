@@ -68,4 +68,8 @@ public class API {
     public String getSVGDrawing(Carport carport) {
         return new DrawCarport(carport).drawSVGWithViewBox();
     }
+
+    public Order getOrder(String token) throws OrderNotFoundException {
+        return orderRepository.getOrder(token);
+    }
 }
