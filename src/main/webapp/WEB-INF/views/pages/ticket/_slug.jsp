@@ -37,6 +37,9 @@
                                 <c:when test="${eventOrMessage.getScope() == 'ORDER_CREATED'}">
                                     Ordren blev oprettet af <c:out value="${eventOrMessage.getAuthor().getFullName()}" />
                                 </c:when>
+                                <c:when test="${eventOrMessage.getScope() == 'ORDER_UPDATED'}">
+                                    Ordren blev ændret af <c:out value="${eventOrMessage.getAuthor().getFullName()}" />
+                                </c:when>
                                 <c:when test="${eventOrMessage.getScope() == 'OFFER_SENT'}">
                                     Noget andet tekst.
                                 </c:when>

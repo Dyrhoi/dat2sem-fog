@@ -15,6 +15,7 @@ import domain.order.OrderRepository;
 import domain.carport.Shed;
 import domain.user.customer.exceptions.CustomerNotFoundException;
 import domain.user.exceptions.UserNotFoundException;
+import domain.user.sales_representative.SalesRepresentative;
 import infrastructure.Database;
 
 import java.sql.*;
@@ -464,47 +465,60 @@ public class OrderDAO implements OrderRepository {
     }
 
     @Override
-    public int updateOrder(int id, Carport carport, Shed shed) {
+    public int updateOrder(int id, Carport carport, Shed shed, Order order, SalesRepresentative updatedBy) {
         try (Connection conn = database.getConnection()) {
             conn.setAutoCommit(false);
-            PreparedStatement stmt;
-            stmt = conn.prepareStatement("UPDATE carports SET length = ?, width = ?, roof_type = ?, roof_material = ?, angle = ? WHERE id =" + id);
-            stmt.setInt(1, carport.getLength());
-            stmt.setInt(2, carport.getWidth());
-            stmt.setString(3, carport.getRoof().toString());
-            stmt.setInt(4, carport.getRoof_material());
-            stmt.setInt(5, carport.getRoofAngle());
-            stmt.executeUpdate();
-            stmt.close();
+            try {
+                PreparedStatement stmt;
+                stmt = conn.prepareStatement("UPDATE carports SET length = ?, width = ?, roof_type = ?, roof_material = ?, angle = ? WHERE id =" + id);
+                stmt.setInt(1, carport.getLength());
+                stmt.setInt(2, carport.getWidth());
+                stmt.setString(3, carport.getRoof().toString());
+                stmt.setInt(4, carport.getRoof_material());
+                stmt.setInt(5, carport.getRoofAngle());
+                stmt.executeUpdate();
+                stmt.close();
 
-            //TODO: MAKE PREPARED STATEMENTS PREPARED STATEMENTS :)
+                //TODO: MAKE PREPARED STATEMENTS PREPARED STATEMENTS :)
 
-            if (shed == null) {
-                stmt = conn.prepareStatement("DELETE FROM sheds WHERE carports_id =" + id);
-            }
-            else {
-                stmt = conn.prepareStatement("SELECT COUNT(1) FROM sheds WHERE carports_id = " + id);
-                ResultSet rs = stmt.executeQuery();
-                if (rs.next()) {
-                    if (rs.getInt(1) == 1) {
-                        stmt = conn.prepareStatement("UPDATE sheds SET length = ?, width = ? WHERE carports_id =" + id);
-                        stmt.setInt(1, shed.getLength());
-                        stmt.setInt(2, shed.getWidth());
-                    }
-                    else {
-                        stmt = conn.prepareStatement("INSERT INTO sheds (width, length, carports_id) VALUES(?,?,?)");
-                        stmt.setInt(1, shed.getWidth());
-                        stmt.setInt(2, shed.getLength());
-                        stmt.setInt(3, id);
+                if (shed == null) {
+                    stmt = conn.prepareStatement("DELETE FROM sheds WHERE carports_id =" + id);
+                }
+                else {
+                    stmt = conn.prepareStatement("SELECT COUNT(1) FROM sheds WHERE carports_id = " + id);
+                    ResultSet rs = stmt.executeQuery();
+                    if (rs.next()) {
+                        if (rs.getInt(1) == 1) {
+                            stmt = conn.prepareStatement("UPDATE sheds SET length = ?, width = ? WHERE carports_id =" + id);
+                            stmt.setInt(1, shed.getLength());
+                            stmt.setInt(2, shed.getWidth());
+                        }
+                        else {
+                            stmt = conn.prepareStatement("INSERT INTO sheds (width, length, carports_id) VALUES(?,?,?)");
+                            stmt.setInt(1, shed.getWidth());
+                            stmt.setInt(2, shed.getLength());
+                            stmt.setInt(3, id);
+                        }
                     }
                 }
+
+                stmt.executeUpdate();
+
+                //Ticket creation, add event and message (order note)
+                stmt = conn.prepareStatement("INSERT INTO order_events (author_id, scope, order_token) VALUES (?, ?, ?)");
+                stmt.setInt(1, updatedBy.getId());
+                stmt.setString(2, TicketEvent.EventType.ORDER_UPDATED.toString());
+                stmt.setString(3, order.getToken());
+
+                stmt.executeUpdate();
+            } catch (SQLException e) {
+                //error with sql statements... Roll back
+                conn.rollback();
+            } finally {
+                conn.setAutoCommit(true);
             }
-            stmt.executeUpdate();
-            stmt.close();
-
-            conn.setAutoCommit(true);
-
         } catch (SQLException throwables) {
+            //Connection issues...
             throwables.printStackTrace();
         }
         return -1;

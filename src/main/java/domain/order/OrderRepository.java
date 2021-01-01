@@ -6,6 +6,7 @@ import domain.order.exceptions.OrderNotFoundException;
 import domain.order.exceptions.TicketNotFoundException;
 import domain.order.ticket.Ticket;
 import domain.order.ticket.TicketMessage;
+import domain.user.sales_representative.SalesRepresentative;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -18,7 +19,7 @@ public interface OrderRepository {
 
     OrderFactory createOrder();
 
-    int updateOrder(int id, Carport carport, Shed shed);
+    int updateOrder(int id, Carport carport, Shed shed, Order order, SalesRepresentative updatedBy);
 
     int getCarportIdFromUuid(UUID uuid);
   
