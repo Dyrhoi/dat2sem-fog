@@ -63,6 +63,8 @@ $(".ql-toolbar button").on('click', function() {
 })
 
 function refreshSVG() {
+   if(!$("#order_form").length)
+      return;
    if(svgRequest != null)
       svgRequest.abort();
 

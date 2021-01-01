@@ -1,4 +1,4 @@
-package web.servlets.pages;
+package web.servlets.order;
 
 import api.Util;
 import domain.carport.Carport;
@@ -105,7 +105,7 @@ public class OrderServlet extends BaseServlet {
             orderFactory.setToken(token);
 
             Order order = orderFactory.validateAndCommit();
-            resp.sendRedirect(req.getContextPath() + "/ticket/" + order.getToken());
+            resp.sendRedirect(req.getContextPath() + "/order/thank-you/" + order.getToken());
         } catch (ValidationErrorException e) {
             Notifier notifier = new Notifier(Notifier.Type.DANGER, "Vi kunne ikke oprette ordren, disse inputs va ikke udfyldt korrekt.", e);
             super.addNotifcation(req, notifier);
