@@ -175,6 +175,9 @@ public class OrderDAO implements OrderRepository {
                 shed = new Shed(shedId, shedWidth, shedLength);
             }
 
+            if(carport != null)
+                carport.setShed(shed);
+
             //Get Customer
             stmt = conn.prepareStatement("SELECT * FROM users INNER JOIN customers ON user_id = users.id WHERE users.id = ?");
             stmt.setInt(1, customerId);
@@ -268,6 +271,9 @@ public class OrderDAO implements OrderRepository {
                 int shedLength = rs.getInt("length");
                 shed = new Shed(shedId, shedWidth, shedLength);
             }
+
+            if(carport != null)
+                carport.setShed(shed);
 
             //Get Customer
             stmt = conn.prepareStatement("SELECT * FROM users INNER JOIN customers ON user_id = users.id WHERE users.id = ?");

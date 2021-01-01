@@ -14,21 +14,65 @@
             <h1>Carport Ordre <span class="badge badge-warning">Afventer</span></h1>
             <div class="row">
                 <div class="col-sm">
-                    <p>Ordre Nr.: <strong>#${requestScope.order.uuid}</strong></p>
+                    <p><strong>Ordre Nr.: </strong>#${requestScope.order.uuid}</p>
                 </div>
-                <div class="col-sm">
-                    <p>Ordre afgivet: <strong>#${Util.formatDateTime(requestScope.order.date)}</strong></p>
+                <div class="col-sm text-right">
+                    <p><strong>Ordre afgivet:</strong> ${Util.formatDateTime(requestScope.order.date)}</p>
                 </div>
             </div>
+            <h3>Kunde</h3>
+            <div class="row">
+                <div class="col-sm">
+                    <p>
+                        <strong>Navn:</strong> ${requestScope.order.customer.fullName}
+                        <br>
+                        <br>
+                        <strong>E-mail:</strong> ${requestScope.order.customer.email}
+                        <br>
+                        <strong>Tlf. nr.:</strong> ${requestScope.order.customer.phone}
+                    </p>
+                    <p class="mb-0">
+                        <strong>Addresse:</strong> ${requestScope.order.customer.address.address}
+                        <br>
+                        <strong>Postnr.:</strong> ${requestScope.order.customer.address.postalCode}
+                        <br>
+                        <strong>By:</strong> ${requestScope.order.customer.address.city}
+                    </p>
+                </div>
+            </div>
+
         </div>
     </section>
-    <section class="bg-primary text-light" id="your_carport">
+    <section class="bg-light" id="your_carport">
         <div class="container">
             <div class="row">
                 <div class="col d-flex align-items-center">
                     <div>
                         <h2>Din carport</h2>
-                        <p class="mb-0">Her kan du se din genereret carport plan-tegning.</p>
+                        <p>
+                            Carport: ${requestScope.order.carport.length} X ${requestScope.order.carport.width}
+                            <br>
+                            Overdække: <c:choose>
+                                <c:when test="${requestScope.order.carport.roof == 'FLAT'}">
+                                    Fladt tag.
+                                </c:when>
+                                <c:otherwise>
+                                    Med rejsning.
+                                </c:otherwise>
+                            </c:choose>
+                            <br>
+                            Tagmateriale:
+                            <br>
+                            Skur:
+                            <c:choose>
+                                <c:when test="${requestScope.order.carport.shed != null}">
+                                    ${requestScope.order.carport.shed.length} X ${requestScope.order.carport.shed.width}
+                                </c:when>
+                                <c:otherwise>
+                                    N/A
+                                </c:otherwise>
+                            </c:choose>
+                        </p>
                     </div>
                 </div>
                 <div class="col">

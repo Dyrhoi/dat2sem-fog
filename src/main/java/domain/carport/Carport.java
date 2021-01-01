@@ -35,6 +35,10 @@ public class Carport extends Applet {
         this.roofAngle = roofAngle;
     }
 
+    public void setShed(Shed shed) {
+        this.shed = shed;
+    }
+
     public int getWidth() { return width; }
 
     public int getLength() { return length; }
