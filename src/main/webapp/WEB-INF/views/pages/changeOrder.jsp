@@ -176,6 +176,8 @@
                 </c:choose>
                 </span>
             </p>
+            <input hidden name="uuid" value="${requestScope.order.uuid}">
+            <input hidden name="action" value="update-order">
             <button class="btn btn-success" type="submit">Gem</button>
             <button class="btn btn-danger" type="button" onclick="location.href='${pageContext.request.contextPath}/sales/orders/${requestScope.order.uuid}'">Annuller</button>
         </div>

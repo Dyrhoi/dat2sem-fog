@@ -62,8 +62,9 @@
                                 <c:choose>
                                     <c:when test="${order.salesRepresentative == null}">
                                         <form method="post" action="${pageContext.request.contextPath}/sales/orders" id="rep-form">
-                                            <a href="javascript:{}" onclick="document.getElementById('rep-form').submit(); return false;"><c:out value="Tag ordre"/></a>
+                                            <a href="javascript:{}" onclick="document.getElementById('rep-form').submit(); return false;">Tag ordre</a>
                                             <input type="hidden" name="uuid" value="${order.uuid}"/>
+                                            <input hidden name="action" value="update-salesrep">
                                         </form>
                                     </c:when>
                                     <c:otherwise>

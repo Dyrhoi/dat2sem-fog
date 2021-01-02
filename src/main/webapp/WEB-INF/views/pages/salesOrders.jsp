@@ -60,6 +60,8 @@
                                 value="${requestScope.order.offer}"/></span>
                     </div>
                     <div class="text-right">
+                        <input hidden name="uuid" value="${requestScope.order.uuid}">
+                        <input hidden name="action" value="update-offer">
                         <button class="btn btn-outline-success pull-right" type="submit" name="order-offer">Send
                             tilbud
                         </button>

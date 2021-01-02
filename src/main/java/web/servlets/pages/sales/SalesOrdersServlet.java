@@ -18,10 +18,10 @@ import java.util.UUID;
 
 @WebServlet({"/sales/orders", "/sales/orders/*"})
 public class SalesOrdersServlet extends BaseServlet {
-    String slug;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    String slug;
         /*
          * UUID IS SET IN URL
          * */
@@ -69,19 +69,35 @@ public class SalesOrdersServlet extends BaseServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        UUID uuid = UUID.fromString(slug);
-        try {
-            req.setAttribute("slug", slug);
-            Order order = api.getOrder(uuid);
+        String action = req.getParameter("action");
+        UUID uuid = null;
 
-            if (req.getParameter("order-offer") != null) {
-                int offer = Integer.parseInt(req.getParameter("offer"));
-                try {
-                    api.updateOffer(uuid, offer);
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            } else {
+        if (action.equals("update-offer")) {
+            int offer = Integer.parseInt(req.getParameter("offer"));
+            uuid = UUID.fromString(req.getParameter("uuid"));
+            try {
+                api.updateOffer(uuid, offer);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+        else if (action.equals("update-salesrep")) {
+            try {
+                uuid = UUID.fromString(req.getParameter("uuid"));
+                Order order = null;
+                order = api.getOrder(uuid);
+                SalesRepresentative salesRepresentative = (SalesRepresentative) req.getSession().getAttribute("user");
+                int ret = api.updateSalesRep(order, salesRepresentative);
+                resp.sendRedirect(req.getContextPath() + "/sales/orders");
+                return;
+            } catch (OrderNotFoundException | SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (action.equals("update-order")) {
+            try {
+                uuid = UUID.fromString(req.getParameter("uuid"));
+                Order order = api.getOrder(uuid);
                 int carportWidth;
                 int carportLength;
                 Carport.roofTypes roofType;
@@ -123,9 +139,14 @@ public class SalesOrdersServlet extends BaseServlet {
                 int carportId = api.getCarportIdFromUuid(uuid);
                 api.updateOrder(carportId, carport, shed, order, salesRepresentative);
             }
-            resp.sendRedirect(slug);
-        } catch (OrderNotFoundException e) {
-            resp.sendError(404, "Kunne ikke opdatere den her ordre, da den ikke kunne findes i systemet.");
+            catch (OrderNotFoundException e) {
+                resp.sendError(404, "Kunne ikke opdatere den her ordre, da den ikke kunne findes i systemet.");
+            }
+
         }
+        else {
+            resp.sendError(500, "NO ACTION FOUND!");
+        }
+        resp.sendRedirect(req.getContextPath() + "/sales/orders/" + uuid.toString());
     }
 }
