@@ -137,6 +137,48 @@ input[type="radio"]:checked + .image-radio .image-radio--image {
 }
 
 /*
+
+*/
+
+.bg-primary {
+    background-color:#003d76 !important;
+}
+
+#your_carport {
+    margin:45px 0;
+}
+
+#your_carport.bg-light #svg-request-updater svg rect, #your_carport.bg-light #svg-request-updater svg line {
+    stroke: #2f2f2f !important;
+    fill: #ffffff !important;
+}
+
+.badge-dyrhoi {
+    padding:5px 12px;
+    font-size:1em;
+    font-weight: 500;
+    line-height: 20px;
+    text-align: center;
+    white-space: nowrap;
+    border-radius: 2em;
+    color:black !important;
+}
+
+#svg-request-updater svg {
+    max-width: 100%;
+    max-height: 400px;
+}
+
+#svg-request-updater svg rect, #svg-request-updater svg line {
+    stroke: #61b0fb !important;
+    fill: #03498a !important;
+}
+
+#svg-request-updater {
+    border-radius: 6px;
+}
+
+/*
 Default paddings
  */
 
@@ -163,6 +205,10 @@ article.message section, article.reply section {
 
 article.message.alert-warning section, article.reply.alert-warning  section {
     border-bottom: 1px solid #ffc107;
+}
+
+article.message .footer, article.reply .footer {
+    background-color:#f1f8ff;
 }
 
 .ql-toolbar.ql-snow {

@@ -1,6 +1,7 @@
 package api;
 
 import domain.carport.Carport;
+import domain.carport.OrderMaterial;
 import domain.carport.RoofMaterial;
 import domain.carport.Shed;
 import domain.material.MaterialRepository;
@@ -10,6 +11,7 @@ import domain.order.OrderRepository;
 import domain.order.exceptions.OrderNotFoundException;
 import domain.order.ticket.Ticket;
 import domain.order.ticket.TicketMessage;
+import domain.svg.DrawCarport;
 import domain.user.UserRepository;
 import domain.user.sales_representative.*;
 
@@ -38,7 +40,7 @@ public class API {
 
     public Order getOrder(UUID uuid) throws OrderNotFoundException { return orderRepository.getOrder(uuid); }
 
-    public int updateOrder(int id, Carport carport, Shed shed){ return orderRepository.updateOrder(id, carport, shed);}
+    public int updateOrder(int id, Carport carport, Shed shed, Order order, SalesRepresentative salesRepresentative){ return orderRepository.updateOrder(id, carport, shed, order, salesRepresentative);}
 
     public int getCarportIdFromUuid(UUID uuid) {return orderRepository.getCarportIdFromUuid(uuid); }
   
@@ -62,5 +64,13 @@ public class API {
 
     public int updateSalesRep(Order order, SalesRepresentative salesRepresentative) throws SQLException { return orderRepository.updateSalesRep(order, salesRepresentative);
 
+    public List<OrderMaterial> getOrderMaterials(Order order){return materialRepository.getOrderMaterials(order);}
+
+    public String getSVGDrawing(Carport carport) {
+        return new DrawCarport(carport).drawSVGWithViewBox();
+    }
+
+    public Order getOrder(String token) throws OrderNotFoundException {
+        return orderRepository.getOrder(token);
     }
 }

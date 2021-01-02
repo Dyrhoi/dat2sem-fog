@@ -1,4 +1,5 @@
 //When page loads...
+let svgRequest = null;
 $(".custom-range").each(function () {
    updateRangeLabels(this);
 })
@@ -8,25 +9,34 @@ $(".image-radio--radio").each(function () {
    if($(this).prop("checked")) return false;
 });
 
-let toolbarOptions = [
-   ['bold', 'italic', 'underline'],
-   [{ 'list': 'ordered'}, { 'list': 'bullet' }]
-]
-let quill = new Quill('#editor', {
-   theme: 'snow',
-   placeholder: 'Skriv en besked.',
-   modules: {
-      toolbar: toolbarOptions
-   }
-});
+if($("#editor").length) {
+   //Run this if editor is on page.
+   let toolbarOptions = [
+      ['bold', 'italic', 'underline'],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }]
+   ]
+
+   let quill = new Quill('#editor', {
+      theme: 'snow',
+      placeholder: 'Skriv en besked.',
+      modules: {
+         toolbar: toolbarOptions
+      }
+   });
+}
 
 
 $('.custom-range').rangeslider({
    polyfill : false
 });
 
+refreshSVG();
 
 //Events
+$("#order_form section:not(#user_section) :input").on("change", function() {
+   refreshSVG();
+});
+
 $(".image-radio--image").click(function() {
    let targetToUpdate = $(this).parent().data("radio");
    $(`input[value='${targetToUpdate}'`).click();
@@ -51,6 +61,18 @@ $(".ql-editor").on('input paste', function() {
 $(".ql-toolbar button").on('click', function() {
    updateTicketValue();
 })
+
+function refreshSVG() {
+   if(!$("#order_form").length)
+      return;
+   if(svgRequest != null)
+      svgRequest.abort();
+
+   svgRequest = $.get(contextPath + "/api/carport-svg-drawing", $("#order_form section:not(#user_section) :input").serialize(), function (data) {
+      $("#svg-request-updater").html(data);
+      svgRequest = null;
+   });
+}
 
 function updateTicketValue() {
    let value = $(".ql-editor").html();

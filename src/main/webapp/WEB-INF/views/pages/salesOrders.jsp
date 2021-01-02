@@ -20,7 +20,8 @@
                 </svg>
             </a>
             <h3><small class="text-muted">#</small><c:out value="${requestScope.order.uuid}"/></h3>
-            <a href="${pageContext.request.contextPath}/ticket/${requestScope.order.token}"><c:out value="${requestScope.order.token}"/> </a>
+
+            <a href="<c:url value="/ticket/${requestScope.order.token}" />">Se kunde samtale.</a>
             <button class="btn btn-warning" type="button"
                     onclick="location.href='${pageContext.request.contextPath}/sales/orders/${requestScope.order.uuid}/#'">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear"

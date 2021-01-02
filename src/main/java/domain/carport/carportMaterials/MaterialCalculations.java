@@ -23,13 +23,13 @@ public class MaterialCalculations {
         private final int fittingScrewPackages;
         private final int boardBolts;
         private final int squareDiscs;
-        private final int perforatedTape = 2;
         private final int sternScrewsPackages = 1;
 
         private static final int MINIMUM_NUMBER_OF_PILLARS = 2;
-        private static final int MAXIMUM_PILLAR_DISTANCE_SIDES = 300;
-        private static final int MAXIMUM_PILLAR_DISTANCE_ENDS = 600;
-        private static final int MAXIMUM_STROP_DISTANCE = 600;
+        private static final int PILLAR_EDGE_DISTANCE_SIDES = 70;
+        private static final int PILLAR_EDGE_DISTANCE_ENDS = 140;
+        private static final int MAXIMUM_PILLAR_DISTANCE = 600;
+        private static final int MAXIMUM_STRAP_DISTANCE = 600;
         private static final int MAXIMUM_RAFTER_DISTANCE = 60;
         private static final int STERN_SIDES_LENGTH = 540;
         private static final int STERN_ENDS_LENGTH = 360;
@@ -40,23 +40,23 @@ public class MaterialCalculations {
         private static final int NUMBER_OF_SIDES = 2;
 
         public static int pillars(double length, double width) {
-            return (int) Math.ceil((length / MAXIMUM_PILLAR_DISTANCE_SIDES) + MINIMUM_NUMBER_OF_PILLARS) * pillarRows(width);
+            return (int) Math.floor(((length - PILLAR_EDGE_DISTANCE_ENDS) / MAXIMUM_PILLAR_DISTANCE) + MINIMUM_NUMBER_OF_PILLARS) * pillarRows(width);
         }
 
         public static int pillarRows(double width) {
-            return (int) Math.ceil((width / MAXIMUM_PILLAR_DISTANCE_ENDS) + MINIMUM_NUMBER_OF_PILLARS);
+            return (int) Math.floor(((width - PILLAR_EDGE_DISTANCE_SIDES) / MAXIMUM_PILLAR_DISTANCE) + MINIMUM_NUMBER_OF_PILLARS);
         }
 
         public static int straps(double length, double width) {
-            return (int) Math.ceil((length / MAXIMUM_STROP_DISTANCE) * pillarRows(width));
+            return (int) Math.ceil((length / MAXIMUM_STRAP_DISTANCE) * pillarRows(width));
         }
 
         public static int rafterRows(double width) {
-            return (int) Math.ceil((width / MAXIMUM_PILLAR_DISTANCE_ENDS) - 1);
+            return (int) Math.ceil((width / MAXIMUM_PILLAR_DISTANCE));
         }
 
         public static int rafters(double length, double width) {
-            return (int) Math.ceil((length / MAXIMUM_RAFTER_DISTANCE) * rafterRows(width));
+            return (int) Math.ceil((length / MAXIMUM_RAFTER_DISTANCE)) * rafterRows(width);
         }
 
         public static int sideSterns(double length) {
@@ -119,10 +119,6 @@ public class MaterialCalculations {
             return squareDiscs;
         }
 
-        public int getPerforatedTape() {
-            return perforatedTape;
-        }
-
         public int getSternScrewsPackages() {
             return sternScrewsPackages;
         }
@@ -132,7 +128,7 @@ public class MaterialCalculations {
         }
 
         public static int fittingScrews(int rafters) {
-            return (int) Math.ceil((rafters * NUMBER_OF_SCREWS_PER_FITTING)) / FITTING_SCREW_PACKAGE_SIZE;
+            return (int) Math.ceil((double) FITTING_SCREW_PACKAGE_SIZE / (rafters * NUMBER_OF_SCREWS_PER_FITTING));
         }
 
         public static int boardBolts(int pillars) {
@@ -166,10 +162,12 @@ public class MaterialCalculations {
         private int numberOfLargeRoofPlates;
         private int numberOfSmallRoofPlates;
         private int roofScrewPackages;
+        private int perforatedTape;
 
         private static final int ROOF_PLATE_WIDTH = 106;
         private static final int ROOF_SCREWS_PER_PLATE = 50;
         private static final int ROOF_SCREW_PACKAGE_SIZE = 200;
+        private static final int ROLLS_OF_PERFORATED_TAPE = 2;
 
         public static int roofPlates(double length) {
             return (int) Math.ceil(length / ROOF_PLATE_WIDTH);
@@ -177,6 +175,10 @@ public class MaterialCalculations {
 
         public static int roofScrews(double largeRoofPlates, double smallRoofPlates) {
             return (int) Math.ceil(((largeRoofPlates + smallRoofPlates) * ROOF_SCREWS_PER_PLATE) / ROOF_SCREW_PACKAGE_SIZE);
+        }
+
+        public int getPerforatedTape() {
+            return perforatedTape;
         }
 
         public int getNumberOfLargeRoofPlates() {
@@ -195,6 +197,7 @@ public class MaterialCalculations {
             double length = carport.getLength();
             double width = carport.getWidth();
 
+            this.perforatedTape = ROLLS_OF_PERFORATED_TAPE;
             this.numberOfLargeRoofPlates = roofPlates(length);
             this.numberOfSmallRoofPlates = 0;
             if (width > 600) {
@@ -330,7 +333,7 @@ public class MaterialCalculations {
         private final int looseWoodSides;
         private final int looseWoodEnds;
         private final int looseWoodFittings;
-        private final int pillars;
+        private final int shedPillars;
         private final int cladding;
         private final int doorWood;
         private final int doorHinges;
@@ -338,19 +341,19 @@ public class MaterialCalculations {
         private final int innerCladdingScrewPackages;
         private final int outerCladdingScrewPackages;
 
-        private static final int SHED_PILLAR_FRAME = 4;
-        private static final int MINIMUM_LOOSE_WOOD_DISTANCE_ENDS = 270;
-        private static final int MINIMUM_LOOSE_WOOD_DISTANCE_SIDES = 240;
-        private static final int LOOSE_WOOD_FITTINGS_PER_LOOSE_WOOD = 2;
-        private static final int INNER_CLADDING_WIDTH = 44;
-        private static final int OUTER_CLADDING_DIVISION_NUMBER = 2;
-        private static final int DOOR_WOOD_PIECE_Z = 1;
-        private static final int DOOR_HINGES = 2;
-        private static final int DOOR_HANDLE = 1;
-        private static final int INNERCLADDING_SCREW_PACKAGE_SIZE = 300;
-        private static final int INNERCLADDING_SCREWS_PER_CLADDING = 3;
-        private static final int OUTERCLADDING_SCREW_PACKAGE_SIZE = 400;
-        private static final int OUTERCLADDING_SCREWS_PER_CLADDING = 6;
+        public static final int STATIC_PILLAR_FOR_SHED = 1;
+        public static final int MINIMUM_LOOSE_WOOD_DISTANCE_ENDS = 270;
+        public static final int MINIMUM_LOOSE_WOOD_DISTANCE_SIDES = 240;
+        public static final int LOOSE_WOOD_FITTINGS_PER_LOOSE_WOOD = 2;
+        public static final int INNER_CLADDING_WIDTH = 44;
+        public static final int OUTER_CLADDING_DIVISION_NUMBER = 2;
+        public static final int DOOR_WOOD_PIECE_Z = 1;
+        public static final int DOOR_HINGES = 2;
+        public static final int DOOR_HANDLE = 1;
+        public static final int INNERCLADDING_SCREW_PACKAGE_SIZE = 300;
+        public static final int INNERCLADDING_SCREWS_PER_CLADDING = 3;
+        public static final int OUTERCLADDING_SCREW_PACKAGE_SIZE = 400;
+        public static final int OUTERCLADDING_SCREWS_PER_CLADDING = 6;
 
         public static int looseWoodSides(double length) {
             return (int) Math.ceil((length / MINIMUM_LOOSE_WOOD_DISTANCE_SIDES) * NUMBER_OF_SIDES);
@@ -358,6 +361,10 @@ public class MaterialCalculations {
 
         public static int looseWoodsEnds(double width) {
             return (int) Math.ceil((width / MINIMUM_LOOSE_WOOD_DISTANCE_ENDS) * NUMBER_OF_SIDES);
+        }
+
+        public static int shedPillarRows(double width) {
+            return (int) Math.ceil(width / MINIMUM_LOOSE_WOOD_DISTANCE_SIDES);
         }
 
         public static int loosWoodFittings(int looseWoodEnds, int looseWoodSides) {
@@ -386,6 +393,18 @@ public class MaterialCalculations {
             return (int) Math.ceil(outerCladding) * OUTERCLADDING_SCREWS_PER_CLADDING / OUTERCLADDING_SCREW_PACKAGE_SIZE;
         }
 
+        public static int calcShedPillarsLength(double length) {
+            return (int) Math.ceil(length / MINIMUM_LOOSE_WOOD_DISTANCE_SIDES) + STATIC_PILLAR_FOR_SHED;
+        }
+
+        public static int calcShedPillarsWidth(double width) {
+            return (int) Math.ceil(width/ MINIMUM_LOOSE_WOOD_DISTANCE_ENDS) + STATIC_PILLAR_FOR_SHED;
+        }
+
+        public static int calcShedPillars(double length, double width) {
+            return calcShedPillarsLength(length) * calcShedPillarsWidth(width);
+        }
+
         public int getLooseWoodSides() {
             return looseWoodSides;
         }
@@ -398,8 +417,8 @@ public class MaterialCalculations {
             return looseWoodFittings;
         }
 
-        public int getPillars() {
-            return pillars;
+        public int getShedPillars() {
+            return shedPillars;
         }
 
         public int getCladding() {
@@ -430,7 +449,7 @@ public class MaterialCalculations {
             double length = shed.getLength();
             double width = shed.getWidth();
 
-            this.pillars = SHED_PILLAR_FRAME;
+            this.shedPillars = calcShedPillars(length, width);
             this.looseWoodSides = looseWoodSides(length);
             this.looseWoodEnds = looseWoodsEnds(width);
             this.looseWoodFittings = loosWoodFittings(looseWoodEnds, looseWoodSides);
@@ -470,6 +489,7 @@ public class MaterialCalculations {
         MaterialCalculations.FlatRoof tmpFlatRoof = new FlatRoof(carport);
 
         //Flat Roof
+        finalList.add(new OrderMaterial(tmpFlatRoof.getPerforatedTape(), repo.get(MaterialHandler.PERFORATED_TAPE)));
         finalList.add(new OrderMaterial(tmpFlatRoof.getNumberOfLargeRoofPlates(), repo.get(MaterialHandler.ROOF_PLATE_LARGE)));
         if (tmpFlatRoof.getNumberOfSmallRoofPlates() != 0){
             finalList.add(new OrderMaterial(tmpFlatRoof.getNumberOfSmallRoofPlates(), repo.get(MaterialHandler.ROOF_PLATE_SMALL)));
@@ -499,11 +519,11 @@ public class MaterialCalculations {
 
     public static List<OrderMaterial> calcShed(ConstructionMaterialList repo, Order order){
         List<OrderMaterial> list = new ArrayList<>();
-        Shed shed = order.getShed();
+        Shed shed = order.getCarport().getShed();
 
         ShedConstructor tmpShed = new ShedConstructor(shed);
 
-        list.add(new OrderMaterial(tmpShed.getPillars(), repo.get(MaterialHandler.PILLARS_FLAT_ROOF)));
+        list.add(new OrderMaterial(tmpShed.getShedPillars(), repo.get(MaterialHandler.PILLARS_FLAT_ROOF)));
         list.add(new OrderMaterial(tmpShed.getLooseWoodSides(), repo.get(MaterialHandler.LOOSE_WOOD_SIDES)));
         list.add(new OrderMaterial(tmpShed.getLooseWoodEnds(), repo.get(MaterialHandler.LOOSE_WOOD_ENDS)));
         list.add(new OrderMaterial(tmpShed.getLooseWoodFittings(), repo.get(MaterialHandler.ANGLED_FITTING_FOR_LOOSE_WOOD)));

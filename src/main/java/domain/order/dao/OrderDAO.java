@@ -50,7 +50,8 @@ public class OrderDAO implements OrderRepository {
             int carportId;
             String token;
             User user = null;
-            PreparedStatement orderStmt = conn.prepareStatement("SELECT * FROM orders ORDER BY timestamp DESC");
+            Order.Status status;
+            PreparedStatement orderStmt = conn.prepareStatement("SELECT * FROM orders INNER JOIN order_status on orders.order_status_id = order_status.id ORDER BY timestamp DESC");
             ResultSet orderRs = orderStmt.executeQuery();
 
             while (orderRs.next()) {
@@ -66,6 +67,7 @@ public class OrderDAO implements OrderRepository {
 
                 } catch (UserNotFoundException e) { }
 
+                status = new Order.Status(orderRs.getInt("order_status.id"), orderRs.getString("order_status.name"), orderRs.getString("order_status.color_rgb"));
 
                 stmt = conn.prepareStatement("SELECT * FROM carports WHERE id = ?");
                 stmt.setInt(1, carportId);
@@ -78,7 +80,7 @@ public class OrderDAO implements OrderRepository {
                     int roofAngle = rs.getInt("angle");
                     Carport.roofTypes roofType = Carport.roofTypes.valueOf(rs.getString("roof_type"));
                     int roof_material = rs.getInt("roof_material");
-                    carport = new Carport(carportId, carportWidth, carportLength, roofType, roofAngle, roof_material);
+                    carport = new Carport(carportId, null, carportWidth, carportLength, roofType, roofAngle, roof_material);
                 }
 
                 stmt = conn.prepareStatement("SELECT * FROM sheds WHERE carports_id = ?");
@@ -111,10 +113,12 @@ public class OrderDAO implements OrderRepository {
                     customer = new Customer(customerId, firstname, lastname, email, phone, customerAddress);
                 }
 
-                Order order = new Order(uuid, carport, shed, customer);
-                order.setDate(orderRs.getString("timestamp"));
+                
+                Order order = new Order(uuid, carport, shed, customer, status);
                 order.setSalesRepresentative(salesRepresentative);
+                order.setDate(orderRs.getTimestamp("timestamp").toLocalDateTime());
                 orders.add(order);
+              
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -140,8 +144,10 @@ public class OrderDAO implements OrderRepository {
             //Get ID's
             int customerId;
             int carportId;
+            LocalDateTime date;
             String token;
-            stmt = conn.prepareStatement("SELECT * FROM orders WHERE uuid = ?");
+            Order.Status status;
+            stmt = conn.prepareStatement("SELECT * FROM orders INNER JOIN order_status on orders.order_status_id = order_status.id WHERE uuid = ?");
             stmt.setString(1, uuid.toString());
 
             rs = stmt.executeQuery();
@@ -150,6 +156,8 @@ public class OrderDAO implements OrderRepository {
                 customerId = rs.getInt("customers_id");
                 carportId = rs.getInt("carports_id");
                 token = rs.getString("token");
+                status = new Order.Status(rs.getInt("order_status.id"), rs.getString("order_status.name"), rs.getString("order_status.color_rgb"));
+                date = rs.getTimestamp("timestamp").toLocalDateTime();
             } else {
                 throw new OrderNotFoundException();
             }
@@ -166,7 +174,7 @@ public class OrderDAO implements OrderRepository {
                 int roofAngle = rs.getInt("angle");
                 Carport.roofTypes roofType = Carport.roofTypes.valueOf(rs.getString("roof_type"));
                 int roof_material = rs.getInt("roof_material");
-                carport = new Carport(carportId, carportWidth, carportLength, roofType, roofAngle, roof_material);
+                carport = new Carport(carportId, null, carportWidth, carportLength, roofType, roofAngle, roof_material);
             }
 
             //Get Shed
@@ -181,6 +189,9 @@ public class OrderDAO implements OrderRepository {
                 int shedLength = rs.getInt("length");
                 shed = new Shed(shedId, shedWidth, shedLength);
             }
+
+            if(carport != null)
+                carport.setShed(shed);
 
             //Get Customer
             stmt = conn.prepareStatement("SELECT * FROM users INNER JOIN customers ON user_id = users.id WHERE users.id = ?");
@@ -209,7 +220,8 @@ public class OrderDAO implements OrderRepository {
                 offer = rs.getInt("offer");
             }
 
-            Order order = new Order(uuid, carport, shed, customer);
+            Order order = new Order(uuid, carport, shed, customer, status);
+            order.setDate(date);
             order.setOffer(offer);
             order.setToken(token);
             return order;
@@ -231,8 +243,10 @@ public class OrderDAO implements OrderRepository {
             //Get ID's
             int customerId;
             int carportId;
+            LocalDateTime date;
             UUID uuid;
-            stmt = conn.prepareStatement("SELECT * FROM orders WHERE token = ?");
+            Order.Status status;
+            stmt = conn.prepareStatement("SELECT * FROM orders INNER JOIN order_status on orders.order_status_id = order_status.id WHERE token = ?");
             stmt.setString(1, token);
 
             rs = stmt.executeQuery();
@@ -241,6 +255,8 @@ public class OrderDAO implements OrderRepository {
                 customerId = rs.getInt("customers_id");
                 carportId = rs.getInt("carports_id");
                 uuid = UUID.fromString(rs.getString("uuid"));
+                date = rs.getTimestamp("timestamp").toLocalDateTime();
+                status = new Order.Status(rs.getInt("order_status.id"), rs.getString("order_status.name"), rs.getString("order_status.color_rgb"));
             } else {
                 throw new OrderNotFoundException();
             }
@@ -257,7 +273,7 @@ public class OrderDAO implements OrderRepository {
                 int roofAngle = rs.getInt("angle");
                 Carport.roofTypes roofType = Carport.roofTypes.valueOf(rs.getString("roof_type"));
                 int roof_material = rs.getInt("roof_material");
-                carport = new Carport(carportId, carportWidth, carportLength, roofType, roofAngle, roof_material);
+                carport = new Carport(carportId, null, carportWidth, carportLength, roofType, roofAngle, roof_material);
             }
 
             //Get Shed
@@ -272,6 +288,9 @@ public class OrderDAO implements OrderRepository {
                 int shedLength = rs.getInt("length");
                 shed = new Shed(shedId, shedWidth, shedLength);
             }
+
+            if(carport != null)
+                carport.setShed(shed);
 
             //Get Customer
             stmt = conn.prepareStatement("SELECT * FROM users INNER JOIN customers ON user_id = users.id WHERE users.id = ?");
@@ -294,16 +313,17 @@ public class OrderDAO implements OrderRepository {
 
             int offer = 0;
             //Get offer for order
-            stmt = conn.prepareStatement("SELECT offer FROM offers INNER JOIN orders ON orders.uuid = offers.order_uuid WHERE orders.token = ? ORDER BY 'timestamp' DESC;");
+            stmt = conn.prepareStatement("SELECT offer FROM offers INNER JOIN orders ON orders.uuid = offers.order_uuid WHERE orders.token = ? ORDER BY offers.timestamp DESC;");
             stmt.setString(1, token);
             rs = stmt.executeQuery();
             if (rs.next()) {
                 offer = rs.getInt("offer");
             }
 
-            Order order = new Order(uuid, carport, shed, customer);
+            Order order = new Order(uuid, carport, shed, customer, status);
             order.setOffer(offer);
             order.setToken(token);
+            order.setDate(date);
             return order;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -461,47 +481,60 @@ public class OrderDAO implements OrderRepository {
     }
 
     @Override
-    public int updateOrder(int id, Carport carport, Shed shed) {
+    public int updateOrder(int id, Carport carport, Shed shed, Order order, SalesRepresentative updatedBy) {
         try (Connection conn = database.getConnection()) {
             conn.setAutoCommit(false);
-            PreparedStatement stmt;
-            stmt = conn.prepareStatement("UPDATE carports SET length = ?, width = ?, roof_type = ?, roof_material = ?, angle = ? WHERE id =" + id);
-            stmt.setInt(1, carport.getLength());
-            stmt.setInt(2, carport.getWidth());
-            stmt.setString(3, carport.getRoof().toString());
-            stmt.setInt(4, carport.getRoof_material());
-            stmt.setInt(5, carport.getRoofAngle());
-            stmt.executeUpdate();
-            stmt.close();
+            try {
+                PreparedStatement stmt;
+                stmt = conn.prepareStatement("UPDATE carports SET length = ?, width = ?, roof_type = ?, roof_material = ?, angle = ? WHERE id =" + id);
+                stmt.setInt(1, carport.getLength());
+                stmt.setInt(2, carport.getWidth());
+                stmt.setString(3, carport.getRoof().toString());
+                stmt.setInt(4, carport.getRoof_material());
+                stmt.setInt(5, carport.getRoofAngle());
+                stmt.executeUpdate();
+                stmt.close();
 
-            //TODO: MAKE PREPARED STATEMENTS PREPARED STATEMENTS :)
+                //TODO: MAKE PREPARED STATEMENTS PREPARED STATEMENTS :)
 
-            if (shed == null) {
-                stmt = conn.prepareStatement("DELETE FROM sheds WHERE carports_id =" + id);
-            }
-            else {
-                stmt = conn.prepareStatement("SELECT COUNT(1) FROM sheds WHERE carports_id = " + id);
-                ResultSet rs = stmt.executeQuery();
-                if (rs.next()) {
-                    if (rs.getInt(1) == 1) {
-                        stmt = conn.prepareStatement("UPDATE sheds SET length = ?, width = ? WHERE carports_id =" + id);
-                        stmt.setInt(1, shed.getLength());
-                        stmt.setInt(2, shed.getWidth());
-                    }
-                    else {
-                        stmt = conn.prepareStatement("INSERT INTO sheds (width, length, carports_id) VALUES(?,?,?)");
-                        stmt.setInt(1, shed.getWidth());
-                        stmt.setInt(2, shed.getLength());
-                        stmt.setInt(3, id);
+                if (shed == null) {
+                    stmt = conn.prepareStatement("DELETE FROM sheds WHERE carports_id =" + id);
+                }
+                else {
+                    stmt = conn.prepareStatement("SELECT COUNT(1) FROM sheds WHERE carports_id = " + id);
+                    ResultSet rs = stmt.executeQuery();
+                    if (rs.next()) {
+                        if (rs.getInt(1) == 1) {
+                            stmt = conn.prepareStatement("UPDATE sheds SET length = ?, width = ? WHERE carports_id =" + id);
+                            stmt.setInt(1, shed.getLength());
+                            stmt.setInt(2, shed.getWidth());
+                        }
+                        else {
+                            stmt = conn.prepareStatement("INSERT INTO sheds (width, length, carports_id) VALUES(?,?,?)");
+                            stmt.setInt(1, shed.getWidth());
+                            stmt.setInt(2, shed.getLength());
+                            stmt.setInt(3, id);
+                        }
                     }
                 }
+
+                stmt.executeUpdate();
+
+                //Ticket creation, add event and message (order note)
+                stmt = conn.prepareStatement("INSERT INTO order_events (author_id, scope, order_token) VALUES (?, ?, ?)");
+                stmt.setInt(1, updatedBy.getId());
+                stmt.setString(2, TicketEvent.EventType.ORDER_UPDATED.toString());
+                stmt.setString(3, order.getToken());
+
+                stmt.executeUpdate();
+            } catch (SQLException e) {
+                //error with sql statements... Roll back
+                conn.rollback();
+            } finally {
+                conn.setAutoCommit(true);
             }
-            stmt.executeUpdate();
-            stmt.close();
-
-            conn.setAutoCommit(true);
-
         } catch (SQLException throwables) {
+            //Connection issues...
             throwables.printStackTrace();
         }
         return -1;
@@ -644,7 +677,6 @@ public class OrderDAO implements OrderRepository {
     public int updateOffer(UUID uuid, int offer) throws SQLException {
         try (Connection conn = database.getConnection()) {
             PreparedStatement stmt;
-
             stmt = conn.prepareStatement("INSERT INTO offers (order_uuid, offer) VALUES (?,?)");
             stmt.setString(1, uuid.toString());
             stmt.setInt(2, offer);

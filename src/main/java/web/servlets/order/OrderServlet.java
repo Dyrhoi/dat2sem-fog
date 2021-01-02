@@ -1,10 +1,13 @@
-package web.servlets.pages;
+package web.servlets.order;
 
 import api.Util;
 import domain.carport.Carport;
+import domain.order.Order;
 import domain.user.customer.Customer;
 import domain.order.OrderFactory;
 import domain.carport.Shed;
+import validation.ValidationErrorException;
+import web.plugins.Notifier;
 import web.servlets.BaseServlet;
 
 import javax.servlet.ServletException;
@@ -74,8 +77,6 @@ public class OrderServlet extends BaseServlet {
                 roofAngle = -1;
             }
 
-            Carport carport = new Carport(id, carportWidth, carportLength, roofType, roofAngle, roof_material);
-
             //create shed
             Shed shed = null;
             if (carportHasShed) {
@@ -83,6 +84,7 @@ public class OrderServlet extends BaseServlet {
                 shedLength = Integer.parseInt(req.getParameter("shed-length"));
                 shed = new Shed(id, shedWidth, shedLength);
             }
+            Carport carport = new Carport(id, shed, carportWidth, carportLength, roofType, roofAngle, roof_material);
 
             String note = req.getParameter("note");
 
@@ -102,13 +104,12 @@ public class OrderServlet extends BaseServlet {
             String token = Util.generateSecureToken();
             orderFactory.setToken(token);
 
-            orderFactory.validateAndCommit();
-
-            //Todo:Dyrhoi - Better catch exceptions and validation.
-        } catch (Exception e){
-            e.printStackTrace();
+            Order order = orderFactory.validateAndCommit();
+            resp.sendRedirect(req.getContextPath() + "/order/thank-you/" + order.getToken());
+        } catch (ValidationErrorException e) {
+            Notifier notifier = new Notifier(Notifier.Type.DANGER, "Vi kunne ikke oprette ordren, disse inputs va ikke udfyldt korrekt.", e);
+            super.addNotifcation(req, notifier);
+            resp.sendRedirect(req.getContextPath() + "/");
         }
-
-        doGet(req, resp);
     }
 }

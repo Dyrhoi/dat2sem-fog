@@ -5,6 +5,9 @@ import domain.carport.Shed;
 import domain.user.customer.Customer;
 import domain.user.sales_representative.SalesRepresentative;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -14,16 +17,18 @@ public class Order {
     private final Carport carport;
     private final Shed shed;
     private final Customer customer;
-    private String date;
+    private LocalDateTime date;
     private String token;
     private int offer;
     private SalesRepresentative salesRepresentative;
+    private Status status;
 
-    public Order(UUID uuid, Carport carport, Shed shed, Customer customer) {
+    public Order(UUID uuid, Carport carport, Shed shed, Customer customer, Status status) {
         this.uuid = uuid;
         this.carport = carport;
         this.shed = shed;
         this.customer = customer;
+        this.status = status;
     }
 
     public UUID getUuid() {
@@ -42,16 +47,20 @@ public class Order {
         return shed;
     }
 
-    public String getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
     public String getToken() {
         return token;
+    }
+
+    public Status getStatus() {
+        return status;
     }
 
     public void setToken(String token) {
@@ -95,5 +104,37 @@ public class Order {
                 ", shed=" + shed +
                 ", customer=" + customer +
                 '}';
+    }
+
+    public static class Status {
+        private final int id;
+        private final String name;
+        private final String color;
+
+        public Status(int id, String name, String color) {
+            this.id = id;
+            this.name = name;
+            this.color = color;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getColor() {
+            return color;
+        }
+
+        public String getColorRGBA() {
+            return "rgba(" + color + ", 1)";
+        }
+
+        public String getColorRGBA(double alpha) {
+            return "rgba(" + color + ", " + alpha + ")";
+        }
     }
 }

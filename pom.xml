@@ -79,6 +79,12 @@
             <artifactId>slf4j-jdk14</artifactId>
             <version>1.7.12</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>org.jfree.svg</artifactId>
+            <version>4.1</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -69,21 +69,10 @@ public class SalesOrdersServlet extends BaseServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (slug == null) {
-            try {
-                UUID uuid = UUID.fromString(req.getParameter("uuid"));
-                Order order = api.getOrder(uuid);
-                SalesRepresentative salesRepresentative = (SalesRepresentative) req.getSession().getAttribute("user");
-                int ret = api.updateSalesRep(order, salesRepresentative);
-                resp.sendRedirect("orders");
-            } catch (OrderNotFoundException | SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        else {
-
-            UUID uuid = UUID.fromString(slug);
+        UUID uuid = UUID.fromString(slug);
+        try {
             req.setAttribute("slug", slug);
+            Order order = api.getOrder(uuid);
 
             if (req.getParameter("order-offer") != null) {
                 int offer = Integer.parseInt(req.getParameter("offer"));
@@ -92,8 +81,7 @@ public class SalesOrdersServlet extends BaseServlet {
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
-            }
-            else {
+            } else {
                 int carportWidth;
                 int carportLength;
                 Carport.roofTypes roofType;
@@ -113,14 +101,13 @@ public class SalesOrdersServlet extends BaseServlet {
                     roofType = Carport.roofTypes.ANGLED;
                     roofAngle = Integer.parseInt(req.getParameter("roof-angle"));
                     roof_material = Integer.parseInt(req.getParameter("roof_angled_material"));
-                }
-                else {
+                } else {
                     roofType = Carport.roofTypes.FLAT;
                     roof_material = Integer.parseInt(req.getParameter("roof_flat_material"));
                     roofAngle = -1;
                 }
 
-                Carport carport = new Carport(id, carportWidth, carportLength, roofType, roofAngle, roof_material);
+                Carport carport = new Carport(id, null, carportWidth, carportLength, roofType, roofAngle, roof_material);
 
                 //create shed
                 Shed shed = null;
@@ -130,11 +117,15 @@ public class SalesOrdersServlet extends BaseServlet {
                     shed = new Shed(id, shedWidth, shedLength);
                 }
 
+                SalesRepresentative salesRepresentative = (SalesRepresentative) req.getSession().getAttribute("user");
+
                 //create order
                 int carportId = api.getCarportIdFromUuid(uuid);
-                api.updateOrder(carportId, carport, shed);
+                api.updateOrder(carportId, carport, shed, order, salesRepresentative);
             }
             resp.sendRedirect(slug);
+        } catch (OrderNotFoundException e) {
+            resp.sendError(404, "Kunne ikke opdatere den her ordre, da den ikke kunne findes i systemet.");
         }
     }
 }

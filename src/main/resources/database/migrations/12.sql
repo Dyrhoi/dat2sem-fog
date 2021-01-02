@@ -64,4 +64,4 @@ update materials set description = 'Til montering af rem på stolper' where id =
 update materials set description = 'Til montering af yderste beklædning' where id = 61;
 update materials set description = 'Til montering af inderste beklædning' where id = 62;
 
-UPDATE properties SET value = 11 WHERE name = 'version';
+UPDATE properties SET value = 12 WHERE name = 'version';

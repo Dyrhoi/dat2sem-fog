@@ -18,7 +18,7 @@ public interface OrderRepository {
 
     OrderFactory createOrder();
 
-    int updateOrder(int id, Carport carport, Shed shed);
+    int updateOrder(int id, Carport carport, Shed shed, Order order, SalesRepresentative updatedBy);
 
     int getCarportIdFromUuid(UUID uuid);
   
