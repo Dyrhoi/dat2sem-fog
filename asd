@@ -1,66 +1,41 @@
-if (slug == null) {
-            try {
-                UUID uuid = UUID.fromString(req.getParameter("uuid"));
-                Order order = api.getOrder(uuid);
-                SalesRepresentative salesRepresentative = (SalesRepresentative) req.getSession().getAttribute("user");
-                int ret = api.updateSalesRep(order, salesRepresentative);
-                resp.sendRedirect("orders");
-            } catch (OrderNotFoundException | SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        else {
-
-            UUID uuid = UUID.fromString(slug);
-            req.setAttribute("slug", slug);
-
-            if (req.getParameter("order-offer") != null) {
-                int offer = Integer.parseInt(req.getParameter("offer"));
-                try {
-                    api.updateOffer(uuid, offer);
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            }
-            else {
-                int carportWidth;
-                int carportLength;
-                Carport.roofTypes roofType;
-                String activeRoofAngle;
-                int roofAngle;
-                int roof_material;
-
-                int shedWidth;
-                int shedLength;
-
-                int id = -1;
-
-                carportLength = Integer.parseInt(req.getParameter("carport-length"));
-                carportWidth = Integer.parseInt(req.getParameter("carport-width"));
-                activeRoofAngle = req.getParameter("roof-angle");
-                if (activeRoofAngle != null) {
-                    roofType = Carport.roofTypes.ANGLED;
-                    roofAngle = Integer.parseInt(req.getParameter("roof-angle"));
-                    roof_material = Integer.parseInt(req.getParameter("roof_angled_material"));
-                }
-                else {
-                    roofType = Carport.roofTypes.FLAT;
-                    roof_material = Integer.parseInt(req.getParameter("roof_flat_material"));
-                    roofAngle = -1;
-                }
-
-                Carport carport = new Carport(id, carportWidth, carportLength, roofType, roofAngle, roof_material);
-
-                //create shed
-                Shed shed = null;
-                if (req.getParameter("shed-length") != null) {
-                    shedWidth = Integer.parseInt(req.getParameter("shed-width"));
-                    shedLength = Integer.parseInt(req.getParameter("shed-length"));
-                    shed = new Shed(id, shedWidth, shedLength);
-                }
-
-                //create order
-                int carportId = api.getCarportIdFromUuid(uuid);
-                api.updateOrder(carportId, carport, shed);
-            }
-            resp.sendRedirect(slug);
+<c:if test="${requestScope.orders != null}">
+            <c:choose>
+                <c:when test="${requestScope.salesRepId != null}">
+                    <c:forEach var="order" items="${requestScope.orders}" varStatus="loop">
+                        <c:if test="${order.salesRepresentative.id == requestScope.salesRepId}">
+                            <tr class="d-lg-table-row">
+                            <th scope="row" class="text-nowrap user-id"><a href="${pageContext.request.contextPath}/sales/orders/${order.uuid}"><c:out value="${order.uuid}"/></a></th>
+                            <td class="text-nowrap"><c:out value="${order.customer.fullName}" /></td>
+                            <td class="text-nowrap"><c:out value="${order.customer.email}" /></td>
+                            <td class="text-nowrap"><c:out value="${order.customer.phone}" /></td>
+                            <td class="text-nowrap"><c:out value="${order.date}" /></td>
+                            </tr>
+                        </c:if>
+                    </c:forEach>
+                </c:when>
+                <c:otherwise>
+                    <c:forEach var="order" items="${requestScope.orders}" varStatus="loop">
+                        <tr class="d-lg-table-row">
+                            <th scope="row" class="text-nowrap user-id"><a href="${pageContext.request.contextPath}/sales/orders/${order.uuid}"><c:out value="${order.uuid}"/></a></th>
+                            <td class="text-nowrap"><c:out value="${order.customer.fullName}" /></td>
+                            <td class="text-nowrap"><c:out value="${order.customer.email}" /></td>
+                            <td class="text-nowrap"><c:out value="${order.customer.phone}" /></td>
+                            <td class="text-nowrap"><c:out value="${order.date}" /></td>
+                            <td colspan="text-nowrap">
+                                <c:choose>
+                                    <c:when test="${order.salesRepresentative == null}">
+                                        <form method="post" action="${pageContext.request.contextPath}/sales/orders" id="rep-form">
+                                            <a href="javascript:{}" onclick="document.getElementById('rep-form').submit(); return false;"><c:out value="Tag ordre"/></a>
+                                            <input type="hidden" name="uuid" value="${order.uuid}"/>
+                                        </form>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <c:out value="${order.salesRepresentative.fullName}"/>
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </c:otherwise>
+            </c:choose>
+        </c:if>

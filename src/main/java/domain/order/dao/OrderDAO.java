@@ -40,7 +40,6 @@ public class OrderDAO implements OrderRepository {
         Shed shed = null;
         Customer customer = null;
         UUID uuid;
-        SalesRepresentative salesRepresentative = null;
         try (Connection conn = database.getConnection()) {
             PreparedStatement stmt;
             ResultSet rs;
@@ -55,6 +54,7 @@ public class OrderDAO implements OrderRepository {
             ResultSet orderRs = orderStmt.executeQuery();
 
             while (orderRs.next()) {
+                SalesRepresentative salesRepresentative = null;
                 uuid = UUID.fromString(orderRs.getString("uuid"));
                 carportId = orderRs.getInt("carports_id");
                 customerId = orderRs.getInt("customers_id");
@@ -118,11 +118,14 @@ public class OrderDAO implements OrderRepository {
                 order.setSalesRepresentative(salesRepresentative);
                 order.setDate(orderRs.getTimestamp("timestamp").toLocalDateTime());
                 orders.add(order);
-              
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException();
+        }
+        for (Order ord : orders) {
+            System.out.println(ord.toString());
         }
         return orders;
     }

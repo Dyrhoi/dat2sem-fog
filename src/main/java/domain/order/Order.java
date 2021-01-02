@@ -6,8 +6,6 @@ import domain.user.customer.Customer;
 import domain.user.sales_representative.SalesRepresentative;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -103,6 +101,11 @@ public class Order {
                 ", carport=" + carport +
                 ", shed=" + shed +
                 ", customer=" + customer +
+                ", date=" + date +
+                ", token='" + token + '\'' +
+                ", offer=" + offer +
+                ", salesRepresentative=" + salesRepresentative +
+                ", status=" + status +
                 '}';
     }
 
