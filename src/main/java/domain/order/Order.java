@@ -1,8 +1,9 @@
 package domain.order;
 
 import domain.carport.Carport;
-import domain.user.customer.Customer;
 import domain.carport.Shed;
+import domain.user.customer.Customer;
+import domain.user.sales_representative.SalesRepresentative;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -19,6 +20,7 @@ public class Order {
     private LocalDateTime date;
     private String token;
     private int offer;
+    private SalesRepresentative salesRepresentative;
     private Status status;
 
     public Order(UUID uuid, Carport carport, Shed shed, Customer customer, Status status) {
@@ -71,6 +73,14 @@ public class Order {
 
     public void setOffer(int offer) {
         this.offer = offer;
+    }
+
+    public SalesRepresentative getSalesRepresentative() {
+        return salesRepresentative;
+    }
+
+    public void setSalesRepresentative(SalesRepresentative salesRepresentative) {
+        this.salesRepresentative = salesRepresentative;
     }
 
     @Override

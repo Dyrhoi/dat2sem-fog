@@ -3,7 +3,6 @@ package domain.order;
 import domain.carport.Carport;
 import domain.carport.Shed;
 import domain.order.exceptions.OrderNotFoundException;
-import domain.order.exceptions.TicketNotFoundException;
 import domain.order.ticket.Ticket;
 import domain.order.ticket.TicketMessage;
 import domain.user.sales_representative.SalesRepresentative;
@@ -27,4 +26,5 @@ public interface OrderRepository {
     Ticket updateTicket(String token, TicketMessage ticketMessage) throws OrderNotFoundException;
 
     int updateOffer(UUID uuid, int offer) throws SQLException;
+    int updateSalesRep(Order order, SalesRepresentative salesRepresentative) throws SQLException;
 }

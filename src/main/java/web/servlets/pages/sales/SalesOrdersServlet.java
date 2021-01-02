@@ -25,6 +25,7 @@ public class SalesOrdersServlet extends BaseServlet {
         /*
          * UUID IS SET IN URL
          * */
+        req.setAttribute("salesrep", null);
         if (req.getPathInfo() != null && req.getPathInfo().length() > 1) {
             if (req.getPathInfo().charAt(req.getPathInfo().length() - 1) == '/') {
                 slug = req.getPathInfo().replaceAll("/", "");
@@ -53,7 +54,7 @@ public class SalesOrdersServlet extends BaseServlet {
         else {
             List<Order> orders = api.getOrders();
             req.setAttribute("orders", orders);
-            super.render("Alle ordre - Fog", "sales", req, resp);
+            super.render("Alle ordre - Fog", "allOrders", req, resp);
         }
     }
 

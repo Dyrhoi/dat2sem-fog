@@ -9,7 +9,6 @@ import domain.order.Order;
 import domain.order.OrderFactory;
 import domain.order.OrderRepository;
 import domain.order.exceptions.OrderNotFoundException;
-import domain.order.exceptions.TicketNotFoundException;
 import domain.order.ticket.Ticket;
 import domain.order.ticket.TicketMessage;
 import domain.svg.DrawCarport;
@@ -62,6 +61,8 @@ public class API {
     }
 
     public int updateOffer(UUID uuid, int offer) throws SQLException { return orderRepository.updateOffer(uuid, offer); }
+
+    public int updateSalesRep(Order order, SalesRepresentative salesRepresentative) throws SQLException { return orderRepository.updateSalesRep(order, salesRepresentative);
 
     public List<OrderMaterial> getOrderMaterials(Order order){return materialRepository.getOrderMaterials(order);}
 

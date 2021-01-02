@@ -1,19 +1,17 @@
 package domain.order.dao;
 
 import domain.carport.Carport;
-import domain.order.exceptions.TicketNotFoundException;
+import domain.carport.Shed;
+import domain.order.Order;
+import domain.order.OrderFactory;
+import domain.order.OrderRepository;
+import domain.order.exceptions.OrderNotFoundException;
 import domain.order.ticket.Ticket;
 import domain.order.ticket.TicketEvent;
 import domain.order.ticket.TicketMessage;
 import domain.user.User;
 import domain.user.UserRepository;
 import domain.user.customer.Customer;
-import domain.order.Order;
-import domain.order.OrderFactory;
-import domain.order.exceptions.OrderNotFoundException;
-import domain.order.OrderRepository;
-import domain.carport.Shed;
-import domain.user.customer.exceptions.CustomerNotFoundException;
 import domain.user.exceptions.UserNotFoundException;
 import domain.user.sales_representative.SalesRepresentative;
 import infrastructure.Database;
@@ -21,7 +19,6 @@ import infrastructure.Database;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,6 +40,7 @@ public class OrderDAO implements OrderRepository {
         Shed shed = null;
         Customer customer = null;
         UUID uuid;
+        SalesRepresentative salesRepresentative = null;
         try (Connection conn = database.getConnection()) {
             PreparedStatement stmt;
             ResultSet rs;
@@ -51,6 +49,7 @@ public class OrderDAO implements OrderRepository {
             int customerId;
             int carportId;
             String token;
+            User user = null;
             Order.Status status;
             PreparedStatement orderStmt = conn.prepareStatement("SELECT * FROM orders INNER JOIN order_status on orders.order_status_id = order_status.id ORDER BY timestamp DESC");
             ResultSet orderRs = orderStmt.executeQuery();
@@ -60,6 +59,14 @@ public class OrderDAO implements OrderRepository {
                 carportId = orderRs.getInt("carports_id");
                 customerId = orderRs.getInt("customers_id");
                 token = orderRs.getString("token");
+                try {
+                    user = userRepository.getUser(orderRs.getInt("sales_representative_id"));
+                    if (user instanceof SalesRepresentative) {
+                        salesRepresentative = (SalesRepresentative) user;
+                    }
+
+                } catch (UserNotFoundException e) { }
+
                 status = new Order.Status(orderRs.getInt("order_status.id"), orderRs.getString("order_status.name"), orderRs.getString("order_status.color_rgb"));
 
                 stmt = conn.prepareStatement("SELECT * FROM carports WHERE id = ?");
@@ -106,9 +113,12 @@ public class OrderDAO implements OrderRepository {
                     customer = new Customer(customerId, firstname, lastname, email, phone, customerAddress);
                 }
 
+                
                 Order order = new Order(uuid, carport, shed, customer, status);
+                order.setSalesRepresentative(salesRepresentative);
                 order.setDate(orderRs.getTimestamp("timestamp").toLocalDateTime());
                 orders.add(order);
+              
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -673,5 +683,18 @@ public class OrderDAO implements OrderRepository {
             stmt.executeUpdate();
         }
         return -1;
+    }
+
+    @Override
+    public int updateSalesRep(Order order, SalesRepresentative salesRepresentative) throws SQLException{
+        try (Connection conn = database.getConnection()) {
+            UUID uuid = order.getUuid();
+            PreparedStatement stmt;
+            stmt = conn.prepareStatement("UPDATE orders SET sales_representative_id = ? WHERE uuid = ?");
+            stmt.setInt(1, salesRepresentative.getId());
+            stmt.setString(2, uuid.toString());
+            stmt.executeUpdate();
+        }
+    return -1;
     }
 }

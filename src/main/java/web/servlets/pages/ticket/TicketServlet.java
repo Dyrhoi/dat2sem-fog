@@ -1,12 +1,6 @@
 package web.servlets.pages.ticket;
 
-import com.google.common.base.Joiner;
-import com.google.common.base.Predicates;
-import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
 import domain.order.exceptions.OrderNotFoundException;
-import domain.order.exceptions.TicketNotFoundException;
 import domain.order.ticket.Ticket;
 import domain.order.ticket.TicketMessage;
 import domain.user.User;
