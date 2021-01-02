@@ -62,7 +62,7 @@ public class API {
 
     public int updateOffer(UUID uuid, int offer) throws SQLException { return orderRepository.updateOffer(uuid, offer); }
 
-    public int updateSalesRep(Order order, SalesRepresentative salesRepresentative) throws SQLException { return orderRepository.updateSalesRep(order, salesRepresentative);
+    public int updateSalesRep(Order order, SalesRepresentative salesRepresentative) throws SQLException { return orderRepository.updateSalesRep(order, salesRepresentative);}
 
     public List<OrderMaterial> getOrderMaterials(Order order){return materialRepository.getOrderMaterials(order);}
 
