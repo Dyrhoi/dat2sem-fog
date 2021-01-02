@@ -16,7 +16,7 @@ class MaterialDAOTest {
     @BeforeEach
     void setUp() {
         carport = new Carport(-1, null, 600, 780, Carport.roofTypes.FLAT, null, 6);
-        order = new Order(null, carport, null, null);
+        order = new Order(null, carport, null, null, null);
         md = new MaterialDAO(new Database());
     }
 

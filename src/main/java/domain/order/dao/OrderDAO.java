@@ -51,7 +51,8 @@ public class OrderDAO implements OrderRepository {
             int customerId;
             int carportId;
             String token;
-            PreparedStatement orderStmt = conn.prepareStatement("SELECT * FROM orders ORDER BY timestamp DESC");
+            Order.Status status;
+            PreparedStatement orderStmt = conn.prepareStatement("SELECT * FROM orders INNER JOIN order_status on orders.order_status_id = order_status.id ORDER BY timestamp DESC");
             ResultSet orderRs = orderStmt.executeQuery();
 
             while (orderRs.next()) {
@@ -59,6 +60,7 @@ public class OrderDAO implements OrderRepository {
                 carportId = orderRs.getInt("carports_id");
                 customerId = orderRs.getInt("customers_id");
                 token = orderRs.getString("token");
+                status = new Order.Status(orderRs.getInt("order_status.id"), orderRs.getString("order_status.name"), orderRs.getString("order_status.color_rgb"));
 
                 stmt = conn.prepareStatement("SELECT * FROM carports WHERE id = ?");
                 stmt.setInt(1, carportId);
@@ -104,7 +106,7 @@ public class OrderDAO implements OrderRepository {
                     customer = new Customer(customerId, firstname, lastname, email, phone, customerAddress);
                 }
 
-                Order order = new Order(uuid, carport, shed, customer);
+                Order order = new Order(uuid, carport, shed, customer, status);
                 order.setDate(orderRs.getTimestamp("timestamp").toLocalDateTime());
                 orders.add(order);
             }
@@ -134,7 +136,8 @@ public class OrderDAO implements OrderRepository {
             int carportId;
             LocalDateTime date;
             String token;
-            stmt = conn.prepareStatement("SELECT * FROM orders WHERE uuid = ?");
+            Order.Status status;
+            stmt = conn.prepareStatement("SELECT * FROM orders INNER JOIN order_status on orders.order_status_id = order_status.id WHERE uuid = ?");
             stmt.setString(1, uuid.toString());
 
             rs = stmt.executeQuery();
@@ -143,6 +146,7 @@ public class OrderDAO implements OrderRepository {
                 customerId = rs.getInt("customers_id");
                 carportId = rs.getInt("carports_id");
                 token = rs.getString("token");
+                status = new Order.Status(rs.getInt("order_status.id"), rs.getString("order_status.name"), rs.getString("order_status.color_rgb"));
                 date = rs.getTimestamp("timestamp").toLocalDateTime();
             } else {
                 throw new OrderNotFoundException();
@@ -206,7 +210,7 @@ public class OrderDAO implements OrderRepository {
                 offer = rs.getInt("offer");
             }
 
-            Order order = new Order(uuid, carport, shed, customer);
+            Order order = new Order(uuid, carport, shed, customer, status);
             order.setDate(date);
             order.setOffer(offer);
             order.setToken(token);
@@ -231,7 +235,8 @@ public class OrderDAO implements OrderRepository {
             int carportId;
             LocalDateTime date;
             UUID uuid;
-            stmt = conn.prepareStatement("SELECT * FROM orders WHERE token = ?");
+            Order.Status status;
+            stmt = conn.prepareStatement("SELECT * FROM orders INNER JOIN order_status on orders.order_status_id = order_status.id WHERE token = ?");
             stmt.setString(1, token);
 
             rs = stmt.executeQuery();
@@ -241,6 +246,7 @@ public class OrderDAO implements OrderRepository {
                 carportId = rs.getInt("carports_id");
                 uuid = UUID.fromString(rs.getString("uuid"));
                 date = rs.getTimestamp("timestamp").toLocalDateTime();
+                status = new Order.Status(rs.getInt("order_status.id"), rs.getString("order_status.name"), rs.getString("order_status.color_rgb"));
             } else {
                 throw new OrderNotFoundException();
             }
@@ -304,7 +310,7 @@ public class OrderDAO implements OrderRepository {
                 offer = rs.getInt("offer");
             }
 
-            Order order = new Order(uuid, carport, shed, customer);
+            Order order = new Order(uuid, carport, shed, customer, status);
             order.setOffer(offer);
             order.setToken(token);
             order.setDate(date);
