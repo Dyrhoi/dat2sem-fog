@@ -71,7 +71,8 @@ public class MaterialDAO implements MaterialRepository {
                 String name = resultSet.getString("materials.name");
                 String materialType = resultSet.getString("material_types.description");
                 String description = resultSet.getString("materials.description");
-                ConstructionMaterial tmpCM = new ConstructionMaterial(id, name, materialType, description);
+                int material_types_id = resultSet.getInt("material_types_id");
+                ConstructionMaterial tmpCM = new ConstructionMaterial(id, name, materialType, material_types_id, description);
                 repo.add(tmpCM);
             }
         } catch (RuntimeException | SQLException e) {

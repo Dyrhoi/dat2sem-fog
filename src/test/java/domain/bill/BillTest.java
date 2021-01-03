@@ -1,16 +1,23 @@
-package domain.material.dao;
+package domain.bill;
 
 import domain.carport.Carport;
-import domain.carport.OrderMaterial;
 import domain.carport.Shed;
+import domain.material.dao.MaterialDAO;
 import domain.order.Order;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class MaterialDAOTest {
+import java.io.IOException;
+
+class BillTest {
     MaterialDAO md;
     Carport carport;
     Order order;
+    Bill bill = new Bill();
+
+    BillTest() throws IOException {
+    }
+
     @BeforeEach
     void setUp() {
         carport = new Carport(-1, new Shed(-1, 400, 400), 600, 780, Carport.roofTypes.FLAT, null, 16);
@@ -18,16 +25,7 @@ class MaterialDAOTest {
     }
 
     @Test
-    void getOrderMaterials() {
-
-        for (int i = 1; i <= 4; i++) {
-            for (OrderMaterial orderMaterial : md.getOrderMaterials(order)) {
-                int id = orderMaterial.getConstructionMaterial().getMaterial_types_id();
-
-                if (id == i) {
-                    System.out.println(orderMaterial);
-                }
-            }
-        }
+    void testPDF() throws IOException {
+        //bill.generatePDF(order);
     }
 }

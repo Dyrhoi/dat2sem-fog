@@ -9,6 +9,14 @@ public class OrderMaterial {
         this.constructionMaterial = constructionMaterial;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public ConstructionMaterial getConstructionMaterial() {
+        return constructionMaterial;
+    }
+
     @Override
     public String toString() {
         return "OrderMaterial{" +
