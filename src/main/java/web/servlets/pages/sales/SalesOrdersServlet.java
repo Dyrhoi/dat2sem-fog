@@ -5,6 +5,7 @@ import domain.carport.Shed;
 import domain.order.Order;
 import domain.order.exceptions.OrderNotFoundException;
 import domain.user.sales_representative.SalesRepresentative;
+import web.plugins.Notifier;
 import web.servlets.BaseServlet;
 
 import javax.servlet.ServletException;
@@ -77,6 +78,7 @@ public class SalesOrdersServlet extends BaseServlet {
             uuid = UUID.fromString(req.getParameter("uuid"));
             try {
                 api.updateOffer(uuid, offer);
+                super.addNotifcation(req, new Notifier(Notifier.Type.SUCCESS, "Tilbud opdateret"));
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
@@ -88,6 +90,7 @@ public class SalesOrdersServlet extends BaseServlet {
                 order = api.getOrder(uuid);
                 SalesRepresentative salesRepresentative = (SalesRepresentative) req.getSession().getAttribute("user");
                 int ret = api.updateSalesRep(order, salesRepresentative);
+                super.addNotifcation(req, new Notifier(Notifier.Type.SUCCESS, "Ordre taget"));
                 resp.sendRedirect(req.getContextPath() + "/sales/orders");
                 return;
             } catch (OrderNotFoundException | SQLException e) {
@@ -138,6 +141,7 @@ public class SalesOrdersServlet extends BaseServlet {
                 //create order
                 int carportId = api.getCarportIdFromUuid(uuid);
                 api.updateOrder(carportId, carport, shed, order, salesRepresentative);
+                super.addNotifcation(req, new Notifier(Notifier.Type.SUCCESS, "Ordre opdateret"));
             }
             catch (OrderNotFoundException e) {
                 resp.sendError(404, "Kunne ikke opdatere den her ordre, da den ikke kunne findes i systemet.");
