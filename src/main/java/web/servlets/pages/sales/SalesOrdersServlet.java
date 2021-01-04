@@ -74,7 +74,7 @@ public class SalesOrdersServlet extends BaseServlet {
         UUID uuid = null;
 
         if (action.equals("update-offer")) {
-            int offer = Integer.parseInt(req.getParameter("offer"));
+            Order.Offer offer = new Order.Offer(-1, null, Integer.parseInt(req.getParameter("offer")));
             uuid = UUID.fromString(req.getParameter("uuid"));
             try {
                 api.updateOffer(uuid, offer);

@@ -8,6 +8,7 @@ import domain.material.MaterialRepository;
 import domain.order.Order;
 import domain.order.OrderFactory;
 import domain.order.OrderRepository;
+import domain.order.exceptions.OfferNotFoundException;
 import domain.order.exceptions.OrderNotFoundException;
 import domain.order.ticket.Ticket;
 import domain.order.ticket.TicketMessage;
@@ -60,7 +61,7 @@ public class API {
         return userRepository.authorizeSalesRepresentative(email, password);
     }
 
-    public int updateOffer(UUID uuid, int offer) throws SQLException { return orderRepository.updateOffer(uuid, offer); }
+    public Order.Offer updateOffer(UUID uuid, Order.Offer offer) throws SQLException { return orderRepository.updateOffer(uuid, offer); }
 
     public int updateSalesRep(Order order, SalesRepresentative salesRepresentative) throws SQLException { return orderRepository.updateSalesRep(order, salesRepresentative);}
 
@@ -72,5 +73,9 @@ public class API {
 
     public Order getOrder(String token) throws OrderNotFoundException {
         return orderRepository.getOrder(token);
+    }
+
+    public Order.Offer getOffer(int id) throws OfferNotFoundException {
+        return orderRepository.getOffer(id);
     }
 }

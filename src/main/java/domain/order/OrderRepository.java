@@ -2,6 +2,7 @@ package domain.order;
 
 import domain.carport.Carport;
 import domain.carport.Shed;
+import domain.order.exceptions.OfferNotFoundException;
 import domain.order.exceptions.OrderNotFoundException;
 import domain.order.ticket.Ticket;
 import domain.order.ticket.TicketMessage;
@@ -25,6 +26,8 @@ public interface OrderRepository {
     Ticket getTicket(String orderToken) throws OrderNotFoundException;
     Ticket updateTicket(String token, TicketMessage ticketMessage) throws OrderNotFoundException;
 
-    int updateOffer(UUID uuid, int offer) throws SQLException;
+    Order.Offer updateOffer(UUID uuid, Order.Offer offer) throws SQLException;
+    Order.Offer getOffer(int id) throws OfferNotFoundException;
+
     int updateSalesRep(Order order, SalesRepresentative salesRepresentative) throws SQLException;
 }

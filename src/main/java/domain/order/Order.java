@@ -6,6 +6,7 @@ import domain.user.customer.Customer;
 import domain.user.sales_representative.SalesRepresentative;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -17,7 +18,7 @@ public class Order {
     private final Customer customer;
     private LocalDateTime date;
     private String token;
-    private int offer;
+    private List<Offer> offers;
     private SalesRepresentative salesRepresentative;
     private Status status;
 
@@ -65,12 +66,16 @@ public class Order {
         this.token = token;
     }
 
-    public int getOffer() {
-        return offer;
+    public List<Offer> getOffers() {
+        return offers;
     }
 
-    public void setOffer(int offer) {
-        this.offer = offer;
+    public void addOffer(Offer offer) {
+        this.offers.add(offer);
+    }
+
+    public void setOffers(List<Offer> offers) {
+        this.offers = offers;
     }
 
     public SalesRepresentative getSalesRepresentative() {
@@ -103,7 +108,6 @@ public class Order {
                 ", customer=" + customer +
                 ", date=" + date +
                 ", token='" + token + '\'' +
-                ", offer=" + offer +
                 ", salesRepresentative=" + salesRepresentative +
                 ", status=" + status +
                 '}';
@@ -138,6 +142,30 @@ public class Order {
 
         public String getColorRGBA(double alpha) {
             return "rgba(" + color + ", " + alpha + ")";
+        }
+    }
+
+    public static class Offer {
+        private final int id;
+        private final LocalDateTime createdAt;
+        private final int price;
+
+        public Offer(int id, LocalDateTime createdAt, int price) {
+            this.id = id;
+            this.createdAt = createdAt;
+            this.price = price;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public LocalDateTime getCreatedAt() {
+            return createdAt;
+        }
+
+        public int getPrice() {
+            return price;
         }
     }
 }

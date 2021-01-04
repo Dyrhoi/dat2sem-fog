@@ -5,6 +5,7 @@ import domain.carport.Shed;
 import domain.order.Order;
 import domain.order.OrderFactory;
 import domain.order.OrderRepository;
+import domain.order.exceptions.OfferNotFoundException;
 import domain.order.exceptions.OrderNotFoundException;
 import domain.order.ticket.Ticket;
 import domain.order.ticket.TicketEvent;
@@ -214,24 +215,28 @@ public class OrderDAO implements OrderRepository {
                 Customer.Address customerAddress = new Customer.Address(address, city, postalCode);
                 customer = new Customer(customerId, firstname, lastname, email, phone, customerAddress);
             }
-            int offer = 0;
             //Get offer for order
             stmt = conn.prepareStatement("SELECT offer FROM offers WHERE order_uuid = ? ORDER BY timestamp DESC;");
             stmt.setString(1, uuid.toString());
             rs = stmt.executeQuery();
-            if (rs.next()) {
-                offer = rs.getInt("offer");
+            List<Order.Offer> offers = new ArrayList<>();
+            while (rs.next()) {
+                offers.add(loadOffer(rs));
             }
 
             Order order = new Order(uuid, carport, shed, customer, status);
             order.setDate(date);
-            order.setOffer(offer);
+            order.setOffers(offers);
             order.setToken(token);
             return order;
         } catch (SQLException e) {
             e.printStackTrace();
         }
         throw new RuntimeException("Unkown SQL error.");
+    }
+
+    private Order.Offer loadOffer(ResultSet rs) throws SQLException {
+        return new Order.Offer(rs.getInt("id"), rs.getTimestamp("timestamp").toLocalDateTime(), rs.getInt("offer"));
     }
 
     @Override
@@ -316,15 +321,16 @@ public class OrderDAO implements OrderRepository {
 
             int offer = 0;
             //Get offer for order
-            stmt = conn.prepareStatement("SELECT offer FROM offers INNER JOIN orders ON orders.uuid = offers.order_uuid WHERE orders.token = ? ORDER BY offers.timestamp DESC;");
-            stmt.setString(1, token);
+            stmt = conn.prepareStatement("SELECT offer FROM offers WHERE order_uuid = ? ORDER BY timestamp DESC;");
+            stmt.setString(1, uuid.toString());
             rs = stmt.executeQuery();
-            if (rs.next()) {
-                offer = rs.getInt("offer");
+            List<Order.Offer> offers = new ArrayList<>();
+            while (rs.next()) {
+                offers.add(loadOffer(rs));
             }
 
             Order order = new Order(uuid, carport, shed, customer, status);
-            order.setOffer(offer);
+            order.setOffers(offers);
             order.setToken(token);
             order.setDate(date);
             return order;
@@ -454,12 +460,18 @@ public class OrderDAO implements OrderRepository {
 
                         stmt.executeUpdate();
 
+                        /*
+
+                        This initial price should not be set within an offer. Offers should be offers...
+                        - Dyrhoi
+
                         //Creating price for order
                         int preOffer = (int) Math.round(Math.random() * (40000-20000) + 20000);
                         stmt = conn.prepareStatement("INSERT INTO offers (order_uuid, offer) VALUES (?,?)");
                         stmt.setString(1, getUuid().toString());
                         stmt.setInt(2, preOffer);
                         stmt.executeUpdate();
+                        */
 
                         conn.commit();
 
@@ -677,15 +689,31 @@ public class OrderDAO implements OrderRepository {
     }
 
     @Override
-    public int updateOffer(UUID uuid, int offer) throws SQLException {
+    public Order.Offer updateOffer(UUID uuid, Order.Offer offer) throws SQLException {
         try (Connection conn = database.getConnection()) {
             PreparedStatement stmt;
             stmt = conn.prepareStatement("INSERT INTO offers (order_uuid, offer) VALUES (?,?)");
             stmt.setString(1, uuid.toString());
-            stmt.setInt(2, offer);
+            stmt.setInt(2, offer.getPrice());
             stmt.executeUpdate();
         }
-        return -1;
+        return new Order.Offer(-1, null, -1);
+    }
+
+    @Override
+    public Order.Offer getOffer(int id) throws OfferNotFoundException {
+        try (Connection conn = database.getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM offers WHERE id = ?");
+            stmt.setInt(1, id);
+
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()) {
+                return loadOffer(rs);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        throw new OfferNotFoundException();
     }
 
     @Override
