@@ -6,9 +6,8 @@ import domain.user.customer.Customer;
 import domain.user.sales_representative.SalesRepresentative;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Order {
     public static final double evenOffer = 20000;
@@ -68,6 +67,18 @@ public class Order {
 
     public List<Offer> getOffers() {
         return offers;
+    }
+
+    public Offer getMostRecentOffer() {
+        try {
+            return Collections.max(offers, Comparator.comparing(Offer::getCreatedAt));
+        } catch (NoSuchElementException e) {
+            return null;
+        }
+    }
+
+    public Offer hasAcceptedOffer() {
+        return offers.stream().filter(Offer::isAccepted).findFirst().get();
     }
 
     public void addOffer(Offer offer) {
@@ -149,15 +160,21 @@ public class Order {
         private final int id;
         private final LocalDateTime createdAt;
         private final int price;
+        private final boolean isAccepted;
 
-        public Offer(int id, LocalDateTime createdAt, int price) {
+        public Offer(int id, LocalDateTime createdAt, int price, boolean isAccepted) {
             this.id = id;
             this.createdAt = createdAt;
             this.price = price;
+            this.isAccepted = isAccepted;
         }
 
         public int getId() {
             return id;
+        }
+
+        public boolean isAccepted() {
+            return isAccepted;
         }
 
         public LocalDateTime getCreatedAt() {

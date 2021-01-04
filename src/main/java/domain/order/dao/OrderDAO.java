@@ -16,6 +16,7 @@ import domain.user.customer.Customer;
 import domain.user.exceptions.UserNotFoundException;
 import domain.user.sales_representative.SalesRepresentative;
 import infrastructure.Database;
+import org.apache.ibatis.jdbc.SQL;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -216,7 +217,7 @@ public class OrderDAO implements OrderRepository {
                 customer = new Customer(customerId, firstname, lastname, email, phone, customerAddress);
             }
             //Get offer for order
-            stmt = conn.prepareStatement("SELECT offer FROM offers WHERE order_uuid = ? ORDER BY timestamp DESC;");
+            stmt = conn.prepareStatement("SELECT * FROM offers WHERE order_uuid = ? ORDER BY timestamp DESC;");
             stmt.setString(1, uuid.toString());
             rs = stmt.executeQuery();
             List<Order.Offer> offers = new ArrayList<>();
@@ -236,7 +237,7 @@ public class OrderDAO implements OrderRepository {
     }
 
     private Order.Offer loadOffer(ResultSet rs) throws SQLException {
-        return new Order.Offer(rs.getInt("id"), rs.getTimestamp("timestamp").toLocalDateTime(), rs.getInt("offer"));
+        return new Order.Offer(rs.getInt("id"), rs.getTimestamp("timestamp").toLocalDateTime(), rs.getInt("offer"), rs.getBoolean("is_accepted"));
     }
 
     @Override
@@ -321,7 +322,7 @@ public class OrderDAO implements OrderRepository {
 
             int offer = 0;
             //Get offer for order
-            stmt = conn.prepareStatement("SELECT offer FROM offers WHERE order_uuid = ? ORDER BY timestamp DESC;");
+            stmt = conn.prepareStatement("SELECT * FROM offers WHERE order_uuid = ? ORDER BY timestamp DESC;");
             stmt.setString(1, uuid.toString());
             rs = stmt.executeQuery();
             List<Order.Offer> offers = new ArrayList<>();
@@ -689,15 +690,44 @@ public class OrderDAO implements OrderRepository {
     }
 
     @Override
-    public Order.Offer updateOffer(UUID uuid, Order.Offer offer) throws SQLException {
+    public Order.Offer updateOffer(UUID uuid, Order.Offer offer, SalesRepresentative updatedBy) throws OrderNotFoundException, OfferNotFoundException {
         try (Connection conn = database.getConnection()) {
-            PreparedStatement stmt;
-            stmt = conn.prepareStatement("INSERT INTO offers (order_uuid, offer) VALUES (?,?)");
-            stmt.setString(1, uuid.toString());
-            stmt.setInt(2, offer.getPrice());
-            stmt.executeUpdate();
+            conn.setAutoCommit(false);
+            try {
+                Order.Offer newOffer = null;
+                Order order = getOrder(uuid);
+                PreparedStatement stmt;
+                stmt = conn.prepareStatement("INSERT INTO offers (order_uuid, offer) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS);
+                stmt.setString(1, uuid.toString());
+                stmt.setInt(2, offer.getPrice());
+                stmt.executeUpdate();
+
+                ResultSet rs = stmt.getGeneratedKeys();
+
+                stmt = conn.prepareStatement("INSERT INTO order_events (author_id, scope, order_token) VALUES (?, ?, ?)");
+                stmt.setInt(1, updatedBy.getId());
+                stmt.setString(2, TicketEvent.EventType.OFFER_SENT.toString());
+                stmt.setString(3, order.getToken());
+                stmt.executeUpdate();
+
+                conn.commit();
+
+                if (rs.next()) {
+                    newOffer = getOffer(rs.getInt(1));
+                }
+
+                return newOffer;
+            } catch (SQLException e) {
+                conn.rollback();
+                e.printStackTrace();
+            }
+            finally {
+                conn.setAutoCommit(true);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return new Order.Offer(-1, null, -1);
+        throw new OfferNotFoundException();
     }
 
     @Override
@@ -705,7 +735,6 @@ public class OrderDAO implements OrderRepository {
         try (Connection conn = database.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM offers WHERE id = ?");
             stmt.setInt(1, id);
-
             ResultSet rs = stmt.executeQuery();
             if(rs.next()) {
                 return loadOffer(rs);

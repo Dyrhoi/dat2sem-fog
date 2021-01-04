@@ -3,6 +3,7 @@ package web.servlets.pages.sales;
 import domain.carport.Carport;
 import domain.carport.Shed;
 import domain.order.Order;
+import domain.order.exceptions.OfferNotFoundException;
 import domain.order.exceptions.OrderNotFoundException;
 import domain.user.sales_representative.SalesRepresentative;
 import web.plugins.Notifier;
@@ -74,13 +75,16 @@ public class SalesOrdersServlet extends BaseServlet {
         UUID uuid = null;
 
         if (action.equals("update-offer")) {
-            Order.Offer offer = new Order.Offer(-1, null, Integer.parseInt(req.getParameter("offer")));
+            Order.Offer offer = new Order.Offer(-1, null, Integer.parseInt(req.getParameter("offer")), false);
             uuid = UUID.fromString(req.getParameter("uuid"));
+            SalesRepresentative salesRepresentative = (SalesRepresentative) req.getSession().getAttribute("user");
             try {
-                api.updateOffer(uuid, offer);
+
+                api.updateOffer(uuid, offer, salesRepresentative);
                 super.addNotifcation(req, new Notifier(Notifier.Type.SUCCESS, "Tilbud opdateret"));
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
+            } catch (OfferNotFoundException | OrderNotFoundException e) {
+                resp.sendError(404, "Vi kunne ikke finde ordren eller tilbudet, du prøvede at oprette.");
+                return;
             }
         }
         else if (action.equals("update-salesrep")) {
@@ -145,11 +149,13 @@ public class SalesOrdersServlet extends BaseServlet {
             }
             catch (OrderNotFoundException e) {
                 resp.sendError(404, "Kunne ikke opdatere den her ordre, da den ikke kunne findes i systemet.");
+                return;
             }
 
         }
         else {
             resp.sendError(500, "NO ACTION FOUND!");
+            return;
         }
         resp.sendRedirect(req.getContextPath() + "/sales/orders/" + uuid.toString());
     }

@@ -8,6 +8,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="api.Util" %>
+<jsp:include page="/WEB-INF/views/includes/my-order/my-order-navigation.jsp" />
 <div>
     <section>
         <div class="container">

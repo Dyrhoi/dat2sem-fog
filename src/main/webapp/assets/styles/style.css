@@ -332,6 +332,30 @@ cus scuffed css variables... :(
     }
 }
 
+
+.my-order-nav .navbar-nav .nav-item .nav-link {
+    padding-left:1em;
+    padding-right:1em;
+}
+
+.nav-link {
+    display:flex;
+    align-items: center;
+}
+
+.nav-link span {
+    margin-right:.25em;
+    font-size:1.2em;
+}
+
+.my-order-nav .nav-link {
+    border-bottom:2px solid transparent;
+}
+
+.my-order-nav .nav-link.active {
+    border-color:#003d76;
+}
+
 [data-href] { cursor: pointer; }
 
 input[type=checkbox].css-checkbox + label.css-label {

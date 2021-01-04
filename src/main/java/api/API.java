@@ -61,7 +61,7 @@ public class API {
         return userRepository.authorizeSalesRepresentative(email, password);
     }
 
-    public Order.Offer updateOffer(UUID uuid, Order.Offer offer) throws SQLException { return orderRepository.updateOffer(uuid, offer); }
+    public Order.Offer updateOffer(UUID uuid, Order.Offer offer, SalesRepresentative updatedBy) throws OrderNotFoundException, OfferNotFoundException { return orderRepository.updateOffer(uuid, offer, updatedBy); }
 
     public int updateSalesRep(Order order, SalesRepresentative salesRepresentative) throws SQLException { return orderRepository.updateSalesRep(order, salesRepresentative);}
 

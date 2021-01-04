@@ -9,7 +9,15 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="domain.order.Order" %>
 <div class="container" id="orderInfo" data-evenOffer="${Order.evenOffer}"
-     data-orderOffer="${requestScope.order.offer}">
+     <c:choose>
+         <c:when test="${requestScope.order.mostRecentOffer != null}">
+             data-orderOffer="${requestScope.order.mostRecentOffer.price}"
+         </c:when>
+         <c:otherwise>
+             data-orderOffer="0"
+         </c:otherwise>
+     </c:choose>
+>
     <div class="row">
         <div class="col-8">
             <a id="arrow" href="${pageContext.request.contextPath}/sales/orders">
@@ -54,10 +62,17 @@
             <form method="post" action="${pageContext.request.contextPath}/sales/orders/">
                 <div class="d-flex justify-content-between">
                     <div class="input-group-append">
-                        <input type="number" value="${requestScope.order.offer}" name="offer" id="offer">
+                        <c:choose>
+                            <c:when test="${requestScope.order.mostRecentOffer != null}">
+                                <input type="number" value="${requestScope.order.mostRecentOffer.price}" name="offer" id="offer">
+                            </c:when>
+                            <c:otherwise>
+                                <input type="number" name="offer" id="offer">
+                            </c:otherwise>
+                        </c:choose>
+
                         <span class="input-group-text">kr</span>
-                        <span class="input-group-text" id="profitPercentSpan"><c:out
-                                value="${requestScope.order.offer}"/></span>
+                        <span class="input-group-text" id="profitPercentSpan"></span>
                     </div>
                     <div class="text-right">
                         <input hidden name="uuid" value="${requestScope.order.uuid}">

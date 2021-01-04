@@ -26,7 +26,7 @@ public interface OrderRepository {
     Ticket getTicket(String orderToken) throws OrderNotFoundException;
     Ticket updateTicket(String token, TicketMessage ticketMessage) throws OrderNotFoundException;
 
-    Order.Offer updateOffer(UUID uuid, Order.Offer offer) throws SQLException;
+    Order.Offer updateOffer(UUID uuid, Order.Offer offer, SalesRepresentative updatedBy) throws OrderNotFoundException, OfferNotFoundException;
     Order.Offer getOffer(int id) throws OfferNotFoundException;
 
     int updateSalesRep(Order order, SalesRepresentative salesRepresentative) throws SQLException;
