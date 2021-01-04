@@ -1,4 +1,4 @@
-package web.servlets.order;
+package web.servlets.pages.order;
 
 import api.Util;
 import domain.carport.Carport;
