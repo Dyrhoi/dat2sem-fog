@@ -17,7 +17,7 @@ import java.io.IOException;
 
 @WebServlet({"/ticket", "/ticket/*"})
 public class TicketServlet extends BaseServlet {
-    @Override
+    /*@Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (req.getPathInfo() != null && req.getPathInfo().length() > 1) {
             String slug = req.getPathInfo().substring(1);
@@ -29,7 +29,7 @@ public class TicketServlet extends BaseServlet {
                 resp.sendError(404, "Vi kunne ikke finde ordren, prøv igen.");
             }
         }
-    }
+    }*/
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -38,11 +38,16 @@ public class TicketServlet extends BaseServlet {
             try {
                 //TODO: Make factory.
 
+                boolean isStaff = req.getParameter("is-staff") != null && req.getParameter("is-staff").equals("true");
+
+                System.out.println(req.getParameter("is-staff"));
+                System.out.println(isStaff);
+
                 Ticket ticket = api.getTicket(slug);
                 String content = req.getParameter("content");
                 User user = ticket.getOrder().getCustomer();
 
-                if(req.getSession().getAttribute("user") instanceof SalesRepresentative) { //TODO: If is user logged in (Sales Rep)
+                if(req.getSession().getAttribute("user") instanceof SalesRepresentative && isStaff) {
                     user = (SalesRepresentative) req.getSession().getAttribute("user");
                 }
 
@@ -61,7 +66,10 @@ public class TicketServlet extends BaseServlet {
                 TicketMessage ticketMessage = new TicketMessage(safeHTMLContent, user, null);
 
                 api.updateTicket(slug, ticketMessage);
-                resp.sendRedirect(req.getContextPath() + "/order/my-order/" + slug);
+                String url =
+                        isStaff ? "/sales/orders/" + ticket.getOrder().getUuid() + "/ticket"
+                        : "/order/my-order/" + slug + "/ticket";
+                resp.sendRedirect(req.getContextPath() + url);
             } catch (OrderNotFoundException e) {
                 resp.sendError(500, "Ugyldig kundesamtale.");
             }

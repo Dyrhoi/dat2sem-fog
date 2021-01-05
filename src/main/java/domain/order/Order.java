@@ -78,7 +78,11 @@ public class Order {
     }
 
     public Offer hasAcceptedOffer() {
-        return offers.stream().filter(Offer::isAccepted).findFirst().get();
+        try {
+            return offers.stream().filter(Offer::isAccepted).findFirst().get();
+        } catch (NoSuchElementException e) {
+            return null;
+        }
     }
 
     public void addOffer(Offer offer) {

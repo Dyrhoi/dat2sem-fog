@@ -5,6 +5,7 @@ import domain.carport.Shed;
 import domain.order.Order;
 import domain.order.exceptions.OfferNotFoundException;
 import domain.order.exceptions.OrderNotFoundException;
+import domain.order.ticket.Ticket;
 import domain.user.sales_representative.SalesRepresentative;
 import web.plugins.Notifier;
 import web.servlets.BaseServlet;
@@ -29,18 +30,16 @@ public class SalesOrdersServlet extends BaseServlet {
          * */
         req.setAttribute("salesrep", null);
         if (req.getPathInfo() != null && req.getPathInfo().length() > 1) {
-            if (req.getPathInfo().charAt(req.getPathInfo().length() - 1) == '/') {
-                slug = req.getPathInfo().replaceAll("/", "");
-                try {
-                    UUID uuid = setOrderFromUUID(req, slug);
-                    req.setAttribute("roofMaterials", api.getRoofMaterials());
-                    super.render("Changing order - " + uuid, "changeOrder", req, resp);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            else {
-                slug = req.getPathInfo().substring(1);
+            String path = req.getPathInfo().substring(1);
+
+            slug = path.split("/")[0];
+
+            String subPath = "";
+            try {
+                subPath = path.split("/")[1];
+            } catch (IndexOutOfBoundsException ignored) {}
+
+            if(subPath.equals("")) {
                 try {
                     UUID uuid = setOrderFromUUID(req, slug);
                     req.setAttribute("page", 2);
@@ -49,6 +48,30 @@ public class SalesOrdersServlet extends BaseServlet {
                     e.printStackTrace();
                 }
             }
+            else if (subPath.equals("edit")) {
+                try {
+                    UUID uuid = setOrderFromUUID(req, slug);
+                    req.setAttribute("roofMaterials", api.getRoofMaterials());
+                    super.render("Changing order - " + uuid, "changeOrder", req, resp);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            else if (subPath.equals("ticket")) {
+                try {
+                    UUID uuid = setOrderFromUUID(req, slug);
+                    Ticket ticket = api.getTicket(api.getOrder(uuid).getToken());
+                    req.setAttribute("isStaff", true);
+                    req.setAttribute("ticket", ticket);
+                    super.render("Support Samtale - " + uuid, "sales/ticket", req, resp);
+                } catch (OrderNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                resp.sendError(404);
+            }
+
             /*
              * SHOW ALL ORDERS IF NO UUID IN URL
              * */

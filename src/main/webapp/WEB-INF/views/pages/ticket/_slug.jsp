@@ -42,16 +42,20 @@
                             <c:when test="${eventOrMessage.getScope() == 'OFFER_SENT'}">
                                 Der blev oprettet et tilbud af <c:out value="${eventOrMessage.getAuthor().getFullName()}" />
                                 - <c:out value="${Util.formatDate(eventOrMessage.getDate())}" />
-                                <span class="ml-auto">
-                                    <a class="btn btn-light" href="${pageContext.request.contextPath}/order/my-order/${requestScope.order.token}/offers">Se alle tilbud</a>
-                                </span>
+                                <c:if test="${requestScope.isStaff == null}">
+                                    <span class="ml-auto">
+                                        <a class="btn btn-light" href="${pageContext.request.contextPath}/order/my-order/${requestScope.order.token}/offers">Se alle tilbud</a>
+                                    </span>
+                                </c:if>
                             </c:when>
                             <c:when test="${eventOrMessage.getScope() == 'OFFER_ACCEPTED'}">
                                 Et tilbud blev accepteret af <c:out value="${eventOrMessage.getAuthor().getFullName()}" />
                                 - <c:out value="${Util.formatDate(eventOrMessage.getDate())}" />
-                                <span class="ml-auto">
-                                    <a class="btn btn-light" href="${pageContext.request.contextPath}/order/my-order/${requestScope.order.token}/offers">Se alle tilbud</a>
-                                </span>
+                                <c:if test="${requestScope.isStaff == null}">
+                                    <span class="ml-auto">
+                                        <a class="btn btn-light" href="${pageContext.request.contextPath}/order/my-order/${requestScope.order.token}/offers">Se alle tilbud</a>
+                                    </span>
+                                </c:if>
                             </c:when>
                     </c:choose>
                     </div>
@@ -64,11 +68,12 @@
         <form method="post" action="<c:url value="/ticket/${requestScope.ticket.order.token}"/>">
             <section class="d-flex justify-content-end align-items-center">
                 <input hidden name="content"/>
+                <input hidden name="is-staff" value="${requestScope.isStaff != null ? "true" : "false"}">
                 <p class="mb-0 mr-3">
                     Du svarer som
                     <b>
                         <c:choose>
-                            <c:when test="${sessionScope.user != null}">
+                            <c:when test="${sessionScope.user != null && requestScope.isStaff != null}">
                                 ${sessionScope.user.fullName}
                             </c:when>
                             <c:otherwise>

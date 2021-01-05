@@ -53,7 +53,7 @@ public class MyOrderServlet extends BaseServlet {
     }
 
     private void displayOrderOffer(HttpServletRequest req, HttpServletResponse resp, Order order) throws IOException, ServletException {
-        super.render("Ordre #" + order.getUuid() + " - Fog", "order/my-order-offer", req, resp);
+        super.render("Ordre #" + order.getUuid() + " - Fog", "order/my-order-offers", req, resp);
     }
 
     private void displayOrder(HttpServletRequest req, HttpServletResponse resp, Order order) throws ServletException, IOException {
