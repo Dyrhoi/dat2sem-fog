@@ -19,6 +19,9 @@ ALTER TABLE orders
     ADD CONSTRAINT fk_order_user_id FOREIGN KEY orders(customers_id) REFERENCES users(id),
     ADD CONSTRAINT fk_order_status_id FOREIGN KEY orders(order_status_id) REFERENCES order_status(id);
 
+ALTER TABLE orders DROP FOREIGN KEY orders_ibfk_5, ADD CONSTRAINT fk_order_salesrep_id FOREIGN KEY orders(sales_representative_id) REFERENCES users(id);
+
+
 ALTER TABLE offers
     ADD COLUMN is_accepted boolean DEFAULT false;
 
