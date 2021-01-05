@@ -43,7 +43,7 @@ public class SalesOrdersServlet extends BaseServlet {
                 try {
                     UUID uuid = setOrderFromUUID(req, slug);
                     req.setAttribute("page", 2);
-                    super.render("order - " + uuid, "salesOrders", req, resp);
+                    super.render("order - " + uuid, "sales/salesOrders", req, resp);
                 } catch (IllegalArgumentException | OrderNotFoundException e) { //Illegal Argument from UUID.fromString (Maybe just pass a string to DAO?)
                     e.printStackTrace();
                 }
@@ -52,7 +52,7 @@ public class SalesOrdersServlet extends BaseServlet {
                 try {
                     UUID uuid = setOrderFromUUID(req, slug);
                     req.setAttribute("roofMaterials", api.getRoofMaterials());
-                    super.render("Changing order - " + uuid, "changeOrder", req, resp);
+                    super.render("Changing order - " + uuid, "sales/changeOrder", req, resp);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -79,7 +79,7 @@ public class SalesOrdersServlet extends BaseServlet {
         else {
             List<Order> orders = api.getOrders();
             req.setAttribute("orders", orders);
-            super.render("Alle ordre - Fog", "allOrders", req, resp);
+            super.render("Alle ordre - Fog", "sales/allOrders", req, resp);
         }
     }
 
@@ -175,6 +175,19 @@ public class SalesOrdersServlet extends BaseServlet {
                 return;
             }
 
+        }
+        else if (action.equals("mark-as-paid")) {
+            try {
+                uuid = UUID.fromString(req.getParameter("uuid"));
+                Order order = api.getOrder(uuid);
+                boolean isPaid = req.getParameter("is-paid") != null && req.getParameter("is-paid").equals("on");
+                if(order.hasAcceptedOffer() != null)
+                    api.markOrderAsPaid(order, isPaid, (SalesRepresentative) req.getSession().getAttribute("user"));
+                else throw new OrderNotFoundException();
+            } catch (OrderNotFoundException e) {
+                resp.sendError(404, "Kunne ikke opdatere den her ordre, da den ikke kunne findes i systemet.");
+                return;
+            }
         }
         else {
             resp.sendError(500, "NO ACTION FOUND!");

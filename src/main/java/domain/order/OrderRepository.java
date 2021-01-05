@@ -30,5 +30,7 @@ public interface OrderRepository {
     Order.Offer updateOffer(UUID uuid, Order.Offer offer, User updatedBy) throws OrderNotFoundException, OfferNotFoundException;
     Order.Offer getOffer(int id) throws OfferNotFoundException;
 
+    Order markOrderAsPaid(Order order, boolean isPaid, User user) throws OrderNotFoundException;
+
     int updateSalesRep(Order order, SalesRepresentative salesRepresentative) throws SQLException;
 }

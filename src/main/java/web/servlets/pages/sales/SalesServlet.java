@@ -20,6 +20,6 @@ public class SalesServlet extends BaseServlet {
         req.setAttribute("orders", orders);
         SalesRepresentative salesRepresentative = (SalesRepresentative) req.getSession().getAttribute("user");
         req.setAttribute("salesRepId", salesRepresentative.getId());
-        super.render("Sælger side - Fog", "allOrders", req, resp);
+        super.render("Sælger side - Fog", "sales/allOrders", req, resp);
     }
 }

@@ -780,6 +780,34 @@ public class OrderDAO implements OrderRepository {
     }
 
     @Override
+    public Order markOrderAsPaid(Order order, boolean isPaid, User user) throws OrderNotFoundException {
+        try (Connection conn = database.getConnection()) {
+            conn.setAutoCommit(false);
+            try {
+                PreparedStatement stmt = conn.prepareStatement("UPDATE orders SET order_status_id = ? WHERE uuid = ?");
+                stmt.setInt(1, isPaid ? 4 : 3);
+                stmt.setString(2, order.getUuid().toString());
+                stmt.executeUpdate();
+
+                conn.commit();
+
+                return getOrder(order.getUuid());
+            } catch (SQLException e) {
+                conn.rollback();
+                //On SQL error.
+                e.printStackTrace();
+            }
+            finally {
+                conn.setAutoCommit(true);
+            }
+        } catch (SQLException throwables) {
+            //On connection error.
+            throwables.printStackTrace();
+        }
+        throw new OrderNotFoundException();
+    }
+
+    @Override
     public int updateSalesRep(Order order, SalesRepresentative salesRepresentative) throws SQLException{
         try (Connection conn = database.getConnection()) {
             UUID uuid = order.getUuid();

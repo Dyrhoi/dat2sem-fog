@@ -7,6 +7,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="api.Util" %>
 <%@ page import="domain.order.Order" %>
 <div class="container" id="orderInfo" data-evenOffer="${Order.evenOffer}"
      <c:choose>
@@ -77,6 +78,23 @@
                     </div>
                 </div>
             </form>
+
+            <form method="post" action="${pageContext.request.contextPath}/sales/orders/" class="mt-3">
+                <div class="row">
+                    <c:if test="${requestScope.order.hasAcceptedOffer() == null}">
+                        <p class="alert-warning alert">Du kan ikke sætte en ordre til at være betalt, hvis kunden ikke har accepteret et tilbud.</p>
+                    </c:if>
+                    <div class="col">
+                        <input hidden name="uuid" value="${requestScope.order.uuid}">
+                        <input hidden name="action" value="mark-as-paid">
+                        <input ${requestScope.order.hasAcceptedOffer() == null ? "disabled" : ""} id="is-paid" type="checkbox" ${requestScope.order.status.id == 4 ? "checked" : ""} name="is-paid">
+                        <label for="is-paid">Er ordren betalt?</label>
+                    </div>
+                    <div class="col text-right">
+                        <input ${requestScope.order.hasAcceptedOffer() == null ? "disabled" : ""} class="btn btn-light" type="submit" value="Opdater ordre">
+                    </div>
+                </div>
+            </form>
         </div>
         <div class="bg-light col-4 float-right" id="customerInfo">
             <h4 class="mt-3">Brugerinfo</h4>
@@ -89,4 +107,44 @@
             <p>Postnummer: <c:out value="${requestScope.order.customer.address.postalCode}"/></p>
         </div>
     </div>
+    <section>
+        <h3>Alle tilbud til denne ordre.</h3>
+        <c:choose>
+            <c:when test="${requestScope.order.offers.size() > 0}">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Pris</th>
+                        <th scope="col">Dato</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach items="${requestScope.order.offers}" var="offer" varStatus="iteration">
+                        <tr class=" ${requestScope.order.hasAcceptedOffer() != null && requestScope.order.hasAcceptedOffer() == offer ? "active" : "" }">
+                            <th class="align-middle" scope="row">${requestScope.order.offers.size() + 1 - iteration.count}</th>
+                            <td class="align-middle">${Util.formatPrice(offer.price)}</td>
+                            <td class="align-middle">${Util.formatDateTime(offer.createdAt)}</td>
+                            <td class="align-middle text-right">
+                                <c:choose>
+                                    <c:when test="${requestScope.order.hasAcceptedOffer() != null}">
+                                        <c:if test="${requestScope.order.hasAcceptedOffer() != null && requestScope.order.hasAcceptedOffer() == offer}">
+                                            <span class="badge badge-dyrhoi border" style="background-color:rgba(55, 228, 49, 0.2); border-color:rgba(55, 228, 49, 0.7) !important; font-size:1em;">Accepteret</span>
+                                        </c:if>
+                                    </c:when>
+                                    <c:otherwise>
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+            </c:when>
+            <c:otherwise>
+                <p>Der er ikke blevet lavet nogen tilbud.</p>
+            </c:otherwise>
+        </c:choose>
+    </section>
 </div>

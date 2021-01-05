@@ -79,4 +79,8 @@ public class API {
     public Order.Offer getOffer(int id) throws OfferNotFoundException {
         return orderRepository.getOffer(id);
     }
+
+    public Order markOrderAsPaid(Order order, boolean isPaid, User user) throws OrderNotFoundException {
+        return orderRepository.markOrderAsPaid(order, isPaid, user);
+    }
 }

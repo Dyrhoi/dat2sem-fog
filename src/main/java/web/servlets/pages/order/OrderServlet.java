@@ -24,7 +24,7 @@ public class OrderServlet extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("roofMaterials", api.getRoofMaterials());
-        super.render("Byg selv Carport - Fog", "order", req, resp);
+        super.render("Byg selv Carport - Fog", "order/order", req, resp);
     }
 
     @Override
