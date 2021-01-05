@@ -126,9 +126,6 @@ public class OrderDAO implements OrderRepository {
             e.printStackTrace();
             throw new RuntimeException();
         }
-        for (Order ord : orders) {
-            System.out.println(ord.toString());
-        }
         return orders;
     }
 

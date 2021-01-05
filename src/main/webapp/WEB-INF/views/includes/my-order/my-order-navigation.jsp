@@ -29,10 +29,10 @@
                     </d:router-link>
                 </li>
                 <li class="nav-item" ${requestScope.order.status.id == 4 ? '' : 'data-toggle="tooltip" title="Din materialeliste bliver tilgængelig når ordren er betalt."'}>
-                    <d:router-link to="/order/my-order/${requestScope.order.token}/material-list" className="nav-link ${requestScope.order.status.id == 4 ? '' : 'disabled'}">
+                    <a target="_blank" href="${pageContext.request.contextPath}/order/my-order/${requestScope.order.token}/material-list" class="nav-link ${requestScope.order.status.id == 4 ? '' : 'disabled'}">
                         <span class="material-icons-outlined">description</span>
                         Materialeliste
-                    </d:router-link>
+                    </a>
                 </li>
             </ul>
         </div>

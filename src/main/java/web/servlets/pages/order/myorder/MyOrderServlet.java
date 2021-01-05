@@ -1,5 +1,6 @@
 package web.servlets.pages.order.myorder;
 
+import domain.bill.Bill;
 import domain.order.Order;
 import domain.order.exceptions.OfferNotFoundException;
 import domain.order.exceptions.OrderNotFoundException;
@@ -37,6 +38,7 @@ public class MyOrderServlet extends BaseServlet {
                     case "" -> displayOrder(req, resp, order);
                     case "offers" -> displayOrderOffer(req, resp, order);
                     case "ticket" -> displayOrderTicket(req, resp, order);
+                    case "material-list" -> displayOrderMaterialList(req, resp, order);
                     default -> resp.sendError(404);
                 }
             } catch (OrderNotFoundException | IllegalArgumentException e) {
@@ -45,6 +47,17 @@ public class MyOrderServlet extends BaseServlet {
         }
         else {
             resp.sendError(404, "Vi kunne ikke finde ordren.");
+        }
+    }
+
+    private void displayOrderMaterialList(HttpServletRequest req, HttpServletResponse resp, Order order) throws IOException {
+        Bill bill = new Bill();
+        if(order.getStatus().getId() == 4) {
+            resp.setContentType("application/pdf");
+            bill.generatePDF(order, resp);
+        } else {
+            super.addNotifcation(req, new Notifier(Notifier.Type.DANGER, "Din ordre skal være betalt før du har adgang til materialelisten."));
+            resp.sendRedirect(req.getContextPath() + "/order/my-order/" + order.getToken() + "/offers");
         }
     }
 

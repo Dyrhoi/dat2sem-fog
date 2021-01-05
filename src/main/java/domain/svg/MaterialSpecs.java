@@ -64,10 +64,6 @@ public class MaterialSpecs {
 
         int pillarRows = MaterialCalculations.BaseCarport.pillarRows(width);
         int pillarAmount = MaterialCalculations.BaseCarport.pillars(length, width);
-
-        System.out.println(pillarRows);
-        System.out.println(pillarAmount);
-
         int pillarsPerRow = pillarAmount/pillarRows;
 
         int remainingPillarRows = pillarRows - 2;

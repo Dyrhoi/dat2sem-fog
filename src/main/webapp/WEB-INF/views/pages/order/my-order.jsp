@@ -82,7 +82,12 @@
                         ${requestScope.svgCarportDrawing}
                     </div>
                 </div>
-            </div>
         </div>
+            </div>
+                <div class="col">
+                    <div id="pdf-request-updater">
+                        <a href="${pageContext.request.contextPath}/order/my-order/${requestScope.order.token}/pdf">Se stykliste</a>
+                    </div>
+                </div>
     </section>
 </div>
