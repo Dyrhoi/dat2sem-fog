@@ -36,6 +36,8 @@
             <a href="<c:url value="/sales/orders/${requestScope.order.uuid}/ticket" />">Se kunde samtale.</a>
             <br>
             <a href="<c:url value="/order/my-order/${requestScope.order.token}" />">Se kundens ordre-side.</a>
+            <br>
+            <a target="_blank" href="<c:url value="/sales/orders/${requestScope.order.uuid}/material-list" />">Se materialeliste</a>
             <p>Carport: <c:out value="${requestScope.order.carport.length}"/> X <c:out
                     value="${requestScope.order.carport.width}"/></p>
             <p>Overdække: <c:out value="${requestScope.order.carport.roof}"/></p>

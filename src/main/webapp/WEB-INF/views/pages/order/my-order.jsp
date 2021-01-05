@@ -8,13 +8,14 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="api.Util" %>
-<jsp:include page="/WEB-INF/views/includes/my-order/my-order-navigation.jsp" />
+<jsp:include page="/WEB-INF/views/includes/my-order/my-order-navigation.jsp"/>
 <div>
     <section>
         <div class="container">
             <h1>Ordre Information</h1>
             <p class="mb-0">
-                <span class="badge badge-dyrhoi border" style="background-color:${requestScope.order.status.getColorRGBA(0.2)}; border-color:${requestScope.order.status.colorRGBA} !important;">${requestScope.order.status.name}</span>
+                <span class="badge badge-dyrhoi border"
+                      style="background-color:${requestScope.order.status.getColorRGBA(0.2)}; border-color:${requestScope.order.status.colorRGBA} !important;">${requestScope.order.status.name}</span>
                 <strong>#${requestScope.order.uuid}</strong>.
                 Oprettet ${Util.formatDateTime(requestScope.order.date)}
             </p>
@@ -55,15 +56,18 @@
                             Carport: ${requestScope.order.carport.length} X ${requestScope.order.carport.width}
                             <br>
                             Overdække: <c:choose>
-                                <c:when test="${requestScope.order.carport.roof == 'FLAT'}">
-                                    Fladt tag.
-                                </c:when>
-                                <c:otherwise>
-                                    Med rejsning.
-                                </c:otherwise>
-                            </c:choose>
+                            <c:when test="${requestScope.order.carport.roof == 'FLAT'}">
+                                Fladt tag.
+                            </c:when>
+                            <c:otherwise>
+                                Med rejsning.
+                            </c:otherwise>
+                            <c:if test="${requestScope.order.carport.roof == 'ANGLED'}">
+                                ${requestScope.order.carport.roofAngle}
+                            </c:if>
+                        </c:choose>
                             <br>
-                            Tagmateriale:
+                            Tagmateriale: <c:out value="${requestScope.roof_material}"/>
                             <br>
                             Skur:
                             <c:choose>
@@ -82,12 +86,7 @@
                         ${requestScope.svgCarportDrawing}
                     </div>
                 </div>
-        </div>
             </div>
-                <div class="col">
-                    <div id="pdf-request-updater">
-                        <a href="${pageContext.request.contextPath}/order/my-order/${requestScope.order.token}/pdf">Se stykliste</a>
-                    </div>
-                </div>
+        </div>
     </section>
 </div>

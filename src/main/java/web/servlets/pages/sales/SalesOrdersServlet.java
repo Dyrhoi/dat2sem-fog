@@ -1,5 +1,6 @@
 package web.servlets.pages.sales;
 
+import domain.bill.Bill;
 import domain.carport.Carport;
 import domain.carport.Shed;
 import domain.order.Order;
@@ -65,6 +66,17 @@ public class SalesOrdersServlet extends BaseServlet {
                     req.setAttribute("ticket", ticket);
                     super.render("Support Samtale - " + uuid, "sales/ticket", req, resp);
                 } catch (OrderNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+            else if (subPath.equals("material-list")) {
+                try {
+                    UUID uuid = setOrderFromUUID(req, slug);
+                    Order order = api.getOrder(uuid);
+                    Bill bill = new Bill();
+                    resp.setContentType("application/pdf");
+                    bill.generatePDF(order, resp);
+                } catch (OrderNotFoundException e ){
                     e.printStackTrace();
                 }
             }
@@ -181,8 +193,10 @@ public class SalesOrdersServlet extends BaseServlet {
                 uuid = UUID.fromString(req.getParameter("uuid"));
                 Order order = api.getOrder(uuid);
                 boolean isPaid = req.getParameter("is-paid") != null && req.getParameter("is-paid").equals("on");
-                if(order.hasAcceptedOffer() != null)
+                if(order.hasAcceptedOffer() != null) {
                     api.markOrderAsPaid(order, isPaid, (SalesRepresentative) req.getSession().getAttribute("user"));
+                    super.addNotifcation(req, new Notifier(Notifier.Type.SUCCESS, "Ordre opdateret, ordre status er blevet sat som " + (isPaid ? "betalt" : "ikke betalt")));
+                }
                 else throw new OrderNotFoundException();
             } catch (OrderNotFoundException e) {
                 resp.sendError(404, "Kunne ikke opdatere den her ordre, da den ikke kunne findes i systemet.");
