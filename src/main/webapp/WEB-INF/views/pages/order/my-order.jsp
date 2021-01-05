@@ -56,16 +56,16 @@
                             Carport: ${requestScope.order.carport.length} X ${requestScope.order.carport.width}
                             <br>
                             Overdække: <c:choose>
-                            <c:when test="${requestScope.order.carport.roof == 'FLAT'}">
-                                Fladt tag.
-                            </c:when>
-                            <c:otherwise>
-                                Med rejsning.
-                            </c:otherwise>
+                                <c:when test="${requestScope.order.carport.roof == 'FLAT'}">
+                                    Fladt tag.
+                                </c:when>
+                                <c:otherwise>
+                                    Med rejsning.
+                                </c:otherwise>
+                            </c:choose>
                             <c:if test="${requestScope.order.carport.roof == 'ANGLED'}">
-                                ${requestScope.order.carport.roofAngle}
+                                <br>Vinkel på tag: ${requestScope.order.carport.roofAngle}
                             </c:if>
-                        </c:choose>
                             <br>
                             Tagmateriale: <c:out value="${requestScope.roof_material}"/>
                             <br>

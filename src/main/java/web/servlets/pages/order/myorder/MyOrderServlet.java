@@ -62,7 +62,6 @@ public class MyOrderServlet extends BaseServlet {
     }
 
     private void displayOrderTicket(HttpServletRequest req, HttpServletResponse resp, Order order) throws ServletException, IOException {
-        req.setAttribute("roof_material", api.getRoofMaterial(order.getCarport().getRoof_material()));
         super.render("Ordre #" + order.getUuid() + " - Fog", "order/my-order-ticket", req, resp);
     }
 
@@ -71,6 +70,7 @@ public class MyOrderServlet extends BaseServlet {
     }
 
     private void displayOrder(HttpServletRequest req, HttpServletResponse resp, Order order) throws ServletException, IOException {
+        req.setAttribute("roof_material", api.getRoofMaterial(order.getCarport().getRoof_material()));
         super.render("Ordre #" + order.getUuid() + " - Fog", "order/my-order", req, resp);
     }
 
