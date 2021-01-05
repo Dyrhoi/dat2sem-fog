@@ -12,7 +12,7 @@ class DrawCarportTest {
 
     @BeforeEach
     void setUp() {
-        carport = new Carport(-1, new Shed (-1, 700, 700),800, 800, Carport.roofTypes.FLAT, null, 15);
+        carport = new Carport(-1, new Shed(-1, 400, 400), 600, 780, Carport.roofTypes.FLAT, null, 16);
         drawCarport = new DrawCarport(carport);
     }
 

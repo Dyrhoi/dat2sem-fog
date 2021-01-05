@@ -4,11 +4,8 @@ import domain.carport.Carport;
 import domain.carport.OrderMaterial;
 import domain.carport.Shed;
 import domain.order.Order;
-import infrastructure.Database;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class MaterialDAOTest {
     MaterialDAO md;
@@ -23,8 +20,15 @@ class MaterialDAOTest {
 
     @Test
     void getOrderMaterials() {
-        for (OrderMaterial orderMaterial : md.getOrderMaterials(order)) {
-            System.out.println(orderMaterial);
+
+        for (int i = 1; i <= 4; i++) {
+            for (OrderMaterial orderMaterial : md.getOrderMaterials(order)) {
+                int id = orderMaterial.getConstructionMaterial().getMaterial_types_id();
+
+                if (id == i) {
+                    System.out.println(orderMaterial);
+                }
+            }
         }
     }
 }
