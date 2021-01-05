@@ -15,6 +15,7 @@ class MaterialDAOTest {
     void setUp() {
         carport = new Carport(-1, new Shed(-1, 400, 400), 600, 780, Carport.roofTypes.FLAT, null, 16);
         order = new Order(null, carport, carport.getShed(), null, null);
+        md = new MaterialDAO(new Database());
     }
 
     @Test
