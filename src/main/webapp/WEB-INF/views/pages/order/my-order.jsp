@@ -8,15 +8,21 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="api.Util" %>
+<jsp:include page="/WEB-INF/views/includes/my-order/my-order-navigation.jsp" />
 <div>
     <section>
         <div class="container">
-            <h1>Carport Ordre</h1>
-            <p>
+            <h1>Ordre Information</h1>
+            <p class="mb-0">
                 <span class="badge badge-dyrhoi border" style="background-color:${requestScope.order.status.getColorRGBA(0.2)}; border-color:${requestScope.order.status.colorRGBA} !important;">${requestScope.order.status.name}</span>
                 <strong>#${requestScope.order.uuid}</strong>.
                 Oprettet ${Util.formatDateTime(requestScope.order.date)}
             </p>
+
+        </div>
+    </section>
+    <section>
+        <div class="container">
             <h3>Kunde</h3>
             <div class="row">
                 <div class="col-sm">
@@ -37,7 +43,6 @@
                     </p>
                 </div>
             </div>
-
         </div>
     </section>
     <section class="bg-light" id="your_carport">
@@ -85,5 +90,4 @@
                     </div>
                 </div>
     </section>
-    <jsp:include page="/WEB-INF/views/pages/ticket/_slug.jsp" />
 </div>

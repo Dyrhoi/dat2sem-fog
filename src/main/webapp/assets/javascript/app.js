@@ -239,4 +239,9 @@ $('#offer').bind('keyup', function(){
 function onLoad() {
    getProfitPercent();
 }
+
 onLoad();
+
+$(function () {
+   $('[data-toggle="tooltip"]').tooltip()
+})

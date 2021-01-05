@@ -1,9 +1,8 @@
-package web.servlets.order;
+package web.servlets.pages.order;
 
 
 import domain.order.Order;
 import domain.order.exceptions.OrderNotFoundException;
-import domain.order.ticket.Ticket;
 import web.servlets.BaseServlet;
 
 import javax.servlet.ServletException;
@@ -11,7 +10,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.UUID;
 
 @WebServlet("/order/thank-you/*")
 public class OrderCompleteServlet extends BaseServlet {

@@ -4,6 +4,7 @@ import domain.carport.Carport;
 import domain.carport.OrderMaterial;
 import domain.carport.Shed;
 import domain.order.Order;
+import infrastructure.Database;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

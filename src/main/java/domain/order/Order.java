@@ -6,8 +6,8 @@ import domain.user.customer.Customer;
 import domain.user.sales_representative.SalesRepresentative;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Order {
     public static final double evenOffer = 20000;
@@ -17,7 +17,7 @@ public class Order {
     private final Customer customer;
     private LocalDateTime date;
     private String token;
-    private int offer;
+    private List<Offer> offers;
     private SalesRepresentative salesRepresentative;
     private Status status;
 
@@ -65,12 +65,40 @@ public class Order {
         this.token = token;
     }
 
-    public int getOffer() {
-        return offer;
+    public List<Offer> getOffers() {
+        return offers;
     }
 
-    public void setOffer(int offer) {
-        this.offer = offer;
+    public Offer getMostRecentOffer() {
+        try {
+            return Collections.max(offers, Comparator.comparing(Offer::getCreatedAt));
+        } catch (NoSuchElementException e) {
+            return null;
+        }
+    }
+
+    public Offer hasAcceptedOffer() {
+        try {
+            return offers.stream().filter(Offer::isAccepted).findFirst().get();
+        } catch (NoSuchElementException e) {
+            return null;
+        }
+    }
+
+    public void addOffer(Offer offer) {
+        this.offers.add(offer);
+    }
+
+    public Offer getOfferByArrayId(int arrayId) {
+        try {
+            return offers.get(arrayId);
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
+    }
+
+    public void setOffers(List<Offer> offers) {
+        this.offers = offers;
     }
 
     public SalesRepresentative getSalesRepresentative() {
@@ -103,11 +131,11 @@ public class Order {
                 ", customer=" + customer +
                 ", date=" + date +
                 ", token='" + token + '\'' +
-                ", offer=" + offer +
                 ", salesRepresentative=" + salesRepresentative +
                 ", status=" + status +
                 '}';
     }
+
 
     public static class Status {
         private final int id;
@@ -138,6 +166,53 @@ public class Order {
 
         public String getColorRGBA(double alpha) {
             return "rgba(" + color + ", " + alpha + ")";
+        }
+    }
+
+    public static class Offer {
+        private final int id;
+        private final LocalDateTime createdAt;
+        private final int price;
+        private boolean isAccepted;
+
+        public Offer(int id, LocalDateTime createdAt, int price, boolean isAccepted) {
+            this.id = id;
+            this.createdAt = createdAt;
+            this.price = price;
+            this.isAccepted = isAccepted;
+        }
+
+        public void setAccepted(boolean accepted) {
+            isAccepted = accepted;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public boolean isAccepted() {
+            return isAccepted;
+        }
+
+        public LocalDateTime getCreatedAt() {
+            return createdAt;
+        }
+
+        public int getPrice() {
+            return price;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Offer offer = (Offer) o;
+            return id == offer.id;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(id);
         }
     }
 }

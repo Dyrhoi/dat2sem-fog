@@ -3,7 +3,9 @@ package web.servlets.pages.sales;
 import domain.carport.Carport;
 import domain.carport.Shed;
 import domain.order.Order;
+import domain.order.exceptions.OfferNotFoundException;
 import domain.order.exceptions.OrderNotFoundException;
+import domain.order.ticket.Ticket;
 import domain.user.sales_representative.SalesRepresentative;
 import web.plugins.Notifier;
 import web.servlets.BaseServlet;
@@ -28,18 +30,16 @@ public class SalesOrdersServlet extends BaseServlet {
          * */
         req.setAttribute("salesrep", null);
         if (req.getPathInfo() != null && req.getPathInfo().length() > 1) {
-            if (req.getPathInfo().charAt(req.getPathInfo().length() - 1) == '/') {
-                slug = req.getPathInfo().replaceAll("/", "");
-                try {
-                    UUID uuid = setOrderFromUUID(req, slug);
-                    req.setAttribute("roofMaterials", api.getRoofMaterials());
-                    super.render("Changing order - " + uuid, "changeOrder", req, resp);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            else {
-                slug = req.getPathInfo().substring(1);
+            String path = req.getPathInfo().substring(1);
+
+            slug = path.split("/")[0];
+
+            String subPath = "";
+            try {
+                subPath = path.split("/")[1];
+            } catch (IndexOutOfBoundsException ignored) {}
+
+            if(subPath.equals("")) {
                 try {
                     UUID uuid = setOrderFromUUID(req, slug);
                     req.setAttribute("page", 2);
@@ -48,6 +48,30 @@ public class SalesOrdersServlet extends BaseServlet {
                     e.printStackTrace();
                 }
             }
+            else if (subPath.equals("edit")) {
+                try {
+                    UUID uuid = setOrderFromUUID(req, slug);
+                    req.setAttribute("roofMaterials", api.getRoofMaterials());
+                    super.render("Changing order - " + uuid, "changeOrder", req, resp);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            else if (subPath.equals("ticket")) {
+                try {
+                    UUID uuid = setOrderFromUUID(req, slug);
+                    Ticket ticket = api.getTicket(api.getOrder(uuid).getToken());
+                    req.setAttribute("isStaff", true);
+                    req.setAttribute("ticket", ticket);
+                    super.render("Support Samtale - " + uuid, "sales/ticket", req, resp);
+                } catch (OrderNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                resp.sendError(404);
+            }
+
             /*
              * SHOW ALL ORDERS IF NO UUID IN URL
              * */
@@ -74,13 +98,16 @@ public class SalesOrdersServlet extends BaseServlet {
         UUID uuid = null;
 
         if (action.equals("update-offer")) {
-            int offer = Integer.parseInt(req.getParameter("offer"));
+            Order.Offer offer = new Order.Offer(-1, null, Integer.parseInt(req.getParameter("offer")), false);
             uuid = UUID.fromString(req.getParameter("uuid"));
+            SalesRepresentative salesRepresentative = (SalesRepresentative) req.getSession().getAttribute("user");
             try {
-                api.updateOffer(uuid, offer);
+
+                api.updateOffer(uuid, offer, salesRepresentative);
                 super.addNotifcation(req, new Notifier(Notifier.Type.SUCCESS, "Tilbud opdateret"));
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
+            } catch (OfferNotFoundException | OrderNotFoundException e) {
+                resp.sendError(404, "Vi kunne ikke finde ordren eller tilbudet, du prøvede at oprette.");
+                return;
             }
         }
         else if (action.equals("update-salesrep")) {
@@ -145,11 +172,13 @@ public class SalesOrdersServlet extends BaseServlet {
             }
             catch (OrderNotFoundException e) {
                 resp.sendError(404, "Kunne ikke opdatere den her ordre, da den ikke kunne findes i systemet.");
+                return;
             }
 
         }
         else {
             resp.sendError(500, "NO ACTION FOUND!");
+            return;
         }
         resp.sendRedirect(req.getContextPath() + "/sales/orders/" + uuid.toString());
     }
