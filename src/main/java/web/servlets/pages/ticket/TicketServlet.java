@@ -40,8 +40,8 @@ public class TicketServlet extends BaseServlet {
 
                 boolean isStaff = req.getParameter("is-staff") != null && req.getParameter("is-staff").equals("true");
 
-                System.out.println(req.getParameter("is-staff"));
-                System.out.println(isStaff);
+                //System.out.println(req.getParameter("is-staff"));
+                //System.out.println(isStaff);
 
                 Ticket ticket = api.getTicket(slug);
                 String content = req.getParameter("content");

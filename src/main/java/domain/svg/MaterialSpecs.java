@@ -164,7 +164,7 @@ public class MaterialSpecs {
                 else {
                     x = x - (pillarDistanceLength * j);
                 }
-                System.out.println(i + "," + j + " x: " + x + " y: " + y);
+                //System.out.println(i + "," + j + " x: " + x + " y: " + y);
 
                 coordinates.add(new Coordinate(x, y));
             }
