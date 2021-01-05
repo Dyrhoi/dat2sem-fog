@@ -13,10 +13,15 @@ import domain.order.exceptions.OrderNotFoundException;
 import domain.order.ticket.Ticket;
 import domain.order.ticket.TicketMessage;
 import domain.svg.DrawCarport;
+import domain.svg.DrawCarportNoGUI;
+import domain.svg.DrawCarportOnlyStrings;
 import domain.user.User;
 import domain.user.UserRepository;
 import domain.user.sales_representative.*;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
