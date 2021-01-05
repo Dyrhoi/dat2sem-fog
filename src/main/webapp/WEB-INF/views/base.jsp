@@ -5,6 +5,7 @@
   Time: 13.24
   To change this template use File | Settings | File Templates.
 --%>
+<%@ taglib prefix="d" tagdir="/WEB-INF/tags" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -36,16 +37,26 @@
     <nav class="navbar navbar-light border-bottom mb-3 bg-white navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand d-flex" href="${pageContext.request.contextPath}/">Fog</a>
-            <c:if test="true">
-                <ul class="ml-auto navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/sales">Sælger</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/sales/orders/">Ordrer</a>
-                    </li>
-                </ul>
-            </c:if>
+            <ul class="ml-auto navbar-nav">
+                <c:choose>
+                    <c:when test="${sessionScope.user != null && sessionScope.user.type == 'SALES_REPRESENTATIVE'}">
+                        <li class="nav-item">
+                            <d:router-link className="nav-link" to="/sales" exact="true">Mine Sager</d:router-link>
+                        </li>
+                        <li class="nav-item">
+                            <d:router-link className="nav-link" to="/sales/orders/">Alle Sager</d:router-link>
+                        </li>
+                        <li class="nav-item ml-5">
+                            <a class="nav-link pr-0" href="${pageContext.request.contextPath}/destroy">Log ud</a>
+                        </li>
+                    </c:when>
+                    <c:otherwise>
+                        <li class="nav-item">
+                            <a class="nav-link pr-0" href="${pageContext.request.contextPath}/authenticate">Log ind</a>
+                        </li>
+                    </c:otherwise>
+                </c:choose>
+            </ul>
         </div>
     </nav>
     <!--content-->

@@ -7,6 +7,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="api.Util" %>
 <div class="container-xl">
     <section>
         <div>
@@ -45,7 +46,7 @@
                             <td class="text-nowrap"><c:out value="${order.customer.fullName}" /></td>
                             <td class="text-nowrap"><c:out value="${order.customer.email}" /></td>
                             <td class="text-nowrap"><c:out value="${order.customer.phone}" /></td>
-                            <td class="text-nowrap"><c:out value="${order.date}" /></td>
+                            <td class="text-nowrap"><c:out value="${Util.formatDate(order.date)}" /></td>
                             </tr>
                         </c:if>
                     </c:forEach>
@@ -57,8 +58,8 @@
                             <td class="text-nowrap"><c:out value="${order.customer.fullName}" /></td>
                             <td class="text-nowrap"><c:out value="${order.customer.email}" /></td>
                             <td class="text-nowrap"><c:out value="${order.customer.phone}" /></td>
-                            <td class="text-nowrap"><c:out value="${order.date}" /></td>
-                            <td colspan="text-nowrap">
+                            <td class="text-nowrap"><c:out value="${Util.formatDate(order.date)}" /></td>
+                            <td class="text-nowrap">
                                 <c:choose>
                                     <c:when test="${order.salesRepresentative == null}">
                                         <form method="post" action="${pageContext.request.contextPath}/sales/orders" id="rep-form">
