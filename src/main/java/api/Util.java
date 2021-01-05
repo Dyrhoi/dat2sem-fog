@@ -2,6 +2,7 @@ package api;
 
 import java.io.StringWriter;
 import java.security.SecureRandom;
+import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
@@ -58,5 +59,12 @@ public class Util {
         } catch (Exception ex) {
             throw new RuntimeException("Error converting to String", ex);
         }
+    }
+
+    public static String formatPrice(int price) {
+        //double price = (double) price / 100;
+        NumberFormat numberFormat = NumberFormat.getInstance(LOCALE);
+        numberFormat.setMinimumFractionDigits(2);
+        return numberFormat.format(price) + " DKK";
     }
 }

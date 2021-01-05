@@ -85,6 +85,14 @@ public class Order {
         this.offers.add(offer);
     }
 
+    public Offer getOfferByArrayId(int arrayId) {
+        try {
+            return offers.get(arrayId);
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
+    }
+
     public void setOffers(List<Offer> offers) {
         this.offers = offers;
     }
@@ -124,6 +132,7 @@ public class Order {
                 '}';
     }
 
+
     public static class Status {
         private final int id;
         private final String name;
@@ -160,13 +169,17 @@ public class Order {
         private final int id;
         private final LocalDateTime createdAt;
         private final int price;
-        private final boolean isAccepted;
+        private boolean isAccepted;
 
         public Offer(int id, LocalDateTime createdAt, int price, boolean isAccepted) {
             this.id = id;
             this.createdAt = createdAt;
             this.price = price;
             this.isAccepted = isAccepted;
+        }
+
+        public void setAccepted(boolean accepted) {
+            isAccepted = accepted;
         }
 
         public int getId() {
@@ -183,6 +196,19 @@ public class Order {
 
         public int getPrice() {
             return price;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Offer offer = (Offer) o;
+            return id == offer.id;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(id);
         }
     }
 }

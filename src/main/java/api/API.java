@@ -13,6 +13,7 @@ import domain.order.exceptions.OrderNotFoundException;
 import domain.order.ticket.Ticket;
 import domain.order.ticket.TicketMessage;
 import domain.svg.DrawCarport;
+import domain.user.User;
 import domain.user.UserRepository;
 import domain.user.sales_representative.*;
 
@@ -61,7 +62,7 @@ public class API {
         return userRepository.authorizeSalesRepresentative(email, password);
     }
 
-    public Order.Offer updateOffer(UUID uuid, Order.Offer offer, SalesRepresentative updatedBy) throws OrderNotFoundException, OfferNotFoundException { return orderRepository.updateOffer(uuid, offer, updatedBy); }
+    public Order.Offer updateOffer(UUID uuid, Order.Offer offer, User updatedBy) throws OrderNotFoundException, OfferNotFoundException { return orderRepository.updateOffer(uuid, offer, updatedBy); }
 
     public int updateSalesRep(Order order, SalesRepresentative salesRepresentative) throws SQLException { return orderRepository.updateSalesRep(order, salesRepresentative);}
 

@@ -6,6 +6,7 @@ import domain.order.exceptions.OfferNotFoundException;
 import domain.order.exceptions.OrderNotFoundException;
 import domain.order.ticket.Ticket;
 import domain.order.ticket.TicketMessage;
+import domain.user.User;
 import domain.user.sales_representative.SalesRepresentative;
 
 import java.sql.SQLException;
@@ -26,7 +27,7 @@ public interface OrderRepository {
     Ticket getTicket(String orderToken) throws OrderNotFoundException;
     Ticket updateTicket(String token, TicketMessage ticketMessage) throws OrderNotFoundException;
 
-    Order.Offer updateOffer(UUID uuid, Order.Offer offer, SalesRepresentative updatedBy) throws OrderNotFoundException, OfferNotFoundException;
+    Order.Offer updateOffer(UUID uuid, Order.Offer offer, User updatedBy) throws OrderNotFoundException, OfferNotFoundException;
     Order.Offer getOffer(int id) throws OfferNotFoundException;
 
     int updateSalesRep(Order order, SalesRepresentative salesRepresentative) throws SQLException;

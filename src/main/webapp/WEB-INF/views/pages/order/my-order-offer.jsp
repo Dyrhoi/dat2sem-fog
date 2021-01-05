@@ -12,12 +12,67 @@
 <div>
     <section>
         <div class="container">
-            <h1>Carport Tilbud</h1>
-            <p>
+            <h1>Mine Tilbud</h1>
+            <p class="mb-0">
                 <span class="badge badge-dyrhoi border" style="background-color:${requestScope.order.status.getColorRGBA(0.2)}; border-color:${requestScope.order.status.colorRGBA} !important;">${requestScope.order.status.name}</span>
                 <strong>#${requestScope.order.uuid}</strong>.
                 Oprettet ${Util.formatDateTime(requestScope.order.date)}
             </p>
+        </div>
+    </section>
+    <c:if test="${requestScope.order.hasAcceptedOffer() != null}">
+        <section class="bg-light">
+            <div class="container">
+                <h3>Dit accepteret tilbud</h3>
+                <p>
+                    Når fakturaen, som bliver sendt af din salgsassistent er betalt, vil du få adgang til materialelisten.</p>
+                <p class="mb-0">
+                    Du accepteret tilbuddet til prisen ${Util.formatPrice(requestScope.order.hasAcceptedOffer().price)}, tilbuddet blev sendt ${Util.formatDateTime(requestScope.order.hasAcceptedOffer().createdAt)}
+                </p>
+            </div>
+
+        </section>
+    </c:if>
+    <section>
+        <div class="container">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Pris</th>
+                    <th scope="col">Dato</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach items="${requestScope.order.offers}" var="offer" varStatus="iteration">
+                    <tr class=" ${requestScope.order.hasAcceptedOffer() != null && requestScope.order.hasAcceptedOffer() == offer ? "active" : "" }">
+                        <th class="align-middle" scope="row">${requestScope.order.offers.size() + 1 - iteration.count}</th>
+                        <td class="align-middle">${Util.formatPrice(offer.price)}</td>
+                        <td class="align-middle">${Util.formatDateTime(offer.createdAt)}</td>
+                        <td class="align-middle text-right">
+                            <c:choose>
+                                <c:when test="${requestScope.order.hasAcceptedOffer() != null}">
+                                    <c:if test="${requestScope.order.hasAcceptedOffer() != null && requestScope.order.hasAcceptedOffer() == offer}">
+                                        Accepteret
+                                    </c:if>
+                                </c:when>
+                                <c:otherwise>
+                                    <form method="post">
+                                        <input name="array-id" value="${iteration.count - 1}" hidden>
+                                        <button type="submit" class="btn btn-light">
+                                            Accepter tilbud
+                                        </button>
+                                    </form>
+                                </c:otherwise>
+                            </c:choose>
+
+
+                        </td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
         </div>
     </section>
 </div>

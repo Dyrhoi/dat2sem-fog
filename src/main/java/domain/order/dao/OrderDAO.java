@@ -690,25 +690,62 @@ public class OrderDAO implements OrderRepository {
     }
 
     @Override
-    public Order.Offer updateOffer(UUID uuid, Order.Offer offer, SalesRepresentative updatedBy) throws OrderNotFoundException, OfferNotFoundException {
+    public Order.Offer updateOffer(UUID uuid, Order.Offer offer, User updatedBy) throws OrderNotFoundException, OfferNotFoundException {
         try (Connection conn = database.getConnection()) {
             conn.setAutoCommit(false);
             try {
                 Order.Offer newOffer = null;
                 Order order = getOrder(uuid);
                 PreparedStatement stmt;
-                stmt = conn.prepareStatement("INSERT INTO offers (order_uuid, offer) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS);
-                stmt.setString(1, uuid.toString());
-                stmt.setInt(2, offer.getPrice());
+                TicketEvent.EventType event;
+                if(offer.getId() == -1) {
+                    event = TicketEvent.EventType.OFFER_SENT;
+                    stmt = conn.prepareStatement("INSERT INTO offers (order_uuid, offer) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS);
+                    stmt.setString(1, uuid.toString());
+                    stmt.setInt(2, offer.getPrice());
+                }
+                else {
+                    if(offer.isAccepted())
+                        event = TicketEvent.EventType.OFFER_ACCEPTED;
+                    else
+                        event = TicketEvent.EventType.OFFER_DECLINED;
+                    //Lets clear all other accepted offers in case of an error earlier on.
+                    stmt = conn.prepareStatement("UPDATE offers SET is_accepted = 0 WHERE order_uuid = ?");
+                    stmt.setString(1, uuid.toString());
+                    stmt.executeUpdate();
+
+                    stmt = conn.prepareStatement("UPDATE offers SET is_accepted = ? WHERE id = ?", Statement.RETURN_GENERATED_KEYS);
+                    stmt.setBoolean(1, offer.isAccepted());
+                    stmt.setInt(2, offer.getId());
+                }
                 stmt.executeUpdate();
 
                 ResultSet rs = stmt.getGeneratedKeys();
 
                 stmt = conn.prepareStatement("INSERT INTO order_events (author_id, scope, order_token) VALUES (?, ?, ?)");
                 stmt.setInt(1, updatedBy.getId());
-                stmt.setString(2, TicketEvent.EventType.OFFER_SENT.toString());
+                stmt.setString(2, event.toString());
                 stmt.setString(3, order.getToken());
                 stmt.executeUpdate();
+
+                //Maybe don't overwrite a paid order status?
+                //So only set the order status to: OFFER_SENT if status is under review.
+                if(order.getStatus().getId() == 1) {
+                    stmt = conn.prepareStatement("UPDATE orders SET order_status_id = ? WHERE uuid = ?");
+                    stmt.setInt(1, 2);
+                    stmt.setString(2, uuid.toString());
+                    stmt.executeUpdate();
+                }
+                //Accepting an offer, should change status...
+                // But we should only change our order status to offer accepted if user hasn't already paid...
+                else if(order.getStatus().getId() == 2) {
+                    if(offer.isAccepted()) {
+                        stmt = conn.prepareStatement("UPDATE orders SET order_status_id = ? WHERE uuid = ?");
+                        stmt.setInt(1, 3);
+                        stmt.setString(2, uuid.toString());
+                        stmt.executeUpdate();
+                    }
+                }
 
                 conn.commit();
 
